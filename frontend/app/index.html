@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="visual-scan-frame"></div>
+    <div id="edit-mode-warning">SYSTEM UNLOCKED - EDIT MODE</div>
+    
+    <div class="scene">
+        <!-- ОКНО 1: ГЛАВНЫЕ ДАННЫЕ -->
+        <div class="hologram-panel" id="main-overlay">
+            <header class="drag-handle">
+                <div class="header-block ui-density-total">
+                    <span class="label-sm">Total Density</span>
+                    <div class="main-val ui-ref-data">
+                        <span class="num-full hide" id="t-dens-full">0</span><span class="num-short" id="t-dens-short">0</span>
+                    </div>
+
+                    <!-- ВОТ ЭТОТ БЛОК Я СЛУЧАЙНО УДАЛИЛ В ПРОШЛЫЙ РАЗ -->
+                    <div class="sub-val ui-raw-data">Raw: 
+                        <span class="num-full hide" id="r-dens-full">0</span><span class="num-short" id="r-dens-short">0</span>
+                    </div>
+
+                    <div id="scan-verdict">WAITING</div>
+                    
+                    <!-- НОВЫЙ БЛОК: OPTIMAL CORE -->
+                    <div class="optimal-block mt-1" style="color: #f1c40f;">
+                        <span style="font-size: 10px; text-transform: uppercase;">Best Potential:</span><br>
+                        <span style="font-weight: bold; font-size: 14px;" id="opt-dens">0</span> aUEC/SCU
+                        <span style="font-size: 10px; color: #a0aec0;"> (in <span id="opt-scu">0</span> SCU)</span>
+                    </div>
+                </div>
+                
+                <div class="header-block right ui-profit-total">
+                    <span class="label-sm">Total Profit</span>
+                    <div class="main-val ui-ref-data">
+                        <span class="num-full hide" id="t-prof-full">0</span><span class="num-short" id="t-prof-short">0</span>
+                    </div>
+                    <div class="sub-val ui-raw-data">Raw: 
+                        <span class="num-full hide" id="r-prof-full">0</span><span class="num-short" id="r-prof-short">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="meta-info">
+                <span class="ui-meta-vol" id="meta-vol">VOL: 0 SCU</span>
+                <span class="ui-meta-method" id="meta-method">METHOD: NONE</span>
+                <span class="ui-meta-bonus" id="meta-bonus" style="color: var(--color-bonus);">BONUS: 0%</span>
+            </div>
+
+            <table class="mining-table">
+                <thead>
+                    <tr>
+                        <th class="ui-col-mineral">Mineral</th>
+                        <th class="ui-col-comp comp-cell">%</th>
+                        <th class="ui-col-scu">SCU (R/R)</th>
+                        <th class="ui-col-dens">Density</th>
+                        <th class="ui-col-val" style="text-align: right;">Profit</th>
+                        <th class="ui-col-mods">Mods</th>
+                    </tr>
+                </thead>
+                <tbody id="minerals-body">
+                </tbody>
+            </table>
+            <div id="ui-status">CONNECTING TO BACKEND...</div>
+        </div>
+
+        <!-- ОКНО 2: DEV CONSOLE -->
+        <div class="hologram-panel" id="settings-overlay">
+            <div class="settings-header drag-handle">
+                <span class="settings-title">⚙️ DEV CONSOLE</span>
+                <span class="gear-btn" onclick="document.getElementById('settings-overlay').classList.toggle('collapsed')">🔽</span>
+            </div>
+            
+            <div class="setting-group">
+                <div class="setting-group-title">Calculation Parameters</div>
+                
+                <div class="custom-select" id="select-method">
+                    <div class="select-trigger" onclick="toggleDropdown(event, 'method')">
+                        <span id="val-method">Method: Dinyx Solventation</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="select-options" id="opts-method"></div>
+                </div>
+                <div style="height: 8px;"></div>
+                <div class="custom-select" id="select-system">
+                    <div class="select-trigger" onclick="toggleDropdown(event, 'system')">
+                        <span id="val-system">Prices: ALL SYSTEMS</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="select-options" id="opts-system">
+                        <div class="option-item" onclick="selectOpt(event, 'system', 'ALL', 'Prices: ALL SYSTEMS')">ALL SYSTEMS</div>
+                        <div class="option-item" onclick="selectOpt(event, 'system', 'Stanton', 'STANTON')">STANTON</div>
+                        <div class="option-item" onclick="selectOpt(event, 'system', 'Pyro', 'PYRO')">PYRO</div>
+                        <div class="option-item" onclick="selectOpt(event, 'system', 'Nyx', 'NYX')">NYX</div>
+                    </div>
+                </div>
+                <div style="height: 8px;"></div>
+                <div class="custom-select" id="select-yield">
+                    <div class="select-trigger" onclick="toggleDropdown(event, 'yield')">
+                        <span id="val-yield">Bonuses: ALL SYSTEMS</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="select-options" id="opts-yield">
+                        <div class="option-item" onclick="selectOpt(event, 'yield', 'ALL', 'ALL SYSTEMS')">ALL SYSTEMS</div>
+                        <div class="option-item" onclick="selectOpt(event, 'yield', 'Stanton', 'STANTON')">STANTON</div>
+                        <div class="option-item" onclick="selectOpt(event, 'yield', 'Pyro', 'PYRO')">PYRO</div>
+                        <div class="option-item" onclick="selectOpt(event, 'yield', 'Nyx', 'NYX')">NYX</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-group-title">Data Visibility</div>
+                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-ref-data')"> [Green] Show REFINED</label>
+                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-raw-data')"> [Blue] Show RAW</label>
+            </div>
+            <div class="setting-group">
+                <div class="setting-group-title">Layout & Formatting</div>
+                <label class="setting-item"><input type="checkbox" onchange="toggleLayout()"> Layout: Inline (Side-by-side)</label>
+                <label class="setting-item"><input type="checkbox" checked onchange="toggleFormat()"> Format: Short Numbers (K/M)</label>
+                <label class="setting-item"><input type="checkbox" onchange="toggleMinerals()"> Format: Short Mineral (HEPH)</label>
+            </div>
+            <div class="setting-group">
+                <div class="setting-group-title">Columns Toggle</div>
+                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-comp')"> Column: Composition %</label>
+                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-scu')"> Column: SCU</label>
+                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-dens')"> Column: Density</label>
+                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-val')"> Column: Profit</label>
+                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-mods')"> Column: MODS</label>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ... твой HTML интерфейс остается без изменений ... -->
+    <script src="ui.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html>
+
