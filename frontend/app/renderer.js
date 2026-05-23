@@ -29,6 +29,13 @@ function connectWebSocket() {
             case 'scan_table_data':
                 UI.updateTable(data.data); // Строим HTML из JSON массива
                 break;
+            case 'visibility':
+                // Переключаем видимость всего главного контейнера
+                document.querySelector('.scene').style.display = data.show ? 'block' : 'none';
+                // Если мы скрываем UI, заодно скрываем предупреждение "EDIT MODE", если оно горело
+                if (!data.show) document.getElementById('edit-mode-warning').style.display = 'none';
+                else if (!currentConfigs.is_edit) document.getElementById('edit-mode-warning').style.display = 'block';
+                break;    
         }
     };
 

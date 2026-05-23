@@ -16,11 +16,20 @@ function createWindow() {
         frame: false,           // Без рамок
         alwaysOnTop: true,      // Поверх всех окон (поверх игры)
         skipTaskbar: false,      // Скрыть из панели задач
+        type: 'toolbar',        // <--- 1. Запрещает окну сворачиваться
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
             nodeIntegration: false
         }
+    });
+
+    // <--- 2. Форсируем максимальный Z-index поверх игр
+    mainWindow.setAlwaysOnTop(true, 'screen-saver', 1);
+
+    // <--- 3. Если игра забирает фокус, жестко держим оверлей наверху
+    mainWindow.on('blur', () => {
+        mainWindow.setAlwaysOnTop(true, 'screen-saver', 1);
     });
 
     // Отключаем аппаратное ускорение, если оно конфликтует со Star Citizen
