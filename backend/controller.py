@@ -24,6 +24,7 @@ class OverlayController:
         self.scan_region = DEFAULT_SCAN_REGION
         self.is_click_through = True
         self.is_scanning = False
+        self.is_visible = True 
 
     def set_server(self, server):
         self.server = server
@@ -57,6 +58,11 @@ class OverlayController:
     def start_scan(self):
         if not self.is_scanning:
             self._schedule_async(self.run_scan_async())
+
+    def toggle_visibility(self):
+        """Мгновенно прячет или показывает оверлей"""
+        self.is_visible = not self.is_visible
+        self._schedule_async(self.server.broadcast({"type": "visibility", "show": self.is_visible}))        
 
     # --- ЛОГИКА СКАНИРОВАНИЯ ---
     async def run_scan_async(self):
