@@ -36,10 +36,17 @@ function getMineralInfo(name) {
     return MINERAL_COLORS[upName] || { short: upName.substring(0, 4), color: "#FFFFFF" };
 }
 
+function formatFullNum(num) {
+    return (Math.round(num) + 0).toLocaleString('en-US');
+}
+
 function shortenNum(num) {
-    if (num >= 1000000) return (num / 1000000).toFixed(2) + "M";
-    if (num >= 1000) return (num / 1000).toFixed(1) + "k";
-    return Math.floor(num).toString();
+    // Берем число по модулю, чтобы корректно сокращать отрицательные убытки (-1500 -> -1.5k)
+    if (Math.abs(num) >= 1000000) return (num / 1000000).toFixed(2) + "M";
+    if (Math.abs(num) >= 1000) return (num / 1000).toFixed(1) + "k";
+    
+    // Для чисел меньше 1000 используем честное математическое округление вместо floor
+    return Math.round(num).toString();
 }
 
 function getGradeInfo(grade) {
@@ -63,7 +70,8 @@ const uiState = {
 // ============================================================================
 const UI = {
     updateTotals: function(data) {
-        document.getElementById('meta-vol').innerText = `VOL: ${data.meta_vol.toFixed(1)} SCU`;
+        // Убрали скачки знаков: теперь всегда .toFixed(2) для объемов
+        document.getElementById('meta-vol').innerText = `VOL: ${data.meta_vol.toFixed(2)} SCU`;
         document.getElementById('meta-method').innerText = `METHOD: ${data.meta_method}`;
         document.getElementById('meta-bonus').innerText = `BONUS: +${data.meta_bonus.toFixed(1)}%`;
         
@@ -87,7 +95,8 @@ const UI = {
         const optScu = data.totals.opt_scu;
         
         document.getElementById('opt-dens').innerText = formatNumber(optDens, false);
-        document.getElementById('opt-scu').innerText = optScu.toFixed(1);
+        // Здесь тоже ставим 2 знака, чтобы не было расхождений с таблицей
+        document.getElementById('opt-scu').innerText = optScu.toFixed(2);
 
         // Логика вердикта (подсказка игроку)
     const verdictEl = document.getElementById('scan-verdict');
@@ -160,20 +169,20 @@ const UI = {
                 <td class="cell ui-col-dens">
                     <div class="layout-container">
                         <span class="v-ref ui-ref-data">
-                            <span class="num-full hide">${Math.round(chunk.dens_ref).toLocaleString('en-US')}</span><span class="num-short">${shortenNum(chunk.dens_ref)}</span>
+                            <span class="num-full hide">${formatFullNum(chunk.dens_ref)}</span><span class="num-short">${shortenNum(chunk.dens_ref)}</span>
                         </span>
                         <span class="v-raw ui-raw-data">
-                            <span class="num-full hide">${Math.round(chunk.dens_raw).toLocaleString('en-US')}</span><span class="num-short">${shortenNum(chunk.dens_raw)}</span>
+                            <span class="num-full hide">${formatFullNum(chunk.dens_raw)}</span><span class="num-short">${shortenNum(chunk.dens_raw)}</span>
                         </span>
                     </div>
                 </td>
                 <td class="cell ui-col-val" style="text-align: right;">
                     <div class="layout-container" style="align-items: flex-end;">
                         <span class="v-ref ui-ref-data">
-                            <span class="num-full hide">${Math.round(chunk.prof_ref).toLocaleString('en-US')}</span><span class="num-short">${shortenNum(chunk.prof_ref)}</span>
+                            <span class="num-full hide">${formatFullNum(chunk.prof_ref)}</span><span class="num-short">${shortenNum(chunk.prof_ref)}</span>
                         </span>
                         <span class="v-raw ui-raw-data">
-                            <span class="num-full hide">${Math.round(chunk.prof_raw).toLocaleString('en-US')}</span><span class="num-short">${shortenNum(chunk.prof_raw)}</span>
+                            <span class="num-full hide">${formatFullNum(chunk.prof_raw)}</span><span class="num-short">${shortenNum(chunk.prof_raw)}</span>
                         </span>
                     </div>
                 </td>
