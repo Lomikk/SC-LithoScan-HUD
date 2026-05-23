@@ -1,0 +1,10 @@
+rapidocr
+websockets
+keyboard
+mss
+pywin32
+opencv-python
+numpy
+rapidocr
+rapidocr-onnxruntime
+requests
