@@ -16,7 +16,7 @@ function createWindow() {
         frame: false,           // Без рамок
         alwaysOnTop: true,      // Поверх всех окон (поверх игры)
         skipTaskbar: false,      // Скрыть из панели задач
-        type: 'toolbar',        // <--- 1. Запрещает окну сворачиваться
+        //type: 'toolbar',        // <--- 1. Запрещает окну сворачиваться
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
