@@ -42,11 +42,11 @@ body {
 }
 
 /* Стартовые позиции */
-#main-overlay { width: fit-content; min-width: 400px; left: 1400px; top: 100px; }
+#main-overlay { width: fit-content; left: 1400px; top: 100px; }
 #settings-overlay { width: 250px; left: 1100px; top: 100px; transition: max-height 0.3s, padding 0.3s, transform 0.1s; overflow: hidden; max-height: 500px;}
 #settings-overlay.collapsed { max-height: 25px; padding: 5px 15px; }
 
-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 30px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; cursor: grab;}
+header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; cursor: grab;}
 header:active { cursor: grabbing; }
 
 .header-block { display: flex; flex-direction: column; }
@@ -54,7 +54,7 @@ header:active { cursor: grabbing; }
 .label-sm { font-size: 10px; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px; white-space: nowrap; }
 .main-val { font-size: 24px; font-weight: 800; color: var(--color-ref); line-height: 1; white-space: nowrap; }
 .sub-val { color: var(--color-raw); font-size: 11px; margin-top: 2px; white-space: nowrap; }
-.meta-info { font-size: 10px; color: var(--text-dim); margin-bottom: 10px; display: flex; gap: 10px; }
+.meta-info { font-size: 10px; color: var(--text-dim); margin-bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
 
 .mining-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .mining-table th { text-align: left; font-size: 9px; color: var(--text-dim); text-transform: uppercase; padding-bottom: 5px; border-bottom: 1px solid var(--border); white-space: nowrap; }

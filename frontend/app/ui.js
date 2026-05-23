@@ -94,7 +94,8 @@ const UI = {
         const optDens = data.totals.opt_dens;
         const optScu = data.totals.opt_scu;
         
-        document.getElementById('opt-dens').innerText = formatNumber(optDens, false);
+        document.getElementById('opt-dens-full').innerText = formatNumber(optDens, false);
+        document.getElementById('opt-dens-short').innerText = formatNumber(optDens, true);
         // Здесь тоже ставим 2 знака, чтобы не было расхождений с таблицей
         document.getElementById('opt-scu').innerText = optScu.toFixed(2);
 

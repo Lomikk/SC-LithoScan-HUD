@@ -12,27 +12,36 @@
         <!-- ОКНО 1: ГЛАВНЫЕ ДАННЫЕ -->
         <div class="hologram-panel" id="main-overlay">
             <header class="drag-handle">
+                <!-- ЛЕВАЯ КОЛОНКА (Плотность и Потенциал) -->
                 <div class="header-block ui-density-total">
                     <span class="label-sm">Total Density</span>
                     <div class="main-val ui-ref-data">
                         <span class="num-full hide" id="t-dens-full">0</span><span class="num-short" id="t-dens-short">0</span>
                     </div>
 
-                    <!-- ВОТ ЭТОТ БЛОК Я СЛУЧАЙНО УДАЛИЛ В ПРОШЛЫЙ РАЗ -->
                     <div class="sub-val ui-raw-data">Raw: 
                         <span class="num-full hide" id="r-dens-full">0</span><span class="num-short" id="r-dens-short">0</span>
                     </div>
 
-                    <div id="scan-verdict">WAITING</div>
-                    
                     <!-- НОВЫЙ БЛОК: OPTIMAL CORE -->
                     <div class="optimal-block mt-1" style="color: #f1c40f;">
                         <span style="font-size: 10px; text-transform: uppercase;">Best Potential:</span><br>
-                        <span style="font-weight: bold; font-size: 14px;" id="opt-dens">0</span> aUEC/SCU
+                        <span style="font-weight: bold; font-size: 14px;">
+                            <!-- РАЗДЕЛИЛИ НА ДВА ЭЛЕМЕНТА -->
+                            <span class="num-full hide" id="opt-dens-full">0</span><span class="num-short" id="opt-dens-short">0</span>
+                        </span> aUEC/SCU
                         <span style="font-size: 10px; color: #a0aec0;"> (in <span id="opt-scu">0</span> SCU)</span>
                     </div>
                 </div>
                 
+                <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА (Вердикт) -->
+                <div class="header-block text-center" style="align-items: center; justify-content: center; min-width: 100px;">
+                    <div id="scan-verdict" style="padding: 5px 10px; font-weight: bold; font-size: 14px; letter-spacing: 1px;">
+                        WAITING
+                    </div>
+                </div>
+
+                <!-- ПРАВАЯ КОЛОНКА (Прибыль) -->
                 <div class="header-block right ui-profit-total">
                     <span class="label-sm">Total Profit</span>
                     <div class="main-val ui-ref-data">
