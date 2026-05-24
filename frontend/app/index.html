@@ -67,8 +67,7 @@
                         <th class="ui-col-mods">Mods</th>
                     </tr>
                 </thead>
-                <tbody id="minerals-body">
-                </tbody>
+                <tbody id="minerals-body"></tbody>
             </table>
             <div id="ui-status">CONNECTING TO BACKEND...</div>
         </div>
@@ -81,8 +80,22 @@
             </div>
             
             <div class="setting-group">
+                <div class="setting-group-title">Appearance & Theme</div>
+                <div class="custom-select" id="select-theme">
+                    <div class="select-trigger" onclick="toggleDropdown(event, 'theme')">
+                        <span id="val-theme">Theme: DEFAULT</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="select-options" id="opts-theme">
+                        <div class="option-item" onclick="selectOpt(event, 'theme', 'default', 'DEFAULT')">DEFAULT (Cyan/Green)</div>
+                        <div class="option-item" onclick="selectOpt(event, 'theme', 'amber', 'AMBER HUD')">AMBER HUD (Orange)</div>
+                        <div class="option-item" onclick="selectOpt(event, 'theme', 'glass', 'GLASS HUD')">GLASS HUD</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setting-group">
                 <div class="setting-group-title">Calculation Parameters</div>
-                
                 <div class="custom-select" id="select-method">
                     <div class="select-trigger" onclick="toggleDropdown(event, 'method')">
                         <span id="val-method">Method: Dinyx Solventation</span>
@@ -120,23 +133,25 @@
 
             <div class="setting-group">
                 <div class="setting-group-title">Data Visibility</div>
-                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-ref-data')"> [Green] Show REFINED</label>
-                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-raw-data')"> [Blue] Show RAW</label>
+                <label class="setting-item"><input type="checkbox" id="cb-showRef" onchange="toggleSetting('showRef', this.checked)"> [Refined] Show Primary</label>
+                <label class="setting-item"><input type="checkbox" id="cb-showRaw" onchange="toggleSetting('showRaw', this.checked)"> [Raw] Show Secondary</label>
             </div>
             <div class="setting-group">
                 <div class="setting-group-title">Layout & Formatting</div>
-                <label class="setting-item"><input type="checkbox" onchange="toggleLayout()"> Layout: Inline (Side-by-side)</label>
-                <label class="setting-item"><input type="checkbox" checked onchange="toggleFormat()"> Format: Short Numbers (K/M)</label>
-                <label class="setting-item"><input type="checkbox" onchange="toggleMinerals()"> Format: Short Mineral (HEPH)</label>
+                <label class="setting-item"><input type="checkbox" id="cb-isInline" onchange="toggleSetting('isInline', this.checked)"> Layout: Inline (Side-by-side)</label>
+                <label class="setting-item"><input type="checkbox" id="cb-shortNums" onchange="toggleSetting('shortNums', this.checked)"> Format: Short Numbers (K/M)</label>
+                <label class="setting-item"><input type="checkbox" id="cb-shortMins" onchange="toggleSetting('shortMins', this.checked)"> Format: Short Mineral (HEPH)</label>
             </div>
             <div class="setting-group">
                 <div class="setting-group-title">Columns Toggle</div>
-                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-comp')"> Column: Composition %</label>
-                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-scu')"> Column: SCU</label>
-                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-dens')"> Column: Density</label>
-                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-val')"> Column: Profit</label>
-                <label class="setting-item"><input type="checkbox" checked onchange="toggleUI('.ui-col-mods')"> Column: MODS</label>
+                <label class="setting-item"><input type="checkbox" id="cb-col-comp" onchange="toggleCol('comp', this.checked)"> Column: Composition %</label>
+                <label class="setting-item"><input type="checkbox" id="cb-col-scu" onchange="toggleCol('scu', this.checked)"> Column: SCU</label>
+                <label class="setting-item"><input type="checkbox" id="cb-col-dens" onchange="toggleCol('dens', this.checked)"> Column: Density</label>
+                <label class="setting-item"><input type="checkbox" id="cb-col-val" onchange="toggleCol('val', this.checked)"> Column: Profit</label>
+                <label class="setting-item"><input type="checkbox" id="cb-col-mods" onchange="toggleCol('mods', this.checked)"> Column: MODS</label>
             </div>
+            
+            <button class="btn-action" onclick="resetFactorySettings()">Reset to Factory Settings</button>
         </div>
     </div>
     

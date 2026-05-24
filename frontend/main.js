@@ -37,7 +37,7 @@ function createWindow() {
 
     mainWindow.setIgnoreMouseEvents(false);
     mainWindow.loadFile('app/index.html');
-    //mainWindow.webContents.openDevTools({ mode: 'detach' });
+    // mainWindow.webContents.openDevTools({ mode: 'detach' });
 }
 
 app.whenReady().then(() => {

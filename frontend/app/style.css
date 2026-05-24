@@ -1,16 +1,127 @@
 /* ==========================================================================
-   1. ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ
+   1. ПЕРЕМЕННЫЕ (THEMES)
    ========================================================================== */
+/* ТЕМА 1: DEFAULT (Голографический бирюзово-зеленый) */
 :root {
     --bg-overlay: rgba(11, 15, 19, 0.85);
-    --color-raw: #00d4ff; --color-ref: #00ff9d; --color-bonus: #f1c40f;
-    --text-dim: #718096; --border: rgba(45, 55, 72, 0.5);
+    --color-raw: #00d4ff; 
+    --color-ref: #00ff9d; 
+    --color-bonus: #f1c40f;
+    --text-dim: #718096; 
+    --border: rgba(45, 55, 72, 0.5);
     
     /* Грейды */
     --g-trash: #9d9d9d; --g-base: #ffffff; --g-uncommon: #1eff00;
     --g-rare: #0070dd; --g-epic: #a335ee; --g-legendary: #ff8000;
 }
 
+/* ТЕМА 2: AMBER HUD (Классический Elite Dangerous / Индустриальный) */
+body[data-theme="amber"] {
+    --bg-overlay: rgba(25, 12, 0, 0.9);
+    --color-raw: #d35400; /* Темно-оранжевый */
+    --color-ref: #f39c12; /* Ярко-оранжевый */
+    --color-bonus: #f1c40f; /* Желтый */
+    --text-dim: #a87b51; 
+    --border: rgba(230, 126, 34, 0.4);
+    
+    /* Меняем зеленый грейд на янтарный */
+    --g-uncommon: #f1c40f; 
+}
+
+/* =======================================================
+   ТЕМА 3: "STAR CITIZEN HUD" (Holographic Glass)
+   ======================================================= */
+body[data-theme="glass"] {
+    /* Фирменная палитра mobiGlas / Aegis Dynamics */
+    --bg-overlay: rgba(6, 16, 24, 0.55); /* Темный, чуть синеватый тон визора */
+    --color-raw: #7fd4e3;                /* Приглушенный циановый для второстепенного текста */
+    --color-ref: #00f0ff;                /* Яркий неоновый циан */
+    --text-dim: #5c9ca8;                 /* Темно-бирюзовый для тусклого текста */
+    --border: rgba(0, 240, 255, 0.35);   /* Полупрозрачная граница */
+    --color-bonus: #a8ff00;              /* Кибер-зеленый/желтый для бонусов */
+}
+
+/* 1. Главные панели - эффект голографического стекла */
+body[data-theme="glass"] .hologram-panel {
+    border-radius: 16px; /* Скругление как в инвентаре (скриншот 2) */
+    
+    /* Переопределяем рамки из базовой темы */
+    border: 1px solid var(--border) !important;
+    
+    /* Градиентный фон для объема и сильный блюр заднего фона */
+    background: linear-gradient(135deg, rgba(6, 16, 24, 0.75) 0%, rgba(6, 16, 24, 0.4) 100%);
+    backdrop-filter: blur(12px) brightness(1.1);  
+    
+    /* Внешнее и внутреннее голографическое свечение */
+    box-shadow: 
+        0 0 15px rgba(0, 240, 255, 0.1), 
+        inset 0 0 25px rgba(0, 240, 255, 0.05),
+        0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+/* 2. Технологичные декоративные элементы (полоски сверху и снизу как на MFD дисплеях) */
+body[data-theme="glass"] .hologram-panel::before {
+    content: ''; position: absolute;
+    top: 0; left: 15%; right: 15%;
+    height: 2px; background: var(--color-ref);
+    box-shadow: 0 0 10px var(--color-ref);
+    border-radius: 2px;
+}
+body[data-theme="glass"] .hologram-panel::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 35%; right: 35%;
+    height: 2px; background: rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 5px var(--color-ref);
+    border-radius: 2px;
+}
+
+/* 3. Шапка панели */
+body[data-theme="glass"] header.drag-handle {
+    border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    box-shadow: 0 4px 6px -6px var(--color-ref); /* Легкое свечение под линией */
+    padding-bottom: 12px;
+}
+
+/* 4. Дизайн таблицы для этой темы */
+body[data-theme="glass"] .mining-table th {
+    /* Сплошная линия вместо пунктирной, цвет текста изменен на приглушенный циан */
+    border-bottom: 1px solid rgba(0, 240, 255, 0.3); 
+    color: var(--color-raw);
+    font-weight: 700;
+}
+body[data-theme="glass"] .cell {
+    border-bottom: 1px solid rgba(0, 240, 255, 0.05);
+}
+
+/* 5. Плашка вердикта (полностью плоский парящий текст) */
+body[data-theme="glass"] .verdict-base {
+    background: none;
+    border: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    padding: 0;
+    
+    /* Возвращаем тексту красивое мягкое неоновое свечение */
+    text-shadow: 0 0 10px currentColor; 
+}
+
+/* Цвета специфичных вердиктов (теперь рамки не нужны, меняем только цвет самого текста) */
+body[data-theme="glass"] .verdict-skip { color: #ff4d4d; }
+body[data-theme="glass"] .verdict-jackpot { color: var(--color-bonus); }
+
+/* 6. Полосы прогресса (если есть bar-bg / bar-fill) */
+body[data-theme="glass"] .bar-bg {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+}
+body[data-theme="glass"] .bar-fill {
+    background: var(--color-ref);
+    box-shadow: 0 0 8px var(--color-ref);
+}
+
+/* ==========================================================================
+   2. БАЗОВЫЕ СТИЛИ И УТИЛИТЫ
+   ========================================================================== */
 body {
     background-color: transparent; 
     font-family: 'Segoe UI Condensed', 'Roboto Condensed', sans-serif;
@@ -42,22 +153,20 @@ body {
     border-top: 2px solid var(--color-ref); padding: 12px 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     transform: perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-    transform-origin: center center;
-    backdrop-filter: blur(5px);
+    transform-origin: center center; backdrop-filter: blur(5px);
     transition: transform 0.1s ease-out, width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     will-change: transform, width; 
 }
 
 #main-overlay { width: max-content; min-width: 250px; left: 1400px; top: 100px; }
-#settings-overlay { width: 250px; left: 1100px; top: 100px; transition: max-height 0.3s, padding 0.3s, transform 0.1s; overflow: hidden; max-height: 500px;}
+#settings-overlay { width: 250px; left: 1100px; top: 100px; transition: max-height 0.3s, padding 0.3s, transform 0.1s; overflow: hidden; max-height: 800px;}
 #settings-overlay.collapsed { max-height: 25px; padding: 5px 15px; }
 
 /* ==========================================================================
    4. ШАПКА И ВЕРДИКТ
    ========================================================================== */
 header.drag-handle {
-    position: relative; 
-    display: flex; justify-content: space-between; align-items: flex-start; 
+    position: relative; display: flex; justify-content: space-between; align-items: flex-start; 
     gap: 10px; flex-wrap: wrap; margin-bottom: 12px; border-bottom: 1px solid var(--border); 
     padding-bottom: 8px; cursor: grab;
 }
@@ -73,19 +182,26 @@ header.drag-handle:active { cursor: grabbing; }
 /* Динамический блок потенциала */
 .opt-label { font-size: 10px; text-transform: uppercase; }
 .opt-val { font-weight: bold; font-size: 14px; }
-.opt-sub { font-size: 10px; color: #a0aec0; }
+.opt-sub { font-size: 10px; color: var(--text-dim); }
 .meta-info { font-size: 10px; color: var(--text-dim); margin-bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
 
 /* Вердикт */
 .verdict-base {
-    position: absolute; left: 50%; transform: translateX(-50%); top: 5px;
-    font-size: 16px; font-weight: 900; letter-spacing: 5px; 
-    text-transform: uppercase; white-space: nowrap; padding: 5px 10px;
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    top: 5px;
+    font-size: 16px; 
+    font-weight: 900; 
+    letter-spacing: 5px; 
+    text-transform: uppercase; 
+    white-space: nowrap; 
+    padding: 5px 10px;
 }
 .verdict-default { color: var(--text-dim); }
 .verdict-skip { color: #ff4d4d; text-shadow: 0 0 10px rgba(255, 77, 77, 0.6); }
-.verdict-jackpot { color: #ffb800; text-shadow: 0 0 10px rgba(255, 184, 0, 0.6); }
-.verdict-good { color: #00ff9d; text-shadow: 0 0 10px rgba(0, 255, 157, 0.6); }
+.verdict-jackpot { color: var(--color-bonus); text-shadow: 0 0 10px rgba(241, 196, 15, 0.6); }
+.verdict-good { color: var(--color-ref); text-shadow: 0 0 10px var(--color-ref); }
 .verdict-average { color: #3498db; text-shadow: 0 0 10px rgba(52, 152, 219, 0.6); }
 
 /* ==========================================================================
@@ -118,18 +234,18 @@ header.drag-handle:active { cursor: grabbing; }
 .sys-stanton { color: #29B6F6; text-shadow: 0 0 5px #29B6F6; }
 .sys-pyro { color: #F44336; text-shadow: 0 0 5px #F44336; }
 .sys-nyx { color: #FF6D00; text-shadow: 0 0 5px #FF6D00; }
-.sys-default { color: #a0aec0; }
+.sys-default { color: var(--text-dim); }
 
 .comp-cell { width: 60px; }
-.bar-bg { width: 100%; height: 3px; background: #2d3748; margin-top: 3px; }
+.bar-bg { width: 100%; height: 3px; background: rgba(255,255,255,0.1); margin-top: 3px; }
 .bar-fill { height: 100%; }
-.mod-text { font-size: 10px; color: #a0aec0; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 3px; }
+.mod-text { font-size: 10px; color: var(--text-dim); background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 3px; }
 
 /* Линии трешхолда (Core / Trash) */
 .mining-table td.ui-col-mineral { position: relative; padding-left: 10px; }
 .mining-table tr.row-core td.ui-col-mineral::before {
     content: ''; position: absolute; left: 0; top: 2px; bottom: 2px; width: 4px;
-    background: repeating-linear-gradient(-45deg, #00ff9d, #00ff9d 4px, transparent 4px, transparent 8px);
+    background: repeating-linear-gradient(-45deg, var(--color-ref), var(--color-ref) 4px, transparent 4px, transparent 8px);
     opacity: 0.8;
 }
 .mining-table tr.row-trash td.ui-col-mineral::before {
@@ -144,8 +260,8 @@ header.drag-handle:active { cursor: grabbing; }
 #ui-status { text-align: center; font-size: 11px; margin-top: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;}
 
 #visual-scan-frame {
-    position: absolute; border: 2px solid #2ecc71; box-shadow: 0 0 15px #2ecc71, inset 0 0 10px rgba(46, 204, 113, 0.2);
-    background: rgba(46, 204, 113, 0.05); display: block; opacity: 0; will-change: opacity; z-index: 9999; pointer-events: none;
+    position: absolute; border: 2px solid var(--color-ref); box-shadow: 0 0 15px var(--color-ref), inset 0 0 10px var(--color-ref);
+    background: var(--color-ref); display: block; opacity: 0; will-change: opacity; z-index: 9999; pointer-events: none;
 }
 
 #edit-mode-warning {
@@ -162,13 +278,21 @@ header.drag-handle:active { cursor: grabbing; }
 .gear-btn:hover { transform: rotate(90deg); }
 
 .setting-group { margin-bottom: 12px; }
-.setting-group-title { font-size: 10px; color: #a0aec0; margin-bottom: 5px; text-transform: uppercase; }
+.setting-group-title { font-size: 10px; color: var(--text-dim); margin-bottom: 5px; text-transform: uppercase; }
 .setting-item { display: flex; align-items: center; font-size: 12px; margin-bottom: 4px; cursor: pointer; color: #cbd5e0; }
 .setting-item:hover { color: #fff; }
 
-.custom-select { position: relative; background: #1a202c; border: 1px solid var(--border); font-size: 12px; cursor: pointer; user-select: none; }
+.custom-select { position: relative; background: rgba(0,0,0,0.5); border: 1px solid var(--border); font-size: 12px; cursor: pointer; user-select: none; }
 .select-trigger { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
-.select-options { display: none; position: absolute; top: 100%; left: -1px; right: -1px; background: #1a202c; border: 1px solid var(--border); z-index: 100; max-height: 200px; overflow-y: auto; }
+.select-options { display: none; position: absolute; top: 100%; left: -1px; right: -1px; background: rgba(0,0,0,0.9); border: 1px solid var(--border); z-index: 100; max-height: 200px; overflow-y: auto; }
 .select-options.show { display: block; }
 .option-item { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .option-item:hover { background: var(--color-ref); color: #000; }
+
+/* Кнопка сброса настроек */
+.btn-action {
+    width: 100%; background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c;
+    color: #e74c3c; padding: 8px; margin-top: 15px; border-radius: 4px;
+    cursor: pointer; font-weight: bold; text-transform: uppercase; transition: all 0.2s;
+}
+.btn-action:hover { background: #e74c3c; color: #fff; }
