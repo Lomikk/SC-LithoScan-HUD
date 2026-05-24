@@ -41,11 +41,8 @@ function formatFullNum(num) {
 }
 
 function shortenNum(num) {
-    // Берем число по модулю, чтобы корректно сокращать отрицательные убытки (-1500 -> -1.5k)
     if (Math.abs(num) >= 1000000) return (num / 1000000).toFixed(2) + "M";
     if (Math.abs(num) >= 1000) return (num / 1000).toFixed(1) + "k";
-    
-    // Для чисел меньше 1000 используем честное математическое округление вместо floor
     return Math.round(num).toString();
 }
 
@@ -58,7 +55,7 @@ function getGradeInfo(grade) {
     return { text: "grade-legendary", row: "row-glow-legendary" };
 }
 
-// Текущее состояние интерфейса (чтобы сохранять настройки чекбоксов после обновления таблицы)
+// Текущее состояние интерфейса
 const uiState = {
     showRef: true, showRaw: true, isInline: false,
     shortNums: true, shortMins: false,
@@ -70,12 +67,11 @@ const uiState = {
 // ============================================================================
 const UI = {
     updateTotals: function(data) {
-        // Убрали скачки знаков: теперь всегда .toFixed(2) для объемов
         document.getElementById('meta-vol').innerText = `VOL: ${data.meta_vol.toFixed(2)} SCU`;
         document.getElementById('meta-method').innerText = `METHOD: ${data.meta_method}`;
         document.getElementById('meta-bonus').innerText = `BONUS: +${data.meta_bonus.toFixed(1)}%`;
         
-        const formatNumber = (num, isShort) => isShort ? shortenNum(num) : Math.round(num).toLocaleString('en-US');
+        const formatNumber = (num, isShort) => isShort ? shortenNum(num) : formatFullNum(num);
         
         // Стандартные поля
         document.getElementById('t-dens-full').innerText = formatNumber(data.totals.t_dens, false);
@@ -88,37 +84,25 @@ const UI = {
         document.getElementById('r-prof-full').innerText = formatNumber(data.totals.r_prof, false);
         document.getElementById('r-prof-short').innerText = formatNumber(data.totals.r_prof, true);
 
-        // ====================================================================
-        // НОВОЕ: ВЫВОД OPTIMAL DENSITY И ВЕРДИКТА
-        // ====================================================================
+        // Optimal Density & Verdict
         const optDens = data.totals.opt_dens;
         const optScu = data.totals.opt_scu;
         
         document.getElementById('opt-dens-full').innerText = formatNumber(optDens, false);
         document.getElementById('opt-dens-short').innerText = formatNumber(optDens, true);
-        // Здесь тоже ставим 2 знака, чтобы не было расхождений с таблицей
         document.getElementById('opt-scu').innerText = optScu.toFixed(2);
 
-        // Логика вердикта (подсказка игроку)
-    const verdictEl = document.getElementById('scan-verdict');
-    let vText = "SKIP IT";
-    let vColor = "#ff4d4d"; 
-    
-    if (optDens >= 30000) {
-        vText = "JACKPOT";
-        vColor = "#ffb800"; 
-    } else if (optDens >= 20000) {
-        vText = "GOOD YIELD";
-        vColor = "#00ff9d"; 
-    } else if (optDens >= 12000) {
-        vText = "AVERAGE";
-        vColor = "#3498db"; 
-    }
+        // Логика вердикта с использованием CSS-классов (никаких inline-стилей!)
+        const verdictEl = document.getElementById('scan-verdict');
+        let vText = "SKIP IT";
+        let vClass = "verdict-skip"; 
+        
+        if (optDens >= 30000) { vText = "JACKPOT"; vClass = "verdict-jackpot"; } 
+        else if (optDens >= 20000) { vText = "GOOD YIELD"; vClass = "verdict-good"; } 
+        else if (optDens >= 12000) { vText = "AVERAGE"; vClass = "verdict-average"; }
 
-    verdictEl.innerText = vText;
-    verdictEl.style.color = vColor;
-    // Добавим легкое текстовое свечение, чтобы не было скучно
-    verdictEl.style.textShadow = `0 0 10px ${vColor}aa`;
+        verdictEl.innerText = vText;
+        verdictEl.className = `verdict-base ${vClass}`; // Применяем базовый класс + цвет
     },
 
     updateTable: function(mineralsData) {
@@ -127,30 +111,26 @@ const UI = {
         mineralsData.forEach(chunk => {
             const minInfo = getMineralInfo(chunk.name);
             const gInfo = getGradeInfo(chunk.grade);
-            const opacityStyle = minInfo.short === "INER" ? "opacity: 0.5;" : "";
+            
+            // Заменяем inline-стили на логические классы
+            const coreClass = chunk.is_core ? "row-core" : "row-trash";
+            const opacityClass = minInfo.short === "INER" ? "opacity-dim" : "";
             
             let modText = "-";
             if (chunk.bonus > 0) {
-                let sysColor = "#a0aec0"; // Дефолтный серый
-                
-                if (chunk.system === "Stanton") sysColor = "#29B6F6"; // Синий
-                else if (chunk.system === "Pyro") sysColor = "#F44336"; // Красный
-                else if (chunk.system === "Nyx") sysColor = "#FF6D00"; // Оранжевый
+                let sysClass = "sys-default";
+                if (chunk.system === "Stanton") sysClass = "sys-stanton";
+                else if (chunk.system === "Pyro") sysClass = "sys-pyro";
+                else if (chunk.system === "Nyx") sysClass = "sys-nyx";
 
-                // Окрашиваем только название станции
-                modText = `<span style="color: ${sysColor}; text-shadow: 0 0 5px ${sysColor};">${chunk.station}</span> (+${(chunk.bonus * 100).toFixed(0)}%)`;
+                modText = `<span class="${sysClass}">${chunk.station}</span> (+${(chunk.bonus * 100).toFixed(0)}%)`;
             }
 
-            // Шаблонная строка (Backticks) - идеальная замена f-строкам Python
-            // === НОВОЕ: ОПРЕДЕЛЯЕМ КЛАСС ДЛЯ ШТРИХОВКИ ===
-            const coreClass = chunk.is_core ? "row-core" : "row-trash";
-
-            // Добавляем coreClass в список классов тега <tr>
             html += `
-            <tr class="${gInfo.row} ${coreClass}" style="${opacityStyle}">
+            <tr class="${gInfo.row} ${coreClass} ${opacityClass}">
                 <td class="cell ui-col-mineral">
                     <div class="layout-container align-items-baseline">
-                        <span class="mineral-name" style="color: ${minInfo.color};">
+                        <span class="mineral-name" style="color: ${minInfo.color}; text-shadow: 0 0 5px ${minInfo.color};">
                             <span class="min-full">${minInfo.short === 'INER' ? 'INERT' : chunk.name.toUpperCase()}</span>
                             <span class="min-short hide">${minInfo.short}</span>
                         </span>
@@ -177,8 +157,8 @@ const UI = {
                         </span>
                     </div>
                 </td>
-                <td class="cell ui-col-val" style="text-align: right;">
-                    <div class="layout-container" style="align-items: flex-end;">
+                <td class="cell ui-col-val text-right">
+                    <div class="layout-container align-end">
                         <span class="v-ref ui-ref-data">
                             <span class="num-full hide">${formatFullNum(chunk.prof_ref)}</span><span class="num-short">${shortenNum(chunk.prof_ref)}</span>
                         </span>
@@ -192,11 +172,11 @@ const UI = {
         });
 
         document.getElementById('minerals-body').innerHTML = html;
-        this.applyFormatting(); // Восстанавливаем состояние чекбоксов для новых строк
+        this.applyFormatting(); 
     },
 
     // ========================================================================
-    // ЛОГИКА ИНТЕРФЕЙСА И ЧЕКБОКСОВ
+    // ЛОГИКА ИНТЕРФЕЙСА
     // ========================================================================
     applyFormatting: function() {
         const toggleClass = (selector, shouldShow) => {
@@ -205,9 +185,7 @@ const UI = {
 
         toggleClass('.ui-ref-data', uiState.showRef);
         toggleClass('.ui-raw-data', uiState.showRaw);
-        
         document.querySelectorAll('.layout-container').forEach(el => el.classList.toggle('row-layout', uiState.isInline));
-        
         toggleClass('.num-full', !uiState.shortNums);
         toggleClass('.num-short', uiState.shortNums);
         toggleClass('.min-full', !uiState.shortMins);

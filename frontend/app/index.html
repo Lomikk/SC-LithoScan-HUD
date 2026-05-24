@@ -12,7 +12,7 @@
         <!-- ОКНО 1: ГЛАВНЫЕ ДАННЫЕ -->
         <div class="hologram-panel" id="main-overlay">
             <header class="drag-handle">
-                <!-- ЛЕВАЯ КОЛОНКА (Плотность и Потенциал) -->
+                <!-- ЛЕВАЯ КОЛОНКА -->
                 <div class="header-block ui-density-total">
                     <span class="label-sm">Total Density</span>
                     <div class="main-val ui-ref-data">
@@ -23,26 +23,23 @@
                         <span class="num-full hide" id="r-dens-full">0</span><span class="num-short" id="r-dens-short">0</span>
                     </div>
 
-                    <!-- НОВЫЙ БЛОК: OPTIMAL CORE -->
-                    <div class="optimal-block mt-1" style="color: #f1c40f;">
-                        <span style="font-size: 10px; text-transform: uppercase;">Best Potential:</span><br>
-                        <span style="font-weight: bold; font-size: 14px;">
-                            <!-- РАЗДЕЛИЛИ НА ДВА ЭЛЕМЕНТА -->
+                    <!-- OPTIMAL CORE -->
+                    <div class="optimal-block mt-1 text-bonus">
+                        <span class="opt-label">Best Potential:</span><br>
+                        <span class="opt-val">
                             <span class="num-full hide" id="opt-dens-full">0</span><span class="num-short" id="opt-dens-short">0</span>
                         </span> aUEC/SCU
-                        <span style="font-size: 10px; color: #a0aec0;"> (in <span id="opt-scu">0</span> SCU)</span>
+                        <span class="opt-sub"> (in <span id="opt-scu">0</span> SCU)</span>
                     </div>
                 </div>
                 
                 <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА (Вердикт) -->
-                <div class="header-block text-center" style="align-items: center; justify-content: center; min-width: 100px;">
-                    <div id="scan-verdict" style="padding: 5px 10px; font-weight: bold; font-size: 14px; letter-spacing: 1px;">
-                        WAITING
-                    </div>
+                <div id="scan-verdict" class="verdict-base verdict-default">
+                    WAITING
                 </div>
 
-                <!-- ПРАВАЯ КОЛОНКА (Прибыль) -->
-                <div class="header-block right ui-profit-total">
+                <!-- ПРАВАЯ КОЛОНКА -->
+                <div class="header-block right ui-profit-total text-right">
                     <span class="label-sm">Total Profit</span>
                     <div class="main-val ui-ref-data">
                         <span class="num-full hide" id="t-prof-full">0</span><span class="num-short" id="t-prof-short">0</span>
@@ -56,7 +53,7 @@
             <div class="meta-info">
                 <span class="ui-meta-vol" id="meta-vol">VOL: 0 SCU</span>
                 <span class="ui-meta-method" id="meta-method">METHOD: NONE</span>
-                <span class="ui-meta-bonus" id="meta-bonus" style="color: var(--color-bonus);">BONUS: 0%</span>
+                <span class="ui-meta-bonus text-bonus" id="meta-bonus">BONUS: 0%</span>
             </div>
 
             <table class="mining-table">
@@ -66,7 +63,7 @@
                         <th class="ui-col-comp comp-cell">%</th>
                         <th class="ui-col-scu">SCU (R/R)</th>
                         <th class="ui-col-dens">Density</th>
-                        <th class="ui-col-val" style="text-align: right;">Profit</th>
+                        <th class="ui-col-val text-right">Profit</th>
                         <th class="ui-col-mods">Mods</th>
                     </tr>
                 </thead>
@@ -93,7 +90,7 @@
                     </div>
                     <div class="select-options" id="opts-method"></div>
                 </div>
-                <div style="height: 8px;"></div>
+                <div class="mt-8"></div>
                 <div class="custom-select" id="select-system">
                     <div class="select-trigger" onclick="toggleDropdown(event, 'system')">
                         <span id="val-system">Prices: ALL SYSTEMS</span>
@@ -106,7 +103,7 @@
                         <div class="option-item" onclick="selectOpt(event, 'system', 'Nyx', 'NYX')">NYX</div>
                     </div>
                 </div>
-                <div style="height: 8px;"></div>
+                <div class="mt-8"></div>
                 <div class="custom-select" id="select-yield">
                     <div class="select-trigger" onclick="toggleDropdown(event, 'yield')">
                         <span id="val-yield">Bonuses: ALL SYSTEMS</span>
@@ -143,9 +140,7 @@
         </div>
     </div>
     
-    <!-- ... твой HTML интерфейс остается без изменений ... -->
     <script src="ui.js"></script>
     <script src="renderer.js"></script>
 </body>
 </html>
-
