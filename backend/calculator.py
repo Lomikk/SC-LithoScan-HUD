@@ -223,7 +223,8 @@ class MiningCalculator:
         # =====================================================================
         max_pure_density = 0
         for chunk in minerals_list:
-            pure_dens = chunk.refined.profit / chunk.refined.mineral_after_refining_scu if chunk.refined.mineral_after_refining_scu > 0 else 0
+            # ИСПРАВЛЕНИЕ: Считаем плотность на 1 RAW SCU (так как трюм заполняется сырьем)
+            pure_dens = chunk.refined.profit / chunk.mineral_initial_scu if chunk.mineral_initial_scu > 0 else 0
             if pure_dens > max_pure_density:
                 max_pure_density = pure_dens
 
@@ -232,18 +233,17 @@ class MiningCalculator:
         threshold = max_pure_density * 0.40 
         
         for chunk in minerals_list:
-            # Инерт всегда мусор
             if "INERT" in chunk.mineral_name.upper(): 
                 chunk.is_core = False
                 continue
             
-            pure_dens = chunk.refined.profit / chunk.refined.mineral_after_refining_scu if chunk.refined.mineral_after_refining_scu > 0 else 0
+            pure_dens = chunk.refined.profit / chunk.mineral_initial_scu if chunk.mineral_initial_scu > 0 else 0
             
-            # Если проходит порог — помечаем как "Ядро" (Core), иначе — как мусор (Trash)
             if pure_dens >= threshold:
                 chunk.is_core = True
                 optimal_profit += chunk.refined.profit
-                optimal_scu += chunk.refined.mineral_after_refining_scu
+                # ИСПРАВЛЕНИЕ: Прибавляем сырой объем (место в корабле), а не переработанный!
+                optimal_scu += chunk.mineral_initial_scu 
             else:
                 chunk.is_core = False
 

@@ -78,25 +78,53 @@ const UI = {
         document.getElementById('r-prof-full').innerText = formatNumber(data.totals.r_prof, false);
         document.getElementById('r-prof-short').innerText = formatNumber(data.totals.r_prof, true);
 
-        // Optimal Density & Verdict
+       // ====================================================================
+        // ЛОГИКА УМНОГО ВЕРДИКТА (SMART VERDICT)
+        // ====================================================================
         const optDens = data.totals.opt_dens;
         const optScu = data.totals.opt_scu;
+        const totalDens = data.totals.t_dens;
+        const totalVol = data.meta_vol;
         
         document.getElementById('opt-dens-full').innerText = formatNumber(optDens, false);
         document.getElementById('opt-dens-short').innerText = formatNumber(optDens, true);
         document.getElementById('opt-scu').innerText = optScu.toFixed(2);
 
-        // Логика вердикта с использованием CSS-классов (никаких inline-стилей!)
         const verdictEl = document.getElementById('scan-verdict');
         let vText = "SKIP IT";
         let vClass = "verdict-skip"; 
         
-        if (optDens >= 30000) { vText = "JACKPOT"; vClass = "verdict-jackpot"; } 
-        else if (optDens >= 20000) { vText = "GOOD YIELD"; vClass = "verdict-good"; } 
-        else if (optDens >= 12000) { vText = "AVERAGE"; vClass = "verdict-average"; }
+        let densityToEvaluate = optDens; // По умолчанию оцениваем потенциал
+
+        // 1. ПРАВИЛО ОСКОЛКА: Если камень маленький, его нельзя расколоть. 
+        // Придется брать целиком вместе с мусором. Смотрим только на Total Density.
+        if (totalVol <= 2.0) {
+            densityToEvaluate = totalDens;
+        }
+        // 2. ПРАВИЛО ПЫЛИ: Если камень большой, но хорошей руды там крохи (< 0.5 SCU).
+        // Тратить время на раскол валуна ради пыли нет смысла. Возвращаемся к реальности.
+        else if (optScu < 0.5) {
+            densityToEvaluate = totalDens;
+        }
+
+        // Выносим вердикт на основе "Правильной" плотности
+        if (densityToEvaluate >= 30000) { 
+            vText = "JACKPOT"; vClass = "verdict-jackpot"; 
+        } 
+        else if (densityToEvaluate >= 20000) { 
+            vText = "GOOD YIELD"; vClass = "verdict-good"; 
+        } 
+        else if (densityToEvaluate >= 12000) { 
+            vText = "AVERAGE"; vClass = "verdict-average"; 
+        }
+
+        // Если это хороший осколок, который не надо колоть - даем команду на сбор
+        if (densityToEvaluate >= 12000 && totalVol <= 2.0) {
+            vText = "EXTRACT NOW"; 
+        }
 
         verdictEl.innerText = vText;
-        verdictEl.className = `verdict-base ${vClass}`; // Применяем базовый класс + цвет
+        verdictEl.className = `verdict-base ${vClass}`;
     },
 
     updateTable: function(mineralsData) {
