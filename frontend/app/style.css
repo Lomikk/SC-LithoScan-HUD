@@ -1,7 +1,12 @@
+/* ==========================================================================
+   1. ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ
+   ========================================================================== */
 :root {
     --bg-overlay: rgba(11, 15, 19, 0.85);
-    --color-raw: #00d4ff; --color-ref: #00ff9d; --color-bonus: #ffb800;
+    --color-raw: #00d4ff; --color-ref: #00ff9d; --color-bonus: #f1c40f;
     --text-dim: #718096; --border: rgba(45, 55, 72, 0.5);
+    
+    /* Грейды */
     --g-trash: #9d9d9d; --g-base: #ffffff; --g-uncommon: #1eff00;
     --g-rare: #0070dd; --g-epic: #a335ee; --g-legendary: #ff8000;
 }
@@ -16,47 +21,77 @@ body {
 
 .scene { width: 100%; height: 100%; position: relative; }
 
-#visual-scan-frame {
-    position: absolute;
-    border: 2px solid #2ecc71;
-    box-shadow: 0 0 15px #2ecc71, inset 0 0 10px rgba(46, 204, 113, 0.2);
-    background: rgba(46, 204, 113, 0.05);
-    display: block; 
-    opacity: 0;     
-    will-change: opacity; 
-    z-index: 9999;
-    pointer-events: none;
-}
+/* ==========================================================================
+   2. УТИЛИТЫ (Отступы, выравнивание, скрытие)
+   ========================================================================== */
+.hide { display: none !important; }
+.mt-1 { margin-top: 4px; }
+.mt-8 { margin-top: 8px; }
+.text-right { text-align: right; }
+.align-end { align-items: flex-end; }
+.text-bonus { color: var(--color-bonus); }
+.opacity-dim { opacity: 0.5; }
 
-/* ОБЩИЙ КЛАСС ДЛЯ ПАНЕЛЕЙ */
+/* ==========================================================================
+   3. ГЛАВНЫЕ ПАНЕЛИ
+   ========================================================================== */
 .hologram-panel {
-    pointer-events: auto; /* Сами панели ловят клики */
+    pointer-events: auto; /* Панели ловят клики */
     position: absolute;
     background: var(--bg-overlay); border: 1px solid var(--border);
     border-top: 2px solid var(--color-ref); padding: 12px 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     transform: perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
     transform-origin: center center;
-    backdrop-filter: blur(5px); transition: transform 0.1s ease-out;
-    will-change: transform; 
+    backdrop-filter: blur(5px);
+    transition: transform 0.1s ease-out, width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform, width; 
 }
 
-/* Стартовые позиции */
-#main-overlay { width: fit-content; left: 1400px; top: 100px; }
+#main-overlay { width: max-content; min-width: 250px; left: 1400px; top: 100px; }
 #settings-overlay { width: 250px; left: 1100px; top: 100px; transition: max-height 0.3s, padding 0.3s, transform 0.1s; overflow: hidden; max-height: 500px;}
 #settings-overlay.collapsed { max-height: 25px; padding: 5px 15px; }
 
-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; cursor: grab;}
-header:active { cursor: grabbing; }
+/* ==========================================================================
+   4. ШАПКА И ВЕРДИКТ
+   ========================================================================== */
+header.drag-handle {
+    position: relative; 
+    display: flex; justify-content: space-between; align-items: flex-start; 
+    gap: 10px; flex-wrap: wrap; margin-bottom: 12px; border-bottom: 1px solid var(--border); 
+    padding-bottom: 8px; cursor: grab;
+}
+header.drag-handle:active { cursor: grabbing; }
 
 .header-block { display: flex; flex-direction: column; }
 .header-block.right { align-items: flex-end; text-align: right; }
+
 .label-sm { font-size: 10px; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px; white-space: nowrap; }
 .main-val { font-size: 24px; font-weight: 800; color: var(--color-ref); line-height: 1; white-space: nowrap; }
 .sub-val { color: var(--color-raw); font-size: 11px; margin-top: 2px; white-space: nowrap; }
+
+/* Динамический блок потенциала */
+.opt-label { font-size: 10px; text-transform: uppercase; }
+.opt-val { font-weight: bold; font-size: 14px; }
+.opt-sub { font-size: 10px; color: #a0aec0; }
 .meta-info { font-size: 10px; color: var(--text-dim); margin-bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
 
-.mining-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+/* Вердикт */
+.verdict-base {
+    position: absolute; left: 50%; transform: translateX(-50%); top: 5px;
+    font-size: 16px; font-weight: 900; letter-spacing: 5px; 
+    text-transform: uppercase; white-space: nowrap; padding: 5px 10px;
+}
+.verdict-default { color: var(--text-dim); }
+.verdict-skip { color: #ff4d4d; text-shadow: 0 0 10px rgba(255, 77, 77, 0.6); }
+.verdict-jackpot { color: #ffb800; text-shadow: 0 0 10px rgba(255, 184, 0, 0.6); }
+.verdict-good { color: #00ff9d; text-shadow: 0 0 10px rgba(0, 255, 157, 0.6); }
+.verdict-average { color: #3498db; text-shadow: 0 0 10px rgba(52, 152, 219, 0.6); }
+
+/* ==========================================================================
+   5. ТАБЛИЦА МИНЕРАЛОВ
+   ========================================================================== */
+.mining-table { width: max-content; border-collapse: collapse; font-size: 13px; }
 .mining-table th { text-align: left; font-size: 9px; color: var(--text-dim); text-transform: uppercase; padding-bottom: 5px; border-bottom: 1px solid var(--border); white-space: nowrap; }
 .cell { padding: 6px 12px 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); white-space: nowrap; vertical-align: middle; }
 
@@ -66,6 +101,7 @@ header:active { cursor: grabbing; }
 .v-ref { color: var(--color-ref); font-weight: bold; font-size: 13px; }
 .v-raw { color: var(--color-raw); font-size: 11px; }
 
+/* Дизайн грейдов */
 .mineral-name { font-weight: bold; text-shadow: 0 0 5px currentColor; }
 .grade { font-size: 10px; font-weight: bold; }
 .grade-trash { color: var(--g-trash); }
@@ -74,19 +110,51 @@ header:active { cursor: grabbing; }
 .grade-rare { color: var(--g-rare); text-shadow: 0 0 8px var(--g-rare);}
 .grade-epic { color: var(--g-epic); text-shadow: 0 0 8px var(--g-epic); }
 .grade-legendary { color: var(--g-legendary); text-shadow: 0 0 10px var(--g-legendary); }
-
 .row-glow-epic { background: rgba(163, 53, 238, 0.08); }
 .row-glow-epic .cell { border-bottom: 1px solid rgba(163, 53, 238, 0.3); }
 .row-glow-legendary { background: rgba(255, 128, 0, 0.08); }
+
+/* Цвета систем (Mods) */
+.sys-stanton { color: #29B6F6; text-shadow: 0 0 5px #29B6F6; }
+.sys-pyro { color: #F44336; text-shadow: 0 0 5px #F44336; }
+.sys-nyx { color: #FF6D00; text-shadow: 0 0 5px #FF6D00; }
+.sys-default { color: #a0aec0; }
 
 .comp-cell { width: 60px; }
 .bar-bg { width: 100%; height: 3px; background: #2d3748; margin-top: 3px; }
 .bar-fill { height: 100%; }
 .mod-text { font-size: 10px; color: #a0aec0; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 3px; }
 
+/* Линии трешхолда (Core / Trash) */
+.mining-table td.ui-col-mineral { position: relative; padding-left: 10px; }
+.mining-table tr.row-core td.ui-col-mineral::before {
+    content: ''; position: absolute; left: 0; top: 2px; bottom: 2px; width: 4px;
+    background: repeating-linear-gradient(-45deg, #00ff9d, #00ff9d 4px, transparent 4px, transparent 8px);
+    opacity: 0.8;
+}
+.mining-table tr.row-trash td.ui-col-mineral::before {
+    content: ''; position: absolute; left: 0; top: 2px; bottom: 2px; width: 4px;
+    background: repeating-linear-gradient(-45deg, #e74c3c, #e74c3c 4px, transparent 4px, transparent 8px);
+    opacity: 0.4; 
+}
+
+/* ==========================================================================
+   6. ВИЗУАЛЬНЫЕ ЭФФЕКТЫ (Скан, Настройки)
+   ========================================================================== */
 #ui-status { text-align: center; font-size: 11px; margin-top: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;}
 
-/* DEV CONSOLE */
+#visual-scan-frame {
+    position: absolute; border: 2px solid #2ecc71; box-shadow: 0 0 15px #2ecc71, inset 0 0 10px rgba(46, 204, 113, 0.2);
+    background: rgba(46, 204, 113, 0.05); display: block; opacity: 0; will-change: opacity; z-index: 9999; pointer-events: none;
+}
+
+#edit-mode-warning {
+    display: none; position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    color: #111; background: var(--color-bonus); padding: 5px 20px; font-weight: 700; font-size: 16px;
+    text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px var(--color-bonus); z-index: 9999;
+}
+
+/* Dev Console Inputs */
 .settings-header { display: flex; justify-content: space-between; align-items: center; cursor: grab; border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 10px;}
 .settings-header:active { cursor: grabbing; }
 .settings-title { font-size: 14px; color: var(--color-bonus); text-transform: uppercase; font-weight: bold;}
@@ -98,96 +166,9 @@ header:active { cursor: grabbing; }
 .setting-item { display: flex; align-items: center; font-size: 12px; margin-bottom: 4px; cursor: pointer; color: #cbd5e0; }
 .setting-item:hover { color: #fff; }
 
-.custom-select {
-    position: relative;
-    background: #1a202c;
-    border: 1px solid var(--border);
-    font-size: 12px;
-    cursor: pointer;
-    user-select: none;
-}
-.select-trigger {
-    padding: 5px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.select-options {
-    display: none;
-    position: absolute;
-    top: 100%; left: -1px; right: -1px;
-    background: #1a202c;
-    border: 1px solid var(--border);
-    z-index: 100;
-    max-height: 200px;
-    overflow-y: auto;
-}
+.custom-select { position: relative; background: #1a202c; border: 1px solid var(--border); font-size: 12px; cursor: pointer; user-select: none; }
+.select-trigger { padding: 5px 10px; display: flex; justify-content: space-between; align-items: center; }
+.select-options { display: none; position: absolute; top: 100%; left: -1px; right: -1px; background: #1a202c; border: 1px solid var(--border); z-index: 100; max-height: 200px; overflow-y: auto; }
 .select-options.show { display: block; }
-.option-item {
-    padding: 5px 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
+.option-item { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .option-item:hover { background: var(--color-ref); color: #000; }
-.hide { display: none !important; }
-
-#edit-mode-warning {
-    display: none; position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-    color: #111; background: #f1c40f; padding: 5px 20px; font-weight: 700; font-size: 16px;
-    text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px #f1c40f; z-index: 9999;
-}
-
-/* =========================================
-   ЛИНИИ ТРЕШХОЛДА (CORE / TRASH)
-   ========================================= */
-.mining-table td.ui-col-mineral {
-    position: relative;
-    padding-left: 10px; /* Сдвигаем текст немного вправо, чтобы освободить место для линии */
-}
-
-/* Зеленая штриховка для ценных минералов */
-.mining-table tr.row-core td.ui-col-mineral::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 2px; bottom: 2px; width: 4px;
-    background: repeating-linear-gradient(-45deg, #00ff9d, #00ff9d 4px, transparent 4px, transparent 8px);
-    opacity: 0.8;
-}
-
-/* Красная штриховка для мусора */
-.mining-table tr.row-trash td.ui-col-mineral::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 2px; bottom: 2px; width: 4px;
-    background: repeating-linear-gradient(-45deg, #e74c3c, #e74c3c 4px, transparent 4px, transparent 8px);
-    opacity: 0.4; /* Делаем красную чуть бледнее, чтобы не резала глаз */
-}
-
-header.drag-handle {
-    position: relative; /* Это обязательно, чтобы центр считался от границ шапки */
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-#scan-verdict {
-    /* 1. Центровка по горизонтали */
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%); /* Сдвигает сам текст обратно на половину его ширины для идеального центра */
-
-    /* 2. НАСТРОЙКА ВЫСОТЫ (МЕНЯЙ ЭТОТ ПАРАМЕТР) */
-    top: 5px; /* Увеличивай, чтобы опустить ниже, уменьшай, чтобы поднять */
-
-    /* 3. Сброс лишнего */
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: none;
-    
-    /* 4. Стиль шрифта */
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    white-space: nowrap; /* Чтобы надпись не перепрыгивала на новую строку */
-}
