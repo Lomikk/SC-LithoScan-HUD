@@ -31,7 +31,7 @@ class MiningScanner:
         "TORITE", "TUNGSTEN", "WUOTAN SEED"
     ]
 
-    SCALE_FACTOR = 1
+    SCALE_FACTOR = 4
     # Находим папку, в которой лежит этот скрипт (например, .../NewStarOCR/backend)
     _CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 

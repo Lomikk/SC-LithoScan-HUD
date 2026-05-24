@@ -99,7 +99,7 @@ body[data-theme="glass"] .verdict-base {
     border: none;
     backdrop-filter: none;
     box-shadow: none;
-    padding: 0;
+
     
     /* Возвращаем тексту красивое мягкое неоновое свечение */
     text-shadow: 0 0 10px currentColor; 
@@ -186,17 +186,27 @@ header.drag-handle:active { cursor: grabbing; }
 .meta-info { font-size: 10px; color: var(--text-dim); margin-bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
 
 /* Вердикт */
+/* Вердикт */
 .verdict-base {
     position: absolute; 
     left: 50%; 
     transform: translateX(-50%); 
-    top: 5px;
-    font-size: 16px; 
+    top: 5px;                 /* Позиция сверху */
+    font-size: 12px;          /* Уменьшили с 16px до 12px для компактности */
     font-weight: 900; 
-    letter-spacing: 5px; 
+    letter-spacing: 2px;      /* Уменьшили разрядку букв с 5px до 2px, чтобы сэкономить ширину */
     text-transform: uppercase; 
-    white-space: nowrap; 
-    padding: 5px 10px;
+    
+    /* Разрешаем перенос строк */
+    white-space: normal;      /* Заменили nowrap на normal, чтобы текст мог переноситься */
+    text-align: center;       /* Центрируем перенесенные строчки относительно друг друга */
+    line-height: 1.1;         /* Минимальное расстояние между строками для аккуратного вида */
+    
+    /* Ограничиваем максимальную ширину для принудительного переноса */
+    max-width: 85px;          /* Эта ширина заставит "GOOD YIELD" и "SKIP IT" разбиться на 2 строки, 
+                                 но оставит короткие "JACKPOT" и "AVERAGE" в одну строку */
+    
+    padding: 4px 6px;         /* Чуть более компактные внутренние отступы */
 }
 .verdict-default { color: var(--text-dim); }
 .verdict-skip { color: #ff4d4d; text-shadow: 0 0 10px rgba(255, 77, 77, 0.6); }
@@ -260,8 +270,19 @@ header.drag-handle:active { cursor: grabbing; }
 #ui-status { text-align: center; font-size: 11px; margin-top: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;}
 
 #visual-scan-frame {
-    position: absolute; border: 2px solid var(--color-ref); box-shadow: 0 0 15px var(--color-ref), inset 0 0 10px var(--color-ref);
-    background: var(--color-ref); display: block; opacity: 0; will-change: opacity; z-index: 9999; pointer-events: none;
+    position: absolute; 
+    border: 2px solid var(--color-ref); 
+    box-shadow: 0 0 15px var(--color-ref), inset 0 0 10px var(--color-ref);
+    
+    /* ИСПРАВЛЕНИЕ: Делаем фон прозрачным (или очень слабо тонированным) */
+    background: rgba(0, 240, 255, 0.05); /* Легкий голографический оттенок (5% непрозрачности) */
+    /* Если хотите полностью прозрачную область внутри, используйте: background: transparent; */
+    
+    display: block; 
+    opacity: 0; 
+    will-change: opacity; 
+    z-index: 9999; 
+    pointer-events: none; /* Чтобы рамка не мешала кликам */
 }
 
 #edit-mode-warning {
