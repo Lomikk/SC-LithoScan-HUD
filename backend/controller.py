@@ -2,29 +2,46 @@ import asyncio
 import logging
 import traceback
 import time
+import json
+import os
 
 from api import PriceService
 from scanner import MiningScanner
 from calculator import MiningCalculator, CalcConfig
 from capture import ScreenCapture
+from dataclasses import asdict
 
 logger = logging.getLogger("MinerCalc")
 DEFAULT_SCAN_REGION = {'top': 337, 'left': 1408, 'width': 245, 'height': 431}
 
+# =============================================================================
+# ГЛАВНЫЙ ПЕРЕКЛЮЧАТЕЛЬ ДЛЯ РАЗРАБОТЧИКА (DEV_MODE)
+# True  - кэширует кадры в ОЗУ, пишет логи на диск, разрешает снапшоты по Alt+S.
+# False - (для игроков) отключает логирование, кэширование картинок и экономит ОЗУ.
+# =============================================================================
+DEV_MODE = True 
+
+
 class OverlayController:
     def __init__(self):
+        self.dev_mode = DEV_MODE # Сохраняем статус режима
+        
         self.price_service = PriceService()
         self.config = CalcConfig(system="ALL", yield_system="ALL", refining_method="Dinyx Solventation")
         self.calculator = MiningCalculator(self.price_service, self.config)
         self.scanner = MiningScanner()
-        self.capturer = ScreenCapture()
         
+        # Передаем статус режима разработчика в сканер
+        self.scanner.dev_mode = self.dev_mode
+        
+        self.capturer = ScreenCapture()
         self.server = None
         self.loop = None
         self.scan_region = DEFAULT_SCAN_REGION
         self.is_click_through = True
         self.is_scanning = False
-        self.is_visible = True 
+        self.is_visible = True
+        self.last_result = None
 
     def set_server(self, server):
         self.server = server
@@ -84,16 +101,59 @@ class OverlayController:
                 return
 
             # 3. Расчет
-            self.calculator.config = self.config
             result = self.calculator.analyze(self.scanner.asteroid_data)
 
             if result:
+                # Кэшируем результат только если включен режим разработчика
+                if self.dev_mode:
+                    self.last_result = result 
+                    
                 await self.send_result_to_frontend(result)
                 await self.server.broadcast({"type": "status", "text": "SCAN COMPLETE", "color": "#2ecc71"})
 
         except Exception as e:
             logger.error(f"[WORKER] ОШИБКА:\n{traceback.format_exc()}")
             await self.server.broadcast({"type": "status", "text": "SYSTEM ERROR", "color": "#e74c3c"})
+            
+        self.is_scanning = False
+
+    def save_debug_snapshot(self):
+        """Запуск скана с сохранением всех данных в папку (Вызывается по Alt+S)"""
+        if not self.is_scanning:
+            self._schedule_async(self.run_snapshot_async())
+
+    async def run_snapshot_async(self):
+        self.is_scanning = True
+        
+        # Если режим разработчика выключен, снапшот заблокирован
+        if not self.dev_mode:
+            await self.server.broadcast({"type": "status", "text": "DEV MODE DISABLED", "color": "#e74c3c"})
+            self.is_scanning = False
+            return
+        
+        if not self.last_result:
+            await self.server.broadcast({"type": "status", "text": "NO RECENT SCAN DATA", "color": "#e67e22"})
+            self.is_scanning = False
+            return
+
+        await self.server.broadcast({"type": "status", "text": "SAVING SNAPSHOT FROM CACHE...", "color": "#f1c40f"})
+
+        try:
+            # Превращаем сохраненный датакласс в JSON-словарь
+            calc_dict = asdict(self.last_result)
+            
+            # Просим сканер записать все сохраненные в ОЗУ файлы на диск
+            # Специфика asyncio: запускаем синхронную запись файла в отдельном потоке
+            success = await asyncio.to_thread(self.scanner.save_last_scan_to_disk, calc_dict)
+
+            if success:
+                await self.server.broadcast({"type": "status", "text": "SNAPSHOT COPIED FROM CACHE", "color": "#2ecc71"})
+            else:
+                await self.server.broadcast({"type": "status", "text": "WRITE ERROR", "color": "#e74c3c"})
+
+        except Exception as e:
+            logger.error(f"[WORKER] ОШИБКА SNAPSHOT:\n{traceback.format_exc()}")
+            await self.server.broadcast({"type": "status", "text": "SNAPSHOT ERROR", "color": "#e74c3c"})
             
         self.is_scanning = False
 
@@ -115,6 +175,10 @@ class OverlayController:
             if hasattr(self.scanner, 'asteroid_data') and self.scanner.asteroid_data:
                 result = self.calculator.analyze(self.scanner.asteroid_data)
                 if result:
+                    # Кэшируем результат только если включен режим разработчика
+                    if self.dev_mode:
+                        self.last_result = result 
+                        
                     await self.send_result_to_frontend(result)
                     await self.server.broadcast({"type": "status", "text": "RECALCULATED", "color": "#2ecc71"})
 
