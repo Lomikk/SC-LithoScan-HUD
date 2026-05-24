@@ -55,13 +55,6 @@ function getGradeInfo(grade) {
     return { text: "grade-legendary", row: "row-glow-legendary" };
 }
 
-// Текущее состояние интерфейса
-const uiState = {
-    showRef: true, showRaw: true, isInline: false,
-    shortNums: true, shortMins: false,
-    cols: { comp: true, scu: true, dens: true, val: true, mods: true }
-};
-
 // ============================================================================
 // ГЕНЕРАЦИЯ HTML
 // ============================================================================
@@ -72,6 +65,7 @@ const UI = {
         document.getElementById('meta-bonus').innerText = `BONUS: +${data.meta_bonus.toFixed(1)}%`;
         
         const formatNumber = (num, isShort) => isShort ? shortenNum(num) : formatFullNum(num);
+        const useShort = window.appSettings.ui.shortNums;
         
         // Стандартные поля
         document.getElementById('t-dens-full').innerText = formatNumber(data.totals.t_dens, false);
@@ -175,24 +169,23 @@ const UI = {
         this.applyFormatting(); 
     },
 
-    // ========================================================================
-    // ЛОГИКА ИНТЕРФЕЙСА
-    // ========================================================================
+    // Читаем глобальные настройки appSettings, которые обновляет renderer.js
     applyFormatting: function() {
+        const state = window.appSettings.ui;
         const toggleClass = (selector, shouldShow) => {
             document.querySelectorAll(selector).forEach(el => el.classList.toggle('hide', !shouldShow));
         };
 
-        toggleClass('.ui-ref-data', uiState.showRef);
-        toggleClass('.ui-raw-data', uiState.showRaw);
-        document.querySelectorAll('.layout-container').forEach(el => el.classList.toggle('row-layout', uiState.isInline));
-        toggleClass('.num-full', !uiState.shortNums);
-        toggleClass('.num-short', uiState.shortNums);
-        toggleClass('.min-full', !uiState.shortMins);
-        toggleClass('.min-short', uiState.shortMins);
+        toggleClass('.ui-ref-data', state.showRef);
+        toggleClass('.ui-raw-data', state.showRaw);
+        document.querySelectorAll('.layout-container').forEach(el => el.classList.toggle('row-layout', state.isInline));
+        toggleClass('.num-full', !state.shortNums);
+        toggleClass('.num-short', state.shortNums);
+        toggleClass('.min-full', !state.shortMins);
+        toggleClass('.min-short', state.shortMins);
 
-        Object.keys(uiState.cols).forEach(col => {
-            toggleClass(`.ui-col-${col}`, uiState.cols[col]);
+        Object.keys(state.cols).forEach(col => {
+            toggleClass(`.ui-col-${col}`, state.cols[col]);
         });
     },
 
