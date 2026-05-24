@@ -27,7 +27,10 @@ class InputHandler:
         self.controller.start_scan()
 
     def trigger_visibility(self):
-        self.controller.toggle_visibility()    
+        self.controller.toggle_visibility()
+
+    def trigger_snapshot(self):
+        self.controller.save_debug_snapshot()        
 
     def register_hotkeys(self):
         keyboard.add_hotkey('alt+g', self.trigger_toggle_mode)
@@ -35,4 +38,5 @@ class InputHandler:
         keyboard.add_hotkey('alt+2', self.trigger_point2)
         keyboard.add_hotkey('alt+x', self.trigger_scan)
         keyboard.add_hotkey('alt+v', self.trigger_visibility)
+        keyboard.add_hotkey('alt+ctrl', self.trigger_snapshot)
         logger.info("[HOTKEYS] Хоткеи успешно зарегистрированы")

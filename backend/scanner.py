@@ -65,14 +65,20 @@ class MiningScanner:
             }
         )
 
+        self.dev_mode = False # Режим разработчика (переопределяется контроллером)
+
         # Атрибут для хранения данных астероида (доступна везде!)
         self.asteroid_data = None
+
+        self.last_original_img = None
+        self.last_resized_img = None
+        self.last_raw_text = None
 
     # =========================================================================
     # СИСТЕМА ЛОГИРОВАНИЯ (НОВОЕ)
     # =========================================================================
 
-            # Убедимся, что папка RapidOCR существует
+        # Убедимся, что папка RapidOCR существует
         if not os.path.exists(self.SAVE_PATH):
             os.makedirs(self.SAVE_PATH)
 
@@ -180,36 +186,93 @@ class MiningScanner:
         print("[2] Парсинг данных...")
         self.asteroid_data = self.parse_raw_text(raw_text)
         
-        # ЛОГИРОВАНИЕ
-        self._log_debug_data(f"Файл: {os.path.basename(image_path)}", raw_text, self.asteroid_data)
+        # Запись общего лога только в режиме разработчика
+        if self.dev_mode:
+            self._log_debug_data(f"Файл: {os.path.basename(image_path)}", raw_text, self.asteroid_data)
         
         return self.asteroid_data
+
 
     # -------------------------------------------------------------------------
     # НОВЫЙ ВЫСОКОСКОРОСТНОЙ МЕТОД (ОЗУ) [1]
     # -------------------------------------------------------------------------
     def process_image(self, img_bgr):
-        """Главный метод (ОЗУ): обрабатывает картинку напрямую в оперативной памяти, минуя жесткий диск [1]"""
-        # Изменяем размер изображения, переданного напрямую из capture.py [1]
-        img_resized = cv2.resize(img_bgr, None, fx=self.SCALE_FACTOR, fy=self.SCALE_FACTOR, interpolation=cv2.INTER_CUBIC)
+        """Главный метод (ОЗУ): обрабатывает картинку напрямую в оперативной памяти"""
+        # Кэшируем оригинальное изображение ТОЛЬКО в режиме разработчика!
+        if self.dev_mode:
+            self.last_original_img = img_bgr.copy()
 
-        # (Опционально) Сохраняем только если папка RapidOCR физически существует для дебага
-        # Если захочешь выжать абсолютный максимум по скорости — эту строчку можно будет закомментировать!
-        if os.path.exists(self.SAVE_PATH):
+        img_resized = cv2.resize(img_bgr, None, fx=self.SCALE_FACTOR, fy=self.SCALE_FACTOR, interpolation=cv2.INTER_CUBIC)
+        
+        # Кэшируем обработанное изображение ТОЛЬКО в режиме разработчика!
+        if self.dev_mode:
+            self.last_resized_img = img_resized.copy() 
+
+        # Пишем отладочную картинку ТОЛЬКО в режиме разработчика!
+        if self.dev_mode and os.path.exists(self.SAVE_PATH):
             cv2.imwrite(os.path.join(self.SAVE_PATH, "debug_rapid_upscale.png"), img_resized)
 
         print("\n[1] Распознавание изображения напрямую из ОЗУ...")
         raw_text = self._ocr_and_group_text(img_resized)
-        print(f"Сырой текст от RapidOCR:\n{raw_text}\n")
+        
+        # Сохраняем сырой текст распознавания ТОЛЬКО в режиме разработчика!
+        if self.dev_mode:
+            self.last_raw_text = raw_text 
 
         print("[2] Парсинг данных...")
         self.asteroid_data = self.parse_raw_text(raw_text)
 
-        # ЛОГИРОВАНИЕ
-        self._log_debug_data("ОЗУ (Прямой захват)", raw_text, self.asteroid_data)
+        # Пишем лог-файл ТОЛЬКО в режиме разработчика!
+        if self.dev_mode:
+            self._log_debug_data("ОЗУ (Прямой захват)", raw_text, self.asteroid_data)
 
         return self.asteroid_data
+    
+    def save_last_scan_to_disk(self, calc_result_dict):
+        """Сохраняет последние закэшированные в памяти данные на диск (по Alt+S)"""
+        if self.last_original_img is None:
+            print("⚠️ Нет данных последнего сканирования для создания снапшота!")
+            return False
 
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        snap_dir = os.path.join(self.SAVE_PATH, f"snapshot_{timestamp}")
+        os.makedirs(snap_dir, exist_ok=True)
+
+        try:
+            # 1. Пишем сохраненные в ОЗУ картинки
+            cv2.imwrite(os.path.join(snap_dir, "1_original_image.png"), self.last_original_img)
+            cv2.imwrite(os.path.join(snap_dir, "2_processed_image.png"), self.last_resized_img)
+
+            # 2. Пишем OCR-текст и результат парсинга
+            log_file = os.path.join(snap_dir, "3_text_data.txt")
+            with open(log_file, "w", encoding="utf-8") as f:
+                f.write("--- СЫРОЙ ТЕКСТ (OCR) ---\n")
+                f.write(self.last_raw_text + "\n")
+                f.write("--- РЕЗУЛЬТАТ ПАРСИНГА ---\n")
+                f.write(json.dumps(self.asteroid_data, indent=4, ensure_ascii=False) + "\n")
+
+            # 3. Пишем результаты расчетов калькулятора
+            calc_file = os.path.join(snap_dir, "4_calculation_results.json")
+            with open(calc_file, "w", encoding="utf-8") as f:
+                json.dump(calc_result_dict, f, indent=4, ensure_ascii=False)
+
+            print(f"✅ Снапшот последнего сканирования успешно сохранен в: {snap_dir}")
+            return True
+        except Exception as e:
+            print(f"❌ Ошибка сохранения снапшота на диск: {e}")
+            return False
+
+    # === НОВЫЙ МЕТОД СПЕЦИАЛЬНО ДЛЯ SNAPSHOT ===
+    def _log_snapshot_data(self, raw_text, parsed_data):
+        """Создает файл text_data.txt в папке снапшота"""
+        if not hasattr(self, 'temp_snap_dir'): return
+        
+        log_file = os.path.join(self.temp_snap_dir, "3_text_data.txt")
+        with open(log_file, "w", encoding="utf-8") as f:
+            f.write("--- СЫРОЙ ТЕКСТ (OCR) ---\n")
+            f.write(raw_text + "\n")
+            f.write("--- РЕЗУЛЬТАТ ПАРСИНГА ---\n")
+            f.write(json.dumps(parsed_data, indent=4, ensure_ascii=False) + "\n")
     # =========================================================================
     # ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ПАРСИНГА (ОБНОВЛЕННЫЕ И УЛУЧШЕННЫЕ)
     # =========================================================================
