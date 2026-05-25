@@ -62,6 +62,6 @@ class InputHandler:
         # Область и скан сигнатур
         keyboard.add_hotkey('alt+3', self.trigger_point1_sig)
         keyboard.add_hotkey('alt+4', self.trigger_point2_sig)
-        keyboard.add_hotkey('alt+c', self.trigger_scan_sig)
+        keyboard.add_hotkey('f3', self.trigger_scan_sig)
         
         logger.info("[HOTKEYS] Хоткеи успешно зарегистрированы")
