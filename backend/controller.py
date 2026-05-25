@@ -122,6 +122,8 @@ class OverlayController:
             # 3. Математика сигнатур
             matches = self.sig_calculator.analyze(rs_total)
 
+            logger.info(f"[SIG DECODER] Распознана сигнатура: {rs_total}. Найдено совпадений: {len(matches)}")
+
             # 4. Формируем ответ для фронтенда
             response_data = []
             for match in matches:

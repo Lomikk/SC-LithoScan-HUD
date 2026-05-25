@@ -197,6 +197,49 @@ const UI = {
         this.applyFormatting(); 
     },
 
+    // === НОВАЯ ФУНКЦИЯ ДЛЯ РАДАРА СИГНАТУР ===
+    updateSignature: function(data) {
+        const container = document.getElementById('sig-results-body');
+        
+        // Если база ничего не нашла
+        if (!data.matches || data.matches.length === 0) {
+            container.innerHTML = `
+                <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">SIG: ${data.rs_total}</div>
+                <div style="color: #ff4d4d; font-size: 11px; text-align: center; text-shadow: 0 0 5px rgba(255,77,77,0.5);">
+                    UNKNOWN
+                </div>`;
+            return;
+        }
+
+        // Выводим саму цифру сигнала один раз сверху
+        let html = `
+        <div style="font-size: 10px; color: var(--text-dim); border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 6px;">
+            SIGNAL: <span style="color: var(--color-bonus)">${data.rs_total}</span>
+        </div>`;
+        
+        data.matches.forEach((match) => {
+            const matchType = match.is_mixed ? "MIXED" : "SINGLE";
+            const typeCol = match.is_mixed ? "#3498db" : "var(--color-ref)"; 
+            
+            html += `
+            <div class="sig-match-group">
+                <div class="sig-match-title" style="color: ${typeCol}">${matchType}</div>`;
+            
+            match.nodes.forEach(node => {
+                const minInfo = getMineralInfo(node.mineral);
+                html += `
+                <div class="sig-node">
+                    <span style="color: ${minInfo.color}; text-shadow: 0 0 5px ${minInfo.color};">${node.mineral}</span>
+                    <span class="sig-node-count">x${node.count}</span>
+                </div>`;
+            });
+            
+            html += `</div>`;
+        });
+        
+        container.innerHTML = html;
+    },
+
     // Читаем глобальные настройки appSettings, которые обновляет renderer.js
     applyFormatting: function() {
         const state = window.appSettings.ui;
