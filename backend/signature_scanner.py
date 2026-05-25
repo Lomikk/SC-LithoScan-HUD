@@ -26,17 +26,22 @@ class SignatureScanner:
         # Объединяем весь найденный текст
         combined_text = " ".join(result.txts)
         
-        # Удаляем всё, кроме цифр (иногда OCR путает букву 'O' и ноль, можно сделать замену)
+        # 1. Заменяем частые ошибки OCR (буквы O на нули)
         combined_text = combined_text.replace('O', '0').replace('o', '0')
+        
+        # 2. ИСПРАВЛЕНИЕ: Удаляем запятые и точки, чтобы 11,700 стало 11700
+        combined_text = combined_text.replace(',', '').replace('.', '')
+        
+        # 3. Ищем непрерывные блоки цифр
         numbers = re.findall(r'\d+', combined_text)
         
         if not numbers:
             return 0
             
         # Сигнатуры в игре обычно от 1700 до 50000+. 
-        # Берем самое длинное или самое большое число из найденных
+        # Отфильтровываем случайный мусор (цифры короче 3 знаков)
         valid_nums = [int(n) for n in numbers if len(n) >= 3]
         if valid_nums:
-            return max(valid_nums)
+            return max(valid_nums) # Берем максимальное из найденного
             
         return 0
