@@ -154,22 +154,17 @@
             <button class="btn-action" onclick="resetFactorySettings()">Reset to Factory Settings</button>
         </div>
         
-        <!-- ОКНО 3: РАДАР СИГНАТУР (Вынесено из-под Dev Console) -->
+        <!-- ОКНО 3: РАДАР СИГНАТУР (МИНИМАЛИЗМ) -->
         <div class="hologram-panel" id="sig-overlay">
-            <div class="settings-header drag-handle">
-                <span class="settings-title">📡 SIGNATURE DECODER</span>
-                <span class="gear-btn" onclick="document.getElementById('sig-overlay').classList.toggle('collapsed')">🔽</span>
-            </div>
-            
-            <div class="sig-header">
-                <span class="label-sm">Signal Detected</span>
-                <div class="main-val text-bonus" id="sig-rs-total">0</div>
+            <div class="settings-header drag-handle" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">
+                <span class="settings-title" style="font-size: 11px; letter-spacing: 1px;">📡 DECODER</span>
             </div>
             
             <div class="sig-results" id="sig-results-body">
-                <div class="opacity-dim mt-8" style="font-size: 12px; text-align: center;">
-                    Waiting for scan (Alt+C)...
+                <div class="opacity-dim mt-8" style="font-size: 11px; text-align: center;">
+                    Waiting for ping (Alt+C)
                 </div>
+            </div>
         </div>
     </div>
 

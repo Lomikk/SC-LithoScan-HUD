@@ -319,50 +319,47 @@ header.drag-handle:active { cursor: grabbing; }
 .btn-action:hover { background: #e74c3c; color: #fff; }
 
 /* ==========================================================================
-   7. SIGNATURE DECODER (Радар)
+   7. SIGNATURE DECODER (Радар - Минимализм)
    ========================================================================== */
 #sig-overlay { 
-    width: 250px; 
-    left: 50px; /* Размещаем слева */
+    width: max-content; 
+    min-width: 140px; 
+    left: 50px; 
     top: 100px; 
-    transition: max-height 0.3s, padding 0.3s, transform 0.1s; 
-    overflow: hidden; 
-    max-height: 800px; 
+    padding: 8px 12px;
 }
-#sig-overlay.collapsed { max-height: 25px; padding: 5px 15px; }
 
-.sig-header { border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; }
+.sig-results { margin-top: 4px; }
 
-.sig-match-card { 
-    background: rgba(0,0,0,0.4); 
-    border: 1px solid rgba(255,255,255,0.05); 
-    padding: 8px 12px; 
-    margin-bottom: 8px; 
-    border-left: 3px solid var(--color-ref); 
-    border-radius: 0 4px 4px 0;
+.sig-match-group { 
+    margin-bottom: 6px; 
+    padding-bottom: 6px;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+.sig-match-group:last-child { 
+    border-bottom: none; 
+    margin-bottom: 0; 
+    padding-bottom: 0; 
 }
 
 .sig-match-title { 
-    font-size: 10px; 
+    font-size: 9px; 
     text-transform: uppercase; 
-    color: var(--text-dim); 
-    margin-bottom: 6px; 
+    margin-bottom: 4px; 
     letter-spacing: 1px;
 }
 
 .sig-node { 
     display: flex; 
     justify-content: space-between; 
-    align-items: center;
-    font-size: 14px; 
+    align-items: baseline;
+    font-size: 12px; 
     font-weight: bold; 
-    margin-bottom: 4px; 
+    line-height: 1.3;
+    gap: 15px;
 }
 
 .sig-node-count { 
-    color: var(--color-base); 
-    background: rgba(255,255,255,0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
+    color: var(--text-dim); 
+    font-size: 11px;
 }
