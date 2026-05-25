@@ -317,3 +317,52 @@ header.drag-handle:active { cursor: grabbing; }
     cursor: pointer; font-weight: bold; text-transform: uppercase; transition: all 0.2s;
 }
 .btn-action:hover { background: #e74c3c; color: #fff; }
+
+/* ==========================================================================
+   7. SIGNATURE DECODER (Радар)
+   ========================================================================== */
+#sig-overlay { 
+    width: 250px; 
+    left: 50px; /* Размещаем слева */
+    top: 100px; 
+    transition: max-height 0.3s, padding 0.3s, transform 0.1s; 
+    overflow: hidden; 
+    max-height: 800px; 
+}
+#sig-overlay.collapsed { max-height: 25px; padding: 5px 15px; }
+
+.sig-header { border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; }
+
+.sig-match-card { 
+    background: rgba(0,0,0,0.4); 
+    border: 1px solid rgba(255,255,255,0.05); 
+    padding: 8px 12px; 
+    margin-bottom: 8px; 
+    border-left: 3px solid var(--color-ref); 
+    border-radius: 0 4px 4px 0;
+}
+
+.sig-match-title { 
+    font-size: 10px; 
+    text-transform: uppercase; 
+    color: var(--text-dim); 
+    margin-bottom: 6px; 
+    letter-spacing: 1px;
+}
+
+.sig-node { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    font-size: 14px; 
+    font-weight: bold; 
+    margin-bottom: 4px; 
+}
+
+.sig-node-count { 
+    color: var(--color-base); 
+    background: rgba(255,255,255,0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}

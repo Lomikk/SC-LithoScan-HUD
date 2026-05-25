@@ -81,6 +81,10 @@ function connectWebSocket() {
                 populateMethods(data.methods);
                 setUIEditMode(data.is_edit);
                 break;
+            case 'init':
+                populateMethods(data.methods);
+                setUIEditMode(data.is_edit);
+                break;
             case 'status':
                 setStatus(data.text, data.color);
                 break;
@@ -101,7 +105,10 @@ function connectWebSocket() {
             case 'scan_table_data':
                 UI.updateTable(data.data); 
                 break;
-        }
+            case 'sig_result':
+                UI.updateSignature(data);
+                break;
+        }           
     };
 
     ws.onclose = () => {
