@@ -9,6 +9,8 @@ from api import PriceService
 from scanner import MiningScanner
 from calculator import MiningCalculator, CalcConfig
 from capture import ScreenCapture
+from signature_calculator import SignatureCalculator
+from signature_scanner import SignatureScanner
 from dataclasses import asdict
 
 logger = logging.getLogger("MinerCalc")
@@ -21,23 +23,29 @@ DEFAULT_SCAN_REGION = {'top': 337, 'left': 1408, 'width': 245, 'height': 431}
 # =============================================================================
 DEV_MODE = True 
 
-
 class OverlayController:
     def __init__(self):
-        self.dev_mode = DEV_MODE # Сохраняем статус режима
+        self.dev_mode = DEV_MODE 
         
+        # Модули астероидов
         self.price_service = PriceService()
         self.config = CalcConfig(system="ALL", yield_system="ALL", refining_method="Dinyx Solventation")
         self.calculator = MiningCalculator(self.price_service, self.config)
         self.scanner = MiningScanner()
-        
-        # Передаем статус режима разработчика в сканер
         self.scanner.dev_mode = self.dev_mode
+        
+        # Модули сигнатур (НОВОЕ)
+        self.sig_scanner = SignatureScanner()
+        self.sig_calculator = SignatureCalculator()
         
         self.capturer = ScreenCapture()
         self.server = None
         self.loop = None
+        
+        # Два разных региона
         self.scan_region = DEFAULT_SCAN_REGION
+        self.sig_region = {'top': 200, 'left': 800, 'width': 200, 'height': 50}
+        
         self.is_click_through = True
         self.is_scanning = False
         self.is_visible = True
@@ -58,30 +66,86 @@ class OverlayController:
         self.is_click_through = not self.is_click_through
         self._schedule_async(self.server.broadcast({"type": "edit_mode", "is_edit": not self.is_click_through}))
 
-    def set_point1(self, p1):
-        self._schedule_async(self.server.broadcast({"type": "status", "text": f"PT 1: {p1}", "color": "#f1c40f"}))
+    def set_point1(self, p1, is_signature=False):
+        prefix = "SIG PT 1: " if is_signature else "PT 1: "
+        self._schedule_async(self.server.broadcast({"type": "status", "text": f"{prefix}{p1}", "color": "#f1c40f"}))
 
-    def set_region(self, p1, p2):
+    def set_region(self, p1, p2, is_signature=False):
         l, t = min(p1[0], p2[0]), min(p1[1], p2[1])
         w, h = abs(p2[0] - p1[0]), abs(p2[1] - p1[1])
         if w < 10 or h < 10:
             self._schedule_async(self.server.broadcast({"type": "status", "text": "ERR: TOO SMALL", "color": "#e74c3c"}))
             return
         
-        self.scan_region = {'top': t, 'left': l, 'width': w, 'height': h}
-        self._schedule_async(self.server.broadcast({"type": "status", "text": f"REGION OK", "color": "#2ecc71"}))
+        # Если выделяли через Alt+3 / Alt+4, сохраняем в sig_region
+        if is_signature:
+            self.sig_region = {'top': t, 'left': l, 'width': w, 'height': h}
+            prefix = "SIG REGION OK"
+        # Если выделяли через Alt+1 / Alt+2, сохраняем в scan_region
+        else:
+            self.scan_region = {'top': t, 'left': l, 'width': w, 'height': h}
+            prefix = "REGION OK"
+            
+        self._schedule_async(self.server.broadcast({"type": "status", "text": prefix, "color": "#2ecc71"}))
         self._schedule_async(self.server.broadcast({"type": "scan_frame", "t": t, "l": l, "w": w, "h": h}))
-
-    def start_scan(self):
-        if not self.is_scanning:
-            self._schedule_async(self.run_scan_async())
 
     def toggle_visibility(self):
         """Мгновенно прячет или показывает оверлей"""
         self.is_visible = not self.is_visible
         self._schedule_async(self.server.broadcast({"type": "visibility", "show": self.is_visible}))        
 
-    # --- ЛОГИКА СКАНИРОВАНИЯ ---
+    # --- ЗАПУСК СКАНЕРОВ ---
+    def start_scan(self):
+        if not self.is_scanning:
+            self._schedule_async(self.run_scan_async())
+
+    def start_signature_scan(self):
+        if not self.is_scanning:
+            self._schedule_async(self.run_signature_scan_async())
+
+    async def run_signature_scan_async(self):
+        self.is_scanning = True
+        await self.server.broadcast({"type": "status", "text": "READING SIGNATURE...", "color": "#3498db"})
+
+        try:
+            # 1. Захват маленькой области с сигнатурой
+            img_bgr = self.capturer.grab_region_memory(self.sig_region)
+            
+            # 2. Быстрый OCR только для цифр
+            rs_total = await asyncio.to_thread(self.sig_scanner.process_image, img_bgr)
+            
+            if rs_total == 0:
+                await self.server.broadcast({"type": "status", "text": "NO SIG FOUND", "color": "#e74c3c"})
+                self.is_scanning = False
+                return
+
+            # 3. Математика сигнатур
+            matches = self.sig_calculator.analyze(rs_total)
+
+            # 4. Формируем ответ для фронтенда
+            response_data = []
+            for match in matches:
+                nodes_list = [{"mineral": n.mineral_name, "count": n.count} for n in match.nodes]
+                response_data.append({
+                    "is_mixed": match.is_mixed,
+                    "nodes": nodes_list
+                })
+
+            await self.server.broadcast({
+                "type": "sig_result",
+                "rs_total": rs_total,
+                "matches": response_data
+            })
+            
+            await self.server.broadcast({"type": "status", "text": "SIG SCANNED", "color": "#2ecc71"})
+
+        except Exception as e:
+            logger.error(f"[SIG SCANNER] ОШИБКА:\n{traceback.format_exc()}")
+            await self.server.broadcast({"type": "status", "text": "SIG ERROR", "color": "#e74c3c"})
+            
+        self.is_scanning = False        
+
+    # --- ЛОГИКА СКАНЕРА АСТЕРОИДОВ ---
     async def run_scan_async(self):
         self.is_scanning = True
         await self.server.broadcast({"type": "status", "text": "CAPTURING RAM...", "color": "#f39c12"})
