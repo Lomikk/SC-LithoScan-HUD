@@ -1,0 +1,533 @@
+{
+    "AGRICIUM": {
+        "unrefined": {
+            "ALL": 3149.0,
+            "Stanton": 3149.0,
+            "Pyro": 1035.0,
+            "Nyx": 3000.0
+        },
+        "refined": {
+            "ALL": 11000.0,
+            "Stanton": 11000.0,
+            "Pyro": 9200.0,
+            "Nyx": 10000.0
+        }
+    },
+    "ALUMINUM": {
+        "unrefined": {
+            "ALL": 1175.0,
+            "Stanton": 1175.0,
+            "Pyro": 398.0,
+            "Nyx": 1130.0
+        },
+        "refined": {
+            "ALL": 3800.0,
+            "Stanton": 3800.0,
+            "Pyro": 3600.0,
+            "Nyx": 3800.0
+        }
+    },
+    "APHORITE": {
+        "unrefined": {
+            "ALL": 110000.0,
+            "Stanton": 110000.0,
+            "Pyro": 93000.0,
+            "Nyx": 85000.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "BERYL": {
+        "unrefined": {
+            "ALL": 6600.0,
+            "Stanton": 6600.0,
+            "Pyro": 1229.0
+        },
+        "refined": {
+            "ALL": 22000.0,
+            "Stanton": 22000.0,
+            "Pyro": 21000.0,
+            "Nyx": 20000.0
+        }
+    },
+    "BEXALITE": {
+        "unrefined": {
+            "ALL": 5220.0,
+            "Stanton": 5220.0,
+            "Pyro": 5220.0,
+            "Nyx": 5220.0
+        },
+        "refined": {
+            "ALL": 30000.0,
+            "Stanton": 29000.0,
+            "Pyro": 30000.0,
+            "Nyx": 29000.0
+        }
+    },
+    "BORASE": {
+        "unrefined": {
+            "ALL": 1620.0,
+            "Stanton": 1620.0,
+            "Pyro": 1620.0
+        },
+        "refined": {
+            "ALL": 33000.0,
+            "Stanton": 31000.0,
+            "Pyro": 33000.0,
+            "Nyx": 28000.0
+        }
+    },
+    "COPPER": {
+        "unrefined": {
+            "ALL": 1200.0,
+            "Stanton": 1200.0,
+            "Pyro": 420.0
+        },
+        "refined": {
+            "ALL": 4400.0,
+            "Stanton": 3900.0,
+            "Pyro": 4400.0,
+            "Nyx": 3700.0
+        }
+    },
+    "CORUNDUM": {
+        "unrefined": {
+            "ALL": 1210.0,
+            "Stanton": 1209.0,
+            "Pyro": 441.0,
+            "Nyx": 1210.0
+        },
+        "refined": {
+            "ALL": 4400.0,
+            "Stanton": 3700.0,
+            "Pyro": 4400.0,
+            "Nyx": 3700.0
+        }
+    },
+    "DIAMOND": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 7700.0,
+            "Stanton": 7700.0,
+            "Pyro": 7400.0,
+            "Nyx": 7700.0
+        }
+    },
+    "DOLIVINE": {
+        "unrefined": {
+            "ALL": 160000.0,
+            "Stanton": 160000.0,
+            "Pyro": 130000.0,
+            "Nyx": 110000.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "GOLD": {
+        "unrefined": {
+            "ALL": 2672.0,
+            "Stanton": 2672.0,
+            "Pyro": 2672.0,
+            "Nyx": 1939.0
+        },
+        "refined": {
+            "ALL": 34000.0,
+            "Stanton": 33000.0,
+            "Pyro": 34000.0,
+            "Nyx": 33000.0
+        }
+    },
+    "HADANITE": {
+        "unrefined": {
+            "ALL": 600000.0,
+            "Stanton": 600000.0,
+            "Pyro": 570000.0,
+            "Nyx": 410000.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "HEPHAESTANITE": {
+        "unrefined": {
+            "ALL": 1572.0,
+            "Stanton": 1572.0,
+            "Pyro": 1122.0
+        },
+        "refined": {
+            "ALL": 5300.0,
+            "Stanton": 5300.0,
+            "Pyro": 4600.0,
+            "Nyx": 4100.0
+        }
+    },
+    "INERT MATERIALS": {
+        "unrefined": {
+            "ALL": 6.0,
+            "Pyro": 6.0,
+            "Stanton": 6.0,
+            "Nyx": 6.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "IRON": {
+        "unrefined": {
+            "ALL": 1000.0,
+            "Stanton": 1000.0,
+            "Pyro": 493.0
+        },
+        "refined": {
+            "ALL": 3900.0,
+            "Stanton": 3500.0,
+            "Pyro": 3900.0,
+            "Nyx": 3300.0
+        }
+    },
+    "JANALITE": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 3646390.0,
+            "Stanton": 1800000.0,
+            "Pyro": 1500000.0,
+            "Nyx": 1300000.0
+        }
+    },
+    "LARANITE": {
+        "unrefined": {
+            "ALL": 1281.0,
+            "Stanton": 1281.0,
+            "Pyro": 1281.0,
+            "Nyx": 1183.0
+        },
+        "refined": {
+            "ALL": 9200.0,
+            "Stanton": 8500.0,
+            "Pyro": 8700.0,
+            "Nyx": 9200.0
+        }
+    },
+    "QUANTANIUM": {
+        "unrefined": {
+            "ALL": 24200.0,
+            "Stanton": 12145.0,
+            "Pyro": 24200.0
+        },
+        "refined": {
+            "ALL": 170000.0,
+            "Stanton": 170000.0,
+            "Pyro": 170000.0,
+            "Nyx": 150000.0
+        }
+    },
+    "QUARTZ": {
+        "unrefined": {
+            "ALL": 1429.0,
+            "Stanton": 1429.0,
+            "Pyro": 448.0,
+            "Nyx": 420.0
+        },
+        "refined": {
+            "ALL": 5500.0,
+            "Stanton": 5500.0,
+            "Pyro": 5500.0,
+            "Nyx": 4400.0
+        }
+    },
+    "TARANITE": {
+        "unrefined": {
+            "ALL": 8799.0,
+            "Stanton": 8799.0,
+            "Pyro": 5527.0,
+            "Nyx": 4810.0
+        },
+        "refined": {
+            "ALL": 28000.0,
+            "Stanton": 28000.0,
+            "Pyro": 28000.0,
+            "Nyx": 28000.0
+        }
+    },
+    "TITANIUM": {
+        "unrefined": {
+            "ALL": 2612.0,
+            "Stanton": 2612.0,
+            "Pyro": 526.0
+        },
+        "refined": {
+            "ALL": 8400.0,
+            "Stanton": 8300.0,
+            "Pyro": 8400.0,
+            "Nyx": 8300.0
+        }
+    },
+    "TUNGSTEN": {
+        "unrefined": {
+            "ALL": 3098.0,
+            "Stanton": 3098.0,
+            "Pyro": 562.0
+        },
+        "refined": {
+            "ALL": 12000.0,
+            "Stanton": 11000.0,
+            "Pyro": 12000.0,
+            "Nyx": 10000.0
+        }
+    },
+    "DECARI POD": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "COBALT": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 23000.0,
+            "Pyro": 21000.0,
+            "Stanton": 20000.0,
+            "Nyx": 23000.0
+        }
+    },
+    "POTASSIUM": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 700.0,
+            "Pyro": 560.0,
+            "Stanton": 620.0,
+            "Nyx": 700.0
+        }
+    },
+    "STILERON": {
+        "unrefined": {
+            "ALL": 22207.0,
+            "Pyro": 22207.0,
+            "Stanton": 7932.0
+        },
+        "refined": {
+            "ALL": 150000.0,
+            "Pyro": 150000.0,
+            "Stanton": 150000.0,
+            "Nyx": 150000.0
+        }
+    },
+    "RAW ICE": {
+        "unrefined": {
+            "ALL": 636.0,
+            "Pyro": 636.0,
+            "Stanton": 164.0,
+            "Nyx": 636.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "SILICON": {
+        "unrefined": {
+            "ALL": 285.0,
+            "Pyro": 285.0,
+            "Stanton": 167.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "RICCITE": {
+        "unrefined": {
+            "ALL": 5151.0,
+            "Pyro": 5151.0,
+            "Stanton": 5151.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "BERADOM": {
+        "unrefined": {
+            "ALL": 170000.0,
+            "Stanton": 170000.0,
+            "Nyx": 120000.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "GLACOSITE": {
+        "unrefined": {
+            "ALL": 120000.0,
+            "Stanton": 120000.0,
+            "Nyx": 80000.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "FEYNMALINE": {
+        "unrefined": {
+            "ALL": 390000.0,
+            "Stanton": 390000.0,
+            "Nyx": 270000.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "CARINITE": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "JACLIUM": {
+        "unrefined": {
+            "ALL": 23000000.0,
+            "Stanton": 23000000.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "SALDYNIUM": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 34000000.0,
+            "Stanton": 34000000.0
+        }
+    },
+    "TIN": {
+        "unrefined": {
+            "ALL": 400.0,
+            "Pyro": 400.0,
+            "Stanton": 149.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "ATACAMITE": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "CONSTRUCTION MATERIAL RUBBLE": {
+        "unrefined": {
+            "ALL": 1979.0,
+            "Pyro": 1979.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "CONSTRUCTION MATERIAL PEBBLES": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "CONSTRUCTION MATERIAL SALVAGE": {
+        "unrefined": {
+            "ALL": 494.0,
+            "Pyro": 494.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "LINDINIUM ORE": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "SAVRILIUM ORE": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "SAVRILIUM": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 150000.0,
+            "Nyx": 120000.0,
+            "Stanton": 130000.0,
+            "Pyro": 150000.0
+        }
+    },
+    "TORITE": {
+        "unrefined": {
+            "ALL": 2200.0,
+            "Nyx": 2200.0
+        },
+        "refined": {
+            "ALL": 8500.0,
+            "Nyx": 6600.0,
+            "Stanton": 8500.0,
+            "Pyro": 6900.0
+        }
+    },
+    "WUOTAN SEED": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "ASLARITE": {
+        "unrefined": {
+            "ALL": 32.0,
+            "Stanton": 32.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    },
+    "SADARYX": {
+        "unrefined": {
+            "ALL": 0
+        },
+        "refined": {
+            "ALL": 500000.0,
+            "Stanton": 500000.0
+        }
+    },
+    "OURATITE": {
+        "unrefined": {
+            "ALL": 46000.0,
+            "Pyro": 46000.0,
+            "Nyx": 18300.0
+        },
+        "refined": {
+            "ALL": 0
+        }
+    }
+}
