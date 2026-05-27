@@ -1,0 +1,12 @@
+{
+    "Dinyx Solventation": {
+        "yield": 0.95,
+        "cost": 1.0,
+        "time": 4.0
+    },
+    "Ferron Exchange": {
+        "yield": 0.98,
+        "cost": 2.2,
+        "time": 1.5
+    }
+}

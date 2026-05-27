@@ -3,12 +3,13 @@
         "unrefined": {
             "ALL": 3149.0,
             "Stanton": 3149.0,
-            "Pyro": 1035.0
+            "Pyro": 1035.0,
+            "Nyx": 3000.0
         },
         "refined": {
-            "ALL": 11000.0,
-            "Stanton": 11000.0,
-            "Pyro": 9800.0,
+            "ALL": 10000.0,
+            "Stanton": 10000.0,
+            "Pyro": 10000.0,
             "Nyx": 10000.0
         }
     },
@@ -20,9 +21,9 @@
             "Nyx": 1130.0
         },
         "refined": {
-            "ALL": 3900.0,
-            "Stanton": 3900.0,
-            "Pyro": 3800.0,
+            "ALL": 4000.0,
+            "Stanton": 3800.0,
+            "Pyro": 4000.0,
             "Nyx": 3800.0
         }
     },
@@ -30,7 +31,7 @@
         "unrefined": {
             "ALL": 110000.0,
             "Stanton": 110000.0,
-            "Pyro": 100000.0,
+            "Pyro": 93000.0,
             "Nyx": 85000.0
         },
         "refined": {
@@ -45,7 +46,7 @@
         },
         "refined": {
             "ALL": 24000.0,
-            "Stanton": 23000.0,
+            "Stanton": 22000.0,
             "Pyro": 24000.0,
             "Nyx": 20000.0
         }
@@ -58,9 +59,9 @@
             "Nyx": 5220.0
         },
         "refined": {
-            "ALL": 30000.0,
+            "ALL": 34000.0,
             "Stanton": 29000.0,
-            "Pyro": 30000.0,
+            "Pyro": 34000.0,
             "Nyx": 29000.0
         }
     },
@@ -84,9 +85,9 @@
             "Pyro": 420.0
         },
         "refined": {
-            "ALL": 4500.0,
-            "Stanton": 3990.0,
-            "Pyro": 4500.0,
+            "ALL": 4200.0,
+            "Stanton": 4200.0,
+            "Pyro": 4200.0,
             "Nyx": 3700.0
         }
     },
@@ -99,7 +100,7 @@
         },
         "refined": {
             "ALL": 4400.0,
-            "Stanton": 3700.0,
+            "Stanton": 4000.0,
             "Pyro": 4400.0,
             "Nyx": 3700.0
         }
@@ -109,9 +110,9 @@
             "ALL": 0
         },
         "refined": {
-            "ALL": 8000.0,
+            "ALL": 8200.0,
             "Stanton": 7700.0,
-            "Pyro": 8000.0,
+            "Pyro": 8200.0,
             "Nyx": 7700.0
         }
     },
@@ -158,8 +159,8 @@
             "Pyro": 1122.0
         },
         "refined": {
-            "ALL": 5900.0,
-            "Stanton": 5900.0,
+            "ALL": 6000.0,
+            "Stanton": 6000.0,
             "Pyro": 4600.0,
             "Nyx": 4100.0
         }
@@ -177,15 +178,15 @@
     },
     "IRON": {
         "unrefined": {
-            "ALL": 1014.0,
+            "ALL": 1000.0,
             "Stanton": 1000.0,
             "Pyro": 493.0
         },
         "refined": {
-            "ALL": 3700.0,
-            "Stanton": 3500.0,
-            "Pyro": 3700.0,
-            "Nyx": 3500.0
+            "ALL": 4000.0,
+            "Stanton": 4000.0,
+            "Pyro": 3900.0,
+            "Nyx": 3300.0
         }
     },
     "JANALITE": {
@@ -193,7 +194,7 @@
             "ALL": 0
         },
         "refined": {
-            "ALL": 5201110.0,
+            "ALL": 3336740.0,
             "Stanton": 1800000.0,
             "Pyro": 1500000.0,
             "Nyx": 1300000.0
@@ -207,10 +208,10 @@
             "Nyx": 1183.0
         },
         "refined": {
-            "ALL": 9700.0,
-            "Stanton": 9100.0,
-            "Pyro": 9700.0,
-            "Nyx": 9200.0
+            "ALL": 9300.0,
+            "Stanton": 8500.0,
+            "Pyro": 9300.0,
+            "Nyx": 8500.0
         }
     },
     "QUANTANIUM": {
@@ -234,9 +235,9 @@
             "Nyx": 420.0
         },
         "refined": {
-            "ALL": 5500.0,
-            "Stanton": 4600.0,
-            "Pyro": 5500.0,
+            "ALL": 5200.0,
+            "Stanton": 4700.0,
+            "Pyro": 5200.0,
             "Nyx": 4400.0
         }
     },
@@ -248,8 +249,8 @@
             "Nyx": 4810.0
         },
         "refined": {
-            "ALL": 29000.0,
-            "Stanton": 29000.0,
+            "ALL": 28000.0,
+            "Stanton": 28000.0,
             "Pyro": 28000.0,
             "Nyx": 28000.0
         }
@@ -280,17 +281,6 @@
             "Nyx": 10000.0
         }
     },
-    "AMMONIA": {
-        "unrefined": {
-            "ALL": 2851.0,
-            "Stanton": 2851.0,
-            "Pyro": 910.0,
-            "Nyx": 1000.0
-        },
-        "refined": {
-            "ALL": 0
-        }
-    },
     "DECARI POD": {
         "unrefined": {
             "ALL": 0
@@ -304,10 +294,10 @@
             "ALL": 0
         },
         "refined": {
-            "ALL": 23000.0,
-            "Pyro": 21000.0,
+            "ALL": 22000.0,
+            "Pyro": 22000.0,
             "Stanton": 20000.0,
-            "Nyx": 23000.0
+            "Nyx": 22000.0
         }
     },
     "POTASSIUM": {
@@ -328,10 +318,10 @@
             "Stanton": 7932.0
         },
         "refined": {
-            "ALL": 150000.0,
+            "ALL": 160000.0,
             "Pyro": 150000.0,
             "Stanton": 150000.0,
-            "Nyx": 150000.0
+            "Nyx": 160000.0
         }
     },
     "RAW ICE": {
@@ -465,15 +455,7 @@
             "ALL": 0
         }
     },
-    "LINDINIUM ORE": {
-        "unrefined": {
-            "ALL": 0
-        },
-        "refined": {
-            "ALL": 0
-        }
-    },
-    "SAVRILIUM ORE": {
+    "LINDINIUM": {
         "unrefined": {
             "ALL": 0
         },
@@ -501,7 +483,7 @@
             "ALL": 8500.0,
             "Nyx": 6600.0,
             "Stanton": 8500.0,
-            "Pyro": 6700.0
+            "Pyro": 6900.0
         }
     },
     "WUOTAN SEED": {
@@ -532,10 +514,15 @@
     },
     "OURATITE": {
         "unrefined": {
-            "ALL": 0
+            "ALL": 46000.0,
+            "Pyro": 46000.0,
+            "Nyx": 18300.0
         },
         "refined": {
             "ALL": 0
         }
+    },
+    "_metadata": {
+        "last_updated": "2026-05-27 10:01"
     }
 }

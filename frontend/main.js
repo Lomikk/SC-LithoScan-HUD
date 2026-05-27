@@ -38,7 +38,16 @@ function createWindow() {
 
     mainWindow.setIgnoreMouseEvents(false);
     mainWindow.loadFile('app/index.html');
-    // mainWindow.webContents.openDevTools({ mode: 'detach' });
+
+    // === СБРОС ЗУМА ПРИ ПЕРЕЗАГРУЗКЕ ===
+    // Принудительно сбрасываем масштаб в 1.0 (100%) при каждом запуске или F5,
+    // чтобы Chromium не вытаскивал старый зум из своего внутреннего кэша
+    mainWindow.webContents.on('did-finish-load', () => {
+        currentZoom = 1.0; // Сбрасываем переменную в коде main.js
+        mainWindow.webContents.setZoomFactor(1.0); // Сбрасываем масштаб в движке
+    });
+
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
 }
 
 app.whenReady().then(() => {
