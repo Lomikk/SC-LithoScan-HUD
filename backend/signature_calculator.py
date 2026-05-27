@@ -3,6 +3,8 @@ import os
 from dataclasses import dataclass
 from typing import List, Dict
 
+from utils_path import get_app_dir
+
 # ==========================================
 # СТРУКТУРЫ ДАННЫХ ДЛЯ ОТВЕТА
 # ==========================================
@@ -25,7 +27,7 @@ class SignatureMatch:
 class SignatureCalculator:
     def __init__(self, db_filename="signatures.json"):
         # Формируем абсолютный путь к папке data
-        data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+        data_dir = os.path.join(get_app_dir(), "data")
         db_path = os.path.join(data_dir, db_filename)
         
         self.signatures = self._load_and_filter_signatures(db_path)
@@ -33,7 +35,7 @@ class SignatureCalculator:
     def _load_and_filter_signatures(self, db_path) -> Dict[int, str]:
         """Загружает базу и отсеивает всё, что не относится к корабельному майнингу астероидов"""
         if not os.path.exists(db_path):
-            print(f"⚠️ Файл базы сигнатур не найден: {db_path}")
+            print(f"[WARNING] Файл базы сигнатур не найден: {db_path}")
             return {}
         
         with open(db_path, 'r', encoding='utf-8') as f:
@@ -56,7 +58,7 @@ class SignatureCalculator:
             # Сохраняем в формате {int: str} для быстрых математических операций
             clean_sigs[int(sig_str)] = mineral_name
             
-        print(f"✅ База сигнатур загружена. Отфильтровано чистых корабельных руд: {len(clean_sigs)}")
+        print(f"[SUCCESS] База сигнатур загружена. Отфильтровано чистых корабельных руд: {len(clean_sigs)}")
         return clean_sigs
 
     def analyze(self, rs_total: int) -> List[SignatureMatch]:
@@ -134,14 +136,14 @@ if __name__ == "__main__":
     
     print("\n" + "="*50)
     for rs in test_signals:
-        print(f"📡 СИГНАЛ НА РАДАРЕ: {rs}")
+        print(f"[SIG] СИГНАЛ НА РАДАРЕ: {rs}")
         results = calculator.analyze(rs)
         
         if not results:
-            print("  ❌ Неизвестная сигнатура (возможно шум или мусор)")
+            print("  [ERROR] Неизвестная сигнатура (возможно шум или мусор)")
         
         for match in results:
             mode = "СМЕШАННЫЙ" if match.is_mixed else "ОДИНОЧНЫЙ"
             out_str = " + ".join([f"{n.mineral_name} [x{n.count}]" for n in match.nodes])
-            print(f"  ✅ {mode}: {out_str}")
+            print(f"  [SUCCESS] {mode}: {out_str}")
         print("-" * 50)

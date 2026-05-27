@@ -10,6 +10,8 @@ import json
 import datetime
 from rapidocr import EngineType, LangDet, LangRec, ModelType, OCRVersion, RapidOCR
 
+from utils_path import get_app_dir
+
 # ==========================================
 # 1. КЛАСС MiningScanner
 # ==========================================
@@ -42,7 +44,7 @@ class MiningScanner:
         PROJECT_ROOT = _CURRENT_DIR
 
     # Путь для отладочных картинок теперь будет внутри
-    SAVE_PATH = os.path.join(PROJECT_ROOT, "RapidOCR")
+    SAVE_PATH = os.path.join(get_app_dir(), "RapidOCR")
 
     def __init__(self, use_cuda=False, device_id=0):
         """Инициализация RapidOCR и переменные класса"""
@@ -231,7 +233,7 @@ class MiningScanner:
     def save_last_scan_to_disk(self, calc_result_dict):
         """Сохраняет последние закэшированные в памяти данные на диск (по Alt+S)"""
         if self.last_original_img is None:
-            print("⚠️ Нет данных последнего сканирования для создания снапшота!")
+            print("[WARNING] Нет данных последнего сканирования для создания снапшота!")
             return False
 
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -256,10 +258,10 @@ class MiningScanner:
             with open(calc_file, "w", encoding="utf-8") as f:
                 json.dump(calc_result_dict, f, indent=4, ensure_ascii=False)
 
-            print(f"✅ Снапшот последнего сканирования успешно сохранен в: {snap_dir}")
+            print(f"[SUCCESS] Снапшот последнего сканирования успешно сохранен в: {snap_dir}")
             return True
         except Exception as e:
-            print(f"❌ Ошибка сохранения снапшота на диск: {e}")
+            print(f"[ERROR] Ошибка сохранения снапшота на диск: {e}")
             return False
 
     # === НОВЫЙ МЕТОД СПЕЦИАЛЬНО ДЛЯ SNAPSHOT ===

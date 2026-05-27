@@ -28,3 +28,8 @@ nppBackup/
 # --- Временные файлы ---
 temp_scans/
 *.bak
+
+# --- Авто-сборка ---
+build_temp/
+Releases/
+build_number.txt

@@ -13,7 +13,7 @@ from signature_calculator import SignatureCalculator
 from signature_scanner import SignatureScanner
 from dataclasses import asdict
 
-logger = logging.getLogger("MinerCalc")
+logger = logging.getLogger("lithoscan-hud")
 DEFAULT_SCAN_REGION = {'top': 337, 'left': 1408, 'width': 245, 'height': 431}
 
 # =============================================================================
@@ -21,7 +21,7 @@ DEFAULT_SCAN_REGION = {'top': 337, 'left': 1408, 'width': 245, 'height': 431}
 # True  - кэширует кадры в ОЗУ, пишет логи на диск, разрешает снапшоты по Alt+S.
 # False - (для игроков) отключает логирование, кэширование картинок и экономит ОЗУ.
 # =============================================================================
-DEV_MODE = True 
+DEV_MODE = False 
 
 class OverlayController:
     def __init__(self):

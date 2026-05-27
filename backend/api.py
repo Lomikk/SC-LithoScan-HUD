@@ -19,12 +19,14 @@ import os
 import requests
 import datetime
 
+from utils_path import get_app_dir
+
 class PriceService:
     """Сервис для работы с API (цены, методы, бонусы) с поддержкой локального кэша"""
 
     def __init__(self):
         # 1. Создаем папку data для порядка
-        self.data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+        self.data_dir = os.path.join(get_app_dir(), "data")
         os.makedirs(self.data_dir, exist_ok=True)
         
         self.prices_file = os.path.join(self.data_dir, "prices.json")
@@ -58,7 +60,7 @@ class PriceService:
                 with open(filepath, 'r', encoding='utf-8') as f:
                     return json.load(f)
             except json.JSONDecodeError:
-                print(f"⚠️ Ошибка формата в {os.path.basename(filepath)}. Используются данные по умолчанию.")
+                print(f"[WARNING] Ошибка формата в {os.path.basename(filepath)}. Используются данные по умолчанию.")
         
         # Если файла нет или он сломан - создаем новый
         self._save_json(filepath, default_data)
@@ -69,7 +71,7 @@ class PriceService:
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(data, f, indent=4, ensure_ascii=False)
         except Exception as e:
-            print(f"⚠️ Ошибка сохранения в {os.path.basename(filepath)}: {e}")
+            print(f"[WARNING] Ошибка сохранения в {os.path.basename(filepath)}: {e}")
 
     def reload_local_data(self):
         """Горячая загрузка данных с жесткого диска (Без перезапуска программы!)"""
@@ -79,7 +81,7 @@ class PriceService:
         
         # Пытаемся вытащить время последнего обновления из файла цен
         self.last_update_time = self._prices.get("_metadata", {}).get("last_updated", "Unknown")
-        print(f"📁 Локальные базы данных загружены. Последнее обновление API: {self.last_update_time}")
+        print(f"Локальные базы данных загружены. Последнее обновление API: {self.last_update_time}")
 
     # ==========================================
     # ИНТЕРФЕЙСЫ ДЛЯ КАЛЬКУЛЯТОРА
@@ -139,12 +141,12 @@ class PriceService:
             return f"SUCCESS: {self.last_update_time}"
         except Exception as e:
             err_msg = f"API ERROR: {str(e)[:40]}..."
-            print(f"❌ {err_msg}\nИспользуются старые локальные данные.")
+            print(f"[ERROR] {err_msg}\nИспользуются старые локальные данные.")
             return err_msg
 
     def _fetch_and_save_prices(self):
         session = requests.Session()
-        session.headers.update({'User-Agent': 'Mozilla/5.0 (MinerCalc/2.0)'})
+        session.headers.update({'User-Agent': 'Mozilla/5.0 (lithoscan-hud)'})
         BASE_URL = "https://api.uexcorp.space/2.0"
         TIMEOUT = 10 
 
@@ -198,7 +200,7 @@ class PriceService:
             
     def _fetch_and_save_yields(self):
         url = "https://api.uexcorp.space/2.0/refineries_yields"
-        data = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10).json().get('data', [])
+        data = requests.get(url, headers={'User-Agent': 'Mozilla/5.0 (lithoscan-hud)'}, timeout=10).json().get('data', [])
         
         new_yields = {}
         for entry in data:

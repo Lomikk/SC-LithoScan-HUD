@@ -4,7 +4,9 @@ import keyboard
 import win32api
 import logging
 
-logger = logging.getLogger("MinerCalc")
+from utils_path import get_app_dir
+
+logger = logging.getLogger("lithoscan-hud")
 
 # ЖЕСТКИЙ ОТКАТНЫЙ ВАРИАНТ (ЕСЛИ ФАЙЛ БУДЕТ ПОЛНОСТЬЮ УДАЛЕН)
 FALLBACK_BINDINGS = {
@@ -57,7 +59,7 @@ class InputHandler:
         self.p1_main = None
         self.p1_sig = None
         
-        data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+        data_dir = os.path.join(get_app_dir(), "data")
         self.hotkeys_file = os.path.join(data_dir, "hotkeys.json")
 
     # --- ЧТЕНИЕ КОНФИГУРАЦИИ ---
