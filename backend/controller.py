@@ -231,9 +231,16 @@ class OverlayController:
             "methods": methods, 
             "is_edit": not self.is_click_through
         })
+        # Отправляем дату последнего обновления при запуске
+        await self.server.broadcast({
+            "type": "db_status", 
+            "date": self.price_service.last_update_time
+        })
 
     async def handle_frontend_message(self, data):
-        if data.get("action") == "update_config":
+        action = data.get("action")
+        
+        if action == "update_config":
             self.config.refining_method = data['method']
             self.config.system = data['system']
             self.config.yield_system = data['yield_system']
@@ -241,12 +248,29 @@ class OverlayController:
             if hasattr(self.scanner, 'asteroid_data') and self.scanner.asteroid_data:
                 result = self.calculator.analyze(self.scanner.asteroid_data)
                 if result:
-                    # Кэшируем результат только если включен режим разработчика
-                    if self.dev_mode:
-                        self.last_result = result 
-                        
+                    if self.dev_mode: self.last_result = result 
                     await self.send_result_to_frontend(result)
-                    await self.server.broadcast({"type": "status", "text": "RECALCULATED", "color": "#2ecc71"})
+
+        # === НОВОЕ: Перезагрузка локальных файлов JSON (без интернета) ===
+        elif action == "reload_files":
+            await self.server.broadcast({"type": "status", "text": "RELOADING FILES...", "color": "#f39c12"})
+            self.price_service.reload_local_data()
+            await self.server.broadcast({"type": "db_status", "date": self.price_service.last_update_time})
+            await self.server.broadcast({"type": "status", "text": "FILES RELOADED", "color": "#2ecc71"})
+            
+        # === НОВОЕ: Загрузка свежих данных с UEXCorp ===
+        elif action == "update_api":
+            await self.server.broadcast({"type": "status", "text": "FETCHING UEX API...", "color": "#3498db"})
+            # Выполняем в фоне, чтобы не повесить сервер
+            status_msg = await asyncio.to_thread(self.price_service.update_all_data)
+            
+            color = "#2ecc71" if "SUCCESS" in status_msg else "#e74c3c"
+            await self.server.broadcast({"type": "db_status", "date": self.price_service.last_update_time})
+            await self.server.broadcast({"type": "status", "text": status_msg, "color": color})
+            
+            # Отправляем обновленный список методов на фронт
+            methods = self.price_service.get_available_methods()
+            await self.server.broadcast({"type": "init", "methods": methods, "is_edit": not self.is_click_through})
 
     async def send_result_to_frontend(self, result):
         # 1. Отправляем сводку

@@ -23,8 +23,11 @@ class SignatureMatch:
 # КАЛЬКУЛЯТОР СИГНАТУР
 # ==========================================
 class SignatureCalculator:
-    def __init__(self, db_path="signatures.json"):
-        # База сигнатур: {3170: "Quantainium", 3600: "Bexalite", ...}
+    def __init__(self, db_filename="signatures.json"):
+        # Формируем абсолютный путь к папке data
+        data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+        db_path = os.path.join(data_dir, db_filename)
+        
         self.signatures = self._load_and_filter_signatures(db_path)
 
     def _load_and_filter_signatures(self, db_path) -> Dict[int, str]:

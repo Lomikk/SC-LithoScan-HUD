@@ -108,6 +108,9 @@ function connectWebSocket() {
             case 'sig_result':
                 UI.updateSignature(data);
                 break;
+            case 'db_status':
+                document.getElementById('ui-db-date').innerText = data.date;
+                break;    
         }           
     };
 
@@ -138,6 +141,12 @@ function sendConfigUpdate() {
             system: window.appSettings.system,
             yield_system: window.appSettings.yieldSys
         }));
+    }
+}
+
+window.triggerAction = function(actionName) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ action: actionName }));
     }
 }
 
@@ -196,6 +205,8 @@ window.toggleCol = function(key, isChecked) {
     UI.applyFormatting();
     saveSettings();
 }
+
+
 
 // Инициализация при старте приложения
 applySettingsToUI();
