@@ -3,7 +3,7 @@ import json
 import logging
 import websockets
 
-logger = logging.getLogger("MinerCalc")
+logger = logging.getLogger("lithoscan-hud")
 
 class WebSocketServer:
     def __init__(self, controller, host="localhost", port=8765):
