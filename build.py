@@ -81,13 +81,27 @@ def main():
     
     print(f"Подготовка сборки: {final_exe_name}")
 
-    # 1. Сборка Backend (Питон) с перенаправлением мусора во временную папку
+    # 1. Сборка Backend (Питон)
     print("\n[1/4] Компиляция Python Backend...")
     py_work = os.path.join(TEMP_BUILD_DIR, "py_work")
     py_dist = os.path.join(TEMP_BUILD_DIR, "py_dist")
     
+    # Ищем локальный pyinstaller внутри виртуального окружения venv, чтобы сборка была чистой
+    venv_pyinstaller = os.path.join(BACKEND_DIR, "venv", "Scripts", "pyinstaller.exe")
+    if os.path.exists(venv_pyinstaller):
+        pyinstaller_bin = f'"{venv_pyinstaller}"'
+    else:
+        pyinstaller_bin = "pyinstaller" # Откат на глобальный, если venv не настроен
+    
+    # Явно запрещаем упаковку тяжелых и ненужных библиотек
+    exclude_args = (
+        "--exclude-module PyQt5 --exclude-module PyQt5.QtCore --exclude-module PyQt5.QtGui --exclude-module PyQt5.QtWidgets "
+        "--exclude-module matplotlib --exclude-module scipy --exclude-module pandas --exclude-module IPython --exclude-module jedi "
+        "--exclude-module wx --exclude-module tornado --exclude-module pygments --exclude-module sqlite3 --exclude-module sympy"
+    )
+
     pyinstaller_cmd = (
-        f'pyinstaller --clean --noconsole --onedir --name "lithoscan_backend" '
+        f'{pyinstaller_bin} --clean --noconsole --onedir --name "lithoscan_backend" {exclude_args} '
         f'--collect-all rapidocr_onnxruntime --collect-all rapidocr --collect-all onnxruntime --collect-all cv2 '
         f'--workpath "{py_work}" --distpath "{py_dist}" --specpath "{TEMP_BUILD_DIR}" main.py'
     )
