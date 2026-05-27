@@ -1,0 +1,31 @@
+{
+    "_instructions": [
+        "ИНСТРУКЦИЯ / INSTRUCTIONS:",
+        "1. Пишите клавиши в НИЖНЕМ регистре и БЕЗ пробелов (например: 'alt+x', 'f3', 'alt+ctrl').",
+        "1. Write keys in LOWERCASE, without spaces (e.g. 'alt+x', 'f3', 'alt+ctrl').",
+        "2. Доступные модификаторы / Available modifiers: 'alt', 'ctrl', 'shift', 'win'.",
+        "3. Хоткеи перезагружаются при клике на круглую стрелочку '⟳' в Dev Console оверлея."
+    ],
+    "keybindings": {
+        "toggle_mode": "alt+g",
+        "visibility": "alt+v",
+        "snapshot": "alt+ctrl",
+        "point1_main": "alt+1",
+        "point2_main": "alt+2",
+        "scan_main": "alt+x",
+        "point1_sig": "alt+3",
+        "point2_sig": "alt+4",
+        "scan_sig": "f3"
+    },
+    "_descriptions": {
+        "toggle_mode": "Переключение режима настройки (Разблокировка кликов) / Toggle Setup mode",
+        "visibility": "Показать/Скрыть весь оверлей / Hide/Show whole overlay",
+        "snapshot": "Сохранить снапшот для отладки / Save debug snapshot",
+        "point1_main": "Точка 1 для сканера астероидов / Asteroid Point 1",
+        "point2_main": "Точка 2 для сканера астероидов / Asteroid Point 2",
+        "scan_main": "Запуск сканирования астероида / Start Asteroid Scan",
+        "point1_sig": "Точка 1 для сканера сигнатур / Signature Point 1",
+        "point2_sig": "Точка 2 для сканера сигнатур / Signature Point 2",
+        "scan_sig": "Запуск декодера сигнатур / Start Signature Scan"
+    }
+}

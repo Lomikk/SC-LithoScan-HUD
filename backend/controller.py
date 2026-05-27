@@ -57,6 +57,9 @@ class OverlayController:
     def set_loop(self, loop):
         self.loop = loop
 
+    def set_input_handler(self, handler):
+        self.input_handler = handler    
+
     def _schedule_async(self, coro):
         if self.loop:
             asyncio.run_coroutine_threadsafe(coro, self.loop)
@@ -252,9 +255,15 @@ class OverlayController:
                     await self.send_result_to_frontend(result)
 
         # === НОВОЕ: Перезагрузка локальных файлов JSON (без интернета) ===
+        # === Перезагрузка локальных файлов JSON (без интернета) ===
         elif action == "reload_files":
             await self.server.broadcast({"type": "status", "text": "RELOADING FILES...", "color": "#f39c12"})
             self.price_service.reload_local_data()
+            
+            # ПЕРЕЗАПУСКАЕМ ХОТКЕИ ИЗ ФАЙЛА ГОРЯЧЕЙ КНОПКОЙ!
+            if hasattr(self, 'input_handler') and self.input_handler:
+                self.input_handler.register_hotkeys()
+                
             await self.server.broadcast({"type": "db_status", "date": self.price_service.last_update_time})
             await self.server.broadcast({"type": "status", "text": "FILES RELOADED", "color": "#2ecc71"})
             
