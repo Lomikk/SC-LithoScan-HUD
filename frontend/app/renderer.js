@@ -127,6 +127,16 @@ function connectWebSocket() {
         }           
     };
 
+    // === НОВАЯ СТРАХОВКА НА СЛУЧАЙ ОШИБКИ СОЕДИНЕНИЯ ===
+    ws.onerror = (err) => {
+        console.error("Ошибка сокета:", err);
+        // Если сокет закрыт, onclose сам сделает реконнект через 2 сек.
+        // Но если соединение оборвалось на этапе рукопожатия, onerror гарантирует перезапуск.
+        if (ws.readyState === WebSocket.CLOSED) {
+            setStatus("CONNECTION ERROR. RETRYING...", "#FF0000");
+        }
+    };
+
     ws.onclose = () => {
         setStatus("CONNECTION LOST. RECONNECTING...", "#FF0000");
         setTimeout(connectWebSocket, 2000);

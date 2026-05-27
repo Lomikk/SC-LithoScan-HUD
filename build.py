@@ -87,17 +87,25 @@ def main():
     py_dist = os.path.join(TEMP_BUILD_DIR, "py_dist")
     
     pyinstaller_cmd = (
-        f'pyinstaller --noconsole --onefile --name "lithoscan_backend" '
+        f'pyinstaller --clean --noconsole --onefile --name "lithoscan_backend" '
         f'--collect-all rapidocr_onnxruntime --collect-all rapidocr --collect-all onnxruntime --collect-all cv2 '
         f'--workpath "{py_work}" --distpath "{py_dist}" --specpath "{TEMP_BUILD_DIR}" main.py'
     )
     run_command(pyinstaller_cmd, cwd=BACKEND_DIR)
 
     # 2. Интеграция
-    print("\n[2/4] Копирование ядра в Frontend...")
+    print("\n[2/4] Копирование ядра и баз данных в Frontend...")
     fe_backend_bin = os.path.join(FRONTEND_DIR, "backend-bin")
     os.makedirs(fe_backend_bin, exist_ok=True)
+    
+    # Копируем сам исполняемый файл
     shutil.copy2(os.path.join(py_dist, "lithoscan_backend.exe"), os.path.join(fe_backend_bin, "lithoscan_backend.exe"))
+
+    # НОВОЕ: Копируем папку data со всеми ценами и сигнатурами!
+    fe_data_dir = os.path.join(fe_backend_bin, "data")
+    if os.path.exists(fe_data_dir):
+        shutil.rmtree(fe_data_dir) # Очищаем старую версию, если была
+    shutil.copytree(os.path.join(BACKEND_DIR, "data"), fe_data_dir)
 
     # 3. Сборка Frontend (Electron)
     print("\n[3/4] Упаковка интерфейса и создание инсталлятора...")
