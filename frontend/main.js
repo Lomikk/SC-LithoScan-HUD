@@ -5,6 +5,7 @@ const { spawn } = require('child_process');
 
 let mainWindow;
 let backendProcess = null;
+let windowCreated = false;
 
 // ==========================================
 // 1. ЗАПУСК БЭКЕНДА (PYTHON .EXE)
@@ -22,19 +23,40 @@ function startBackend() {
         return;
     }
 
-    // Запускаем процесс в фоне
+    // Запускаем процесс напрямую, БЕЗ shell: true [2.4]
    backendProcess = spawn(backendPath, [], {
         detached: false, 
         windowsHide: true,
-        env: { ...process.env, PYTHONUTF8: "1" }
+        cwd: path.dirname(backendPath),
+        env: { ...process.env, PYTHONUTF8: "1" },
+        stdio: ['ignore', 'pipe', 'pipe'] // Настраиваем каналы вывода [2.4]
     });
 
-    // ЕСЛИ БЭКЕНД ПАДАЕТ - ВЫВОДИМ ОШИБКУ НА ЭКРАН!
+    // Следим за выводом бэкенда в поисках сигнала готовности [2.4]
+    backendProcess.stdout.on('data', (data) => {
+        const output = data.toString();
+        console.log(`[Backend]: ${output}`);
+        
+        // Как только питон отрапортовал о готовности — открываем интерфейс! [2.4]
+        if (output.includes("===BACKEND_READY===") && !windowCreated) {
+            console.log("Бэкенд готов! Открываем окно.");
+            windowCreated = true;
+            createWindow();
+        }
+    });
+
+    backendProcess.on('error', (err) => {
+        dialog.showErrorBox(
+            "Ошибка запуска бэкенда", 
+            `Не удалось запустить процесс Питона:\n${err.message}`
+        );
+    });
+
     backendProcess.on('exit', (code) => {
         if (code !== 0 && code !== null) {
             dialog.showErrorBox(
                 "Критическая ошибка бэкенда", 
-                `Процесс Python неожиданно завершился (код ${code}).\nУбедитесь, что антивирус не заблокировал файл и у программы есть права Администратора.`
+                `Процесс Python неожиданно завершился (код ${code}).\nУбедитесь, что у программы есть права Администратора.`
             );
         }
     });
@@ -95,10 +117,17 @@ function createWindow() {
 // 3. ЖИЗНЕННЫЙ ЦИКЛ ПРИЛОЖЕНИЯ
 // ==========================================
 app.whenReady().then(() => {
-    startBackend(); // Сначала запускаем Питон
+    startBackend(); 
     
-    // Даем Питону полсекунды на загрузку серверов перед показом UI
-    setTimeout(createWindow, 500); 
+    // Аварийный тайм-аут: если бэкенд не ответил за 5 секунд,
+    // всё равно открываем окно, чтобы пользователь не видел вечную загрузку
+    setTimeout(() => {
+        if (!windowCreated) {
+            console.log("Аварийный тайм-аут: бэкенд не ответил вовремя. Открываем принудительно.");
+            windowCreated = true;
+            createWindow();
+        }
+    }, 5000);
     
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -118,7 +147,7 @@ ipcMain.on('set-ignore-mouse-events', (event, ignore) => {
 // УБИВАЕМ БЭКЕНД ПРИ ЗАКРЫТИИ ПРОГРАММЫ
 app.on('will-quit', () => {
     if (backendProcess) {
-        console.log("Убиваем процесс бэкенда...");
+        console.log("Завершаем процесс бэкенда...");
         backendProcess.kill();
     }
 });
