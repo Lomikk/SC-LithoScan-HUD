@@ -22,6 +22,9 @@ async def main():
     input_handler = InputHandler(controller)
     input_handler.register_hotkeys()
 
+    # ПЕРЕДАЕМ ССЫЛКУ ДЛЯ ВОЗМОЖНОСТИ ГОРЯЧЕЙ ПЕРЕЗАГРУЗКИ КНОПКОЙ ИЗ UI
+    controller.set_input_handler(input_handler)
+
     # 3. Запускаем сервер
     server = WebSocketServer(controller, port=8765)
     
