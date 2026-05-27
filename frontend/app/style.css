@@ -1,123 +1,234 @@
 /* ==========================================================================
-   1. ПЕРЕМЕННЫЕ (THEMES)
+   1. ТЕМЫ (ЦВЕТА И ФОРМА)
    ========================================================================== */
-/* ТЕМА 1: DEFAULT (Голографический бирюзово-зеленый) */
+
+/* --------------------------------------------------------------------------
+   ТЕМА 1 (ПО УМОЛЧАНИЮ): GLASS HUD (Aegis / RSI) - ПОЛНОСТЬЮ ВОССТАНОВЛЕНА
+   -------------------------------------------------------------------------- */
+/* ---> ЦВЕТА (Glass HUD) */
 :root {
-    --bg-overlay: rgba(11, 15, 19, 0.85);
-    --color-raw: #00d4ff; 
-    --color-ref: #00ff9d; 
-    --color-bonus: #f1c40f;
-    --text-dim: #718096; 
-    --border: rgba(45, 55, 72, 0.5);
+    --bg-overlay: rgba(6, 16, 24, 0.75); /* Вернули оригинальную плотность 0.75 */
+    --color-raw: #7fd4e3;                
+    --color-ref: #00f0ff;                
+    --text-dim: #5c9ca8;                 
+    --border: rgba(0, 240, 255, 0.35);   
+    --color-bonus: #a8ff00;              
+    
+    /* Точные оригинальные параметры свечений */
+    --glow-light: rgba(0, 240, 255, 0.1);   /* Внешнее свечение */
+    --glow-inset: rgba(0, 240, 255, 0.05);  /* Вернули мягкое внутреннее свечение 0.05 */
+    --glow-strong: rgba(0, 240, 255, 0.3);  /* Разделители шапок */
+    --glow-stripe: rgba(0, 240, 255, 0.5);  /* Вернули яркую полоску деформации 0.5 */
     
     /* Грейды */
     --g-trash: #9d9d9d; --g-base: #ffffff; --g-uncommon: #1eff00;
     --g-rare: #0070dd; --g-epic: #a335ee; --g-legendary: #ff8000;
 }
 
-/* ТЕМА 2: AMBER HUD (Классический Elite Dangerous / Индустриальный) */
-body[data-theme="amber"] {
-    --bg-overlay: rgba(25, 12, 0, 0.9);
-    --color-raw: #d35400; /* Темно-оранжевый */
-    --color-ref: #f39c12; /* Ярко-оранжевый */
-    --color-bonus: #f1c40f; /* Желтый */
-    --text-dim: #a87b51; 
-    --border: rgba(230, 126, 34, 0.4);
-    
-    /* Меняем зеленый грейд на янтарный */
-    --g-uncommon: #f1c40f; 
-}
-
-/* =======================================================
-   ТЕМА 3: "STAR CITIZEN HUD" (Holographic Glass)
-   ======================================================= */
-body[data-theme="glass"] {
-    /* Фирменная палитра mobiGlas / Aegis Dynamics */
-    --bg-overlay: rgba(6, 16, 24, 0.55); /* Темный, чуть синеватый тон визора */
-    --color-raw: #7fd4e3;                /* Приглушенный циановый для второстепенного текста */
-    --color-ref: #00f0ff;                /* Яркий неоновый циан */
-    --text-dim: #5c9ca8;                 /* Темно-бирюзовый для тусклого текста */
-    --border: rgba(0, 240, 255, 0.35);   /* Полупрозрачная граница */
-    --color-bonus: #a8ff00;              /* Кибер-зеленый/желтый для бонусов */
-}
-
-/* 1. Главные панели - эффект голографического стекла */
-body[data-theme="glass"] .hologram-panel {
-    border-radius: 16px; /* Скругление как в инвентаре (скриншот 2) */
-    
-    /* Переопределяем рамки из базовой темы */
+/* ---> ФОРМА (Glass HUD) - Применяется ко всем, если не переопределено ниже */
+.hologram-panel {
+    border-radius: 16px; 
     border: 1px solid var(--border) !important;
     
-    /* Градиентный фон для объема и сильный блюр заднего фона */
+    /* Восстановлен оригинальный плавный сине-бирюзовый градиент */
     background: linear-gradient(135deg, rgba(6, 16, 24, 0.75) 0%, rgba(6, 16, 24, 0.4) 100%);
     backdrop-filter: blur(12px) brightness(1.1);  
     
-    /* Внешнее и внутреннее голографическое свечение */
+    /* Восстановлен баланс теней (мягкие края внутри) */
     box-shadow: 
-        0 0 15px rgba(0, 240, 255, 0.1), 
-        inset 0 0 25px rgba(0, 240, 255, 0.05),
+        0 0 15px var(--glow-light), 
+        inset 0 0 25px var(--glow-inset),
         0 15px 35px rgba(0, 0, 0, 0.6);
 }
 
-/* 2. Технологичные декоративные элементы (полоски сверху и снизу как на MFD дисплеях) */
-body[data-theme="glass"] .hologram-panel::before {
-    content: ''; position: absolute;
-    top: 0; left: 15%; right: 15%;
-    height: 2px; background: var(--color-ref);
-    box-shadow: 0 0 10px var(--color-ref);
-    border-radius: 2px;
+/* Светящиеся полоски сверху и снизу (Декор) */
+.hologram-panel::before {
+    content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 2px; 
+    background: var(--color-ref); box-shadow: 0 0 10px var(--color-ref); border-radius: 2px;
 }
-body[data-theme="glass"] .hologram-panel::after {
-    content: ''; position: absolute;
-    bottom: 0; left: 35%; right: 35%;
-    height: 2px; background: rgba(0, 240, 255, 0.5);
-    box-shadow: 0 0 5px var(--color-ref);
-    border-radius: 2px;
+.hologram-panel::after {
+    content: ''; position: absolute; bottom: 0; left: 35%; right: 35%; height: 2px; 
+    background: var(--glow-stripe); /* Вернули оригинальную яркость 0.5 */
+    box-shadow: 0 0 5px var(--color-ref); border-radius: 2px;
 }
 
-/* 3. Шапка панели */
-body[data-theme="glass"] header.drag-handle {
-    border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-    box-shadow: 0 4px 6px -6px var(--color-ref); /* Легкое свечение под линией */
+
+/* --------------------------------------------------------------------------
+   ТЕМА 2: CLASSIC HUD (Старый голографический интерфейс)
+   -------------------------------------------------------------------------- */
+/* ---> ЦВЕТА (Classic) */
+body[data-theme="classic"] {
+    --bg-overlay: rgba(11, 15, 19, 0.85);
+    --color-raw: #00d4ff; --color-ref: #00ff9d; --color-bonus: #f1c40f;
+    --text-dim: #718096; --border: rgba(0, 255, 157, 0.3);
+    --glow-light: rgba(0, 255, 157, 0.1); --glow-strong: rgba(0, 255, 157, 0.3);
+    --g-uncommon: #1eff00; 
+}
+/* ---> ФОРМА (Classic) */
+body[data-theme="classic"] .hologram-panel {
+    border-radius: 0px; /* Строгие прямые углы */
+    background: var(--bg-overlay); /* Сплошной фон без градиента */
+    backdrop-filter: blur(5px); /* Легкое размытие */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Обычная тень, без неона */
+    border-top: 2px solid var(--color-ref) !important; /* Классическая верхняя линия */
+}
+/* Отключаем неоновые полоски от Glass HUD */
+body[data-theme="classic"] .hologram-panel::before,
+body[data-theme="classic"] .hologram-panel::after { display: none; }
+
+
+/* --------------------------------------------------------------------------
+   ТЕМА 3: AMBER HUD (Индустриальный / Elite Dangerous)
+   -------------------------------------------------------------------------- */
+/* ---> ЦВЕТА (Amber) */
+body[data-theme="amber"] {
+    --bg-overlay: rgba(25, 12, 0, 0.9);
+    --color-raw: #d35400; --color-ref: #f39c12; --color-bonus: #f1c40f; 
+    --text-dim: #a87b51; --border: rgba(243, 156, 18, 0.4);
+    --glow-light: rgba(243, 156, 18, 0.1); --glow-strong: rgba(243, 156, 18, 0.3);
+    --g-uncommon: #f1c40f; 
+}
+/* ---> ФОРМА (Amber) */
+body[data-theme="amber"] .hologram-panel {
+    border-radius: 0px; 
+    background: var(--bg-overlay);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    border-top: 3px solid var(--color-ref) !important;
+}
+body[data-theme="amber"] .hologram-panel::before,
+body[data-theme="amber"] .hologram-panel::after { display: none; }
+
+
+/* --------------------------------------------------------------------------
+   ТЕМА 4: OUTLAW (Пиратская / Nine Tails)
+   -------------------------------------------------------------------------- */
+/* ---> ЦВЕТА (Outlaw) */
+body[data-theme="outlaw"] {
+    --bg-overlay: rgba(20, 5, 5, 0.85);
+    --color-raw: #ff6666; --color-ref: #ff2a2a; --color-bonus: #ffcc00; 
+    --text-dim: #995c5c; --border: rgba(255, 42, 42, 0.4);
+    --glow-light: rgba(255, 42, 42, 0.15); --glow-strong: rgba(255, 42, 42, 0.4);
+    --g-uncommon: #ffcc00;
+}
+/* ---> ФОРМА (Outlaw) */
+body[data-theme="outlaw"] .hologram-panel {
+    border-radius: 4px; /* Слегка сбитые углы */
+    background: linear-gradient(180deg, rgba(30,5,5,0.9) 0%, rgba(10,0,0,0.95) 100%);
+    backdrop-filter: blur(2px);
+    box-shadow: 0 0 20px rgba(255, 42, 42, 0.15);
+    border-left: 4px solid var(--color-ref) !important; /* Агрессивная боковая линия */
+}
+body[data-theme="outlaw"] .hologram-panel::before,
+body[data-theme="outlaw"] .hologram-panel::after { display: none; }
+
+
+/* --------------------------------------------------------------------------
+   ТЕМА 5: INDUSTRIAL (Drake Interplanetary)
+   -------------------------------------------------------------------------- */
+/* ---> ЦВЕТА (Industrial) */
+body[data-theme="industrial"] {
+    --bg-overlay: rgba(21, 26, 21, 0.95);
+    --color-raw: #d4a017; --color-ref: #ffcc00; --color-bonus: #00ffff; 
+    --text-dim: #7c8a70; --border: rgba(255, 204, 0, 0.4);
+    --glow-light: rgba(255, 204, 0, 0.1); --glow-strong: rgba(255, 204, 0, 0.3);
+}
+/* ---> ФОРМА (Industrial) */
+body[data-theme="industrial"] .hologram-panel {
+    border-radius: 0px;
+    background: var(--bg-overlay);
+    backdrop-filter: none; /* Никакого блюра, чистая утилитарность */
+    border: 2px solid var(--color-ref) !important; /* Толстая грубая рамка со всех сторон */
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.5); /* Грубая падающая тень */
+}
+body[data-theme="industrial"] .hologram-panel::before,
+body[data-theme="industrial"] .hologram-panel::after { display: none; }
+
+
+/* --------------------------------------------------------------------------
+   ТЕМА 6: SYNTHWAVE (MicroTech / New Babbage)
+   -------------------------------------------------------------------------- */
+/* ---> ЦВЕТА (Synthwave) */
+body[data-theme="synthwave"] {
+    --bg-overlay: rgba(15, 10, 30, 0.8);
+    --color-raw: #b92b27; --color-ref: #ff00aa; --color-bonus: #00f0ff; 
+    --text-dim: #8e7cc3; --border: rgba(255, 0, 170, 0.4);
+    --glow-light: rgba(255, 0, 170, 0.15); --glow-strong: rgba(255, 0, 170, 0.4);
+}
+/* ---> ФОРМА (Synthwave) */
+body[data-theme="synthwave"] .hologram-panel {
+    border-radius: 12px;
+    background: rgba(15, 10, 30, 0.85);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px var(--glow-strong); /* Сильное неоновое свечение наружу */
+}
+/* Оставляем полоски, но меняем их вид */
+body[data-theme="synthwave"] .hologram-panel::before { top: -2px; left: 5%; right: 5%; }
+body[data-theme="synthwave"] .hologram-panel::after { bottom: -2px; left: 5%; right: 5%; }
+
+
+/* --------------------------------------------------------------------------
+   ТЕМА 7: LUXURY (Origin Jumpworks)
+   -------------------------------------------------------------------------- */
+/* ---> ЦВЕТА (Luxury) */
+body[data-theme="luxury"] {
+    --bg-overlay: rgba(6, 12, 20, 0.85);
+    --color-raw: #8ab4f8; --color-ref: #ffffff; --color-bonus: #ffd700; 
+    --text-dim: #a0aab5; --border: rgba(255, 255, 255, 0.2);
+    --glow-light: rgba(255, 255, 255, 0.05); --glow-strong: rgba(255, 255, 255, 0.15);
+}
+/* ---> ФОРМА (Luxury) */
+body[data-theme="luxury"] .hologram-panel {
+    border-radius: 24px; /* Очень плавные углы */
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(6,12,20,0.8) 100%);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.15) !important; /* Едва заметная рамка */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+body[data-theme="luxury"] .hologram-panel::before,
+body[data-theme="luxury"] .hologram-panel::after { display: none; }
+
+
+/* ==========================================================================
+   ОБЩИЕ ЭЛЕМЕНТЫ, ЗАВИСЯЩИЕ ОТ ЦВЕТОВ ТЕМЫ (НЕ ТРОГАТЬ ФОРМУ ЗДЕСЬ)
+   ========================================================================== */
+header.drag-handle {
+    border-bottom: 1px solid var(--glow-strong);
+    box-shadow: 0 4px 6px -6px var(--color-ref);
     padding-bottom: 12px;
 }
 
-/* 4. Дизайн таблицы для этой темы */
-body[data-theme="glass"] .mining-table th {
-    /* Сплошная линия вместо пунктирной, цвет текста изменен на приглушенный циан */
-    border-bottom: 1px solid rgba(0, 240, 255, 0.3); 
+.mining-table th {
+    border-bottom: 1px solid var(--glow-strong); 
     color: var(--color-raw);
-    font-weight: 700;
 }
-body[data-theme="glass"] .cell {
+
+.cell {
+    /* Вернули оригинальный едва заметный циановый цвет разделителя строк */
     border-bottom: 1px solid rgba(0, 240, 255, 0.05);
 }
 
+.bar-bg {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glow-strong);
+}
+
+.bar-fill {
+    background: var(--color-ref);
+    box-shadow: 0 0 8px var(--glow-strong);
+}
+
 /* 5. Плашка вердикта (полностью плоский парящий текст) */
-body[data-theme="glass"] .verdict-base {
+.verdict-base {
     background: none;
     border: none;
     backdrop-filter: none;
     box-shadow: none;
-
-    
-    /* Возвращаем тексту красивое мягкое неоновое свечение */
-    text-shadow: 0 0 10px currentColor; 
+    text-shadow: 0 0 10px currentColor; /* Мягкое неоновое свечение текста */
 }
 
-/* Цвета специфичных вердиктов (теперь рамки не нужны, меняем только цвет самого текста) */
-body[data-theme="glass"] .verdict-skip { color: #ff4d4d; }
-body[data-theme="glass"] .verdict-jackpot { color: var(--color-bonus); }
-
-/* 6. Полосы прогресса (если есть bar-bg / bar-fill) */
-body[data-theme="glass"] .bar-bg {
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid rgba(0, 240, 255, 0.2);
-}
-body[data-theme="glass"] .bar-fill {
-    background: var(--color-ref);
-    box-shadow: 0 0 8px var(--color-ref);
-}
+.verdict-skip { color: #ff4d4d; }
+.verdict-jackpot { color: var(--color-bonus); }
 
 /* ==========================================================================
    2. БАЗОВЫЕ СТИЛИ И УТИЛИТЫ
@@ -159,8 +270,29 @@ body {
 }
 
 #main-overlay { width: max-content; min-width: 250px; left: 1400px; top: 100px; }
-#settings-overlay { width: 250px; left: 1100px; top: 100px; transition: max-height 0.3s, padding 0.3s, transform 0.1s; overflow: hidden; max-height: 800px;}
-#settings-overlay.collapsed { max-height: 25px; padding: 5px 15px; }
+/* Блок настроек в развернутом виде */
+#settings-overlay { 
+    width: 200px; 
+    left: 1100px; 
+    top: 100px; 
+    
+    /* Добавили плавность для изменения ширины (width) */
+    transition: 
+        max-height 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+        width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+        padding 0.3s ease, 
+        transform 0.1s; 
+        
+    overflow: hidden; 
+    max-height: 800px;
+}
+
+/* Блок настроек в СВЕРНУТОМ виде */
+#settings-overlay.collapsed { 
+    max-height: 25px; 
+    width: 125px;      /* <--- Сжимаем ширину до компактной плашки-кнопки */
+    padding: 5px 12px; /* Чуть уменьшили внутренние отступы для компактности */
+}
 
 /* ==========================================================================
    4. ШАПКА И ВЕРДИКТ

@@ -76,7 +76,7 @@
         <div class="hologram-panel" id="settings-overlay">
             <div class="settings-header drag-handle">
                 
-                <span class="settings-title">⚙️ DEV CONSOLE</span>
+                <span class="settings-title">⏣ Settings</span>
                 <span class="gear-btn" onclick="document.getElementById('settings-overlay').classList.toggle('collapsed')">🔽</span>
             </div>
             
@@ -84,14 +84,11 @@
                 <div class="setting-group-title">Appearance & Theme</div>
                 <div class="custom-select" id="select-theme">
                     <div class="select-trigger" onclick="toggleDropdown(event, 'theme')">
-                        <span id="val-theme">Theme: DEFAULT</span>
+                        <span id="val-theme">Theme: LOADING...</span>
                         <span>▼</span>
                     </div>
-                    <div class="select-options" id="opts-theme">
-                        <div class="option-item" onclick="selectOpt(event, 'theme', 'default', 'DEFAULT')">DEFAULT (Cyan/Green)</div>
-                        <div class="option-item" onclick="selectOpt(event, 'theme', 'amber', 'AMBER HUD')">AMBER HUD (Orange)</div>
-                        <div class="option-item" onclick="selectOpt(event, 'theme', 'glass', 'GLASS HUD')">GLASS HUD</div>
-                    </div>
+                    <!-- Оставляем пустым, JS заполнит его сам -->
+                    <div class="select-options" id="opts-theme"></div>
                 </div>
             </div>
             

@@ -7,12 +7,24 @@ const DEFAULT_SETTINGS = {
     method: 'Dinyx Solventation',
     system: 'ALL',
     yieldSys: 'ALL',
-    theme: 'default',
+    theme: 'glass',
     ui: {
         showRef: true, showRaw: true, isInline: false,
         shortNums: true, shortMins: false,
         cols: { comp: true, scu: true, dens: true, val: true, mods: true }
     }
+};
+
+// Единый центр управления темами. Добавляй новые темы только сюда!
+// Единый центр управления темами. Добавляй новые темы только сюда!
+const AVAILABLE_THEMES = {
+    'glass':      { title: 'GLASS HUD',   desc: '(Holographic)' },
+    'classic':    { title: 'CLASSIC HUD', desc: '(Cyan/Green)' },
+    'amber':      { title: 'AMBER HUD',   desc: '(Orange)' },
+    'outlaw':     { title: 'OUTLAW HUD',  desc: '(GrimHEX Red)' },
+    'industrial': { title: 'INDUSTRIAL',  desc: '(Drake Yellow)' },
+    'synthwave':  { title: 'SYNTHWAVE',   desc: '(MicroTech Pink)' },
+    'luxury':     { title: 'LUXURY HUD',  desc: '(Origin White)' }
 };
 
 // Загружаем из памяти или создаем новый профиль
@@ -33,8 +45,9 @@ function applySettingsToUI() {
     document.getElementById('val-system').innerText = "Prices: " + sysLabels[window.appSettings.system];
     document.getElementById('val-yield').innerText = "Bonuses: " + sysLabels[window.appSettings.yieldSys];
     
-    const themeLabels = { 'default': 'DEFAULT (Cyan/Green)', 'amber': 'AMBER HUD (Orange)', 'glass': 'GLASS HUD (Rounded & Blur)' };
-    document.getElementById('val-theme').innerText = "Theme: " + themeLabels[window.appSettings.theme];
+    // Берем короткое название темы из нашего единого словаря
+    const activeTheme = AVAILABLE_THEMES[window.appSettings.theme] || AVAILABLE_THEMES['glass'];
+    document.getElementById('val-theme').innerText = "Theme: " + activeTheme.title;
 
     // 3. Обновляем галочки у чекбоксов
     document.getElementById('cb-showRef').checked = window.appSettings.ui.showRef;
@@ -48,7 +61,7 @@ function applySettingsToUI() {
     document.getElementById('cb-col-dens').checked = window.appSettings.ui.cols.dens;
     document.getElementById('cb-col-val').checked = window.appSettings.ui.cols.val;
     document.getElementById('cb-col-mods').checked = window.appSettings.ui.cols.mods;
-
+    
     // 4. Даем команду UI.js перерисовать таблицу согласно новым настройкам
     if (typeof UI !== 'undefined') UI.applyFormatting();
 }
@@ -193,6 +206,22 @@ function populateMethods(methodsList) {
     });
 }
 
+function populateThemes() {
+    const container = document.getElementById('opts-theme');
+    container.innerHTML = "";
+    
+    Object.keys(AVAILABLE_THEMES).forEach(themeId => {
+        const themeData = AVAILABLE_THEMES[themeId];
+        let div = document.createElement('div');
+        div.className = "option-item";
+        // Пишем полное название в выпадающий список: "GLASS HUD (Holographic)"
+        div.innerText = `${themeData.title} ${themeData.desc}`;
+        // При клике передаем только короткое имя для шапки: "GLASS HUD"
+        div.onclick = (e) => selectOpt(e, 'theme', themeId, themeData.title);
+        container.appendChild(div);
+    });
+}
+
 // ЧЕКБОКСЫ
 window.toggleSetting = function(key, isChecked) {
     window.appSettings.ui[key] = isChecked;
@@ -209,5 +238,6 @@ window.toggleCol = function(key, isChecked) {
 
 
 // Инициализация при старте приложения
+populateThemes();
 applySettingsToUI();
 connectWebSocket();
