@@ -1,3 +1,4 @@
+const { exec } = require('child_process'); // Добавь этот импорт в самый верх, если его там нет
 const { app, BrowserWindow, ipcMain, screen, dialog } = require('electron'); // <-- добавили dialog
 const path = require('path');
 const fs = require('fs'); // <-- добавили fs
@@ -145,11 +146,28 @@ ipcMain.on('set-ignore-mouse-events', (event, ignore) => {
 });
 
 // УБИВАЕМ БЭКЕНД ПРИ ЗАКРЫТИИ ПРОГРАММЫ
-app.on('will-quit', () => {
-    if (backendProcess) {
-        console.log("Завершаем процесс бэкенда...");
-        backendProcess.kill();
+// В самом конце файла frontend/main.js:
+
+// Функция для железного убийства дерева процессов в Windows
+function killBackend() {
+    if (backendProcess && backendProcess.pid) {
+        console.log(`Завершаем процесс бэкенда (PID: ${backendProcess.pid})...`);
+        
+        // /F - принудительно, /T - убивает дерево процессов (все дочерние потоки Питона)
+        exec(`taskkill /pid ${backendProcess.pid} /T /F`, (err) => {
+            if (err) {
+                console.log("Taskkill завершился с ошибкой, пробуем стандартный kill()");
+                backendProcess.kill(); // Резервный откат
+            } else {
+                console.log("Бэкенд успешно и полностью выгружен из ОЗУ.");
+            }
+        });
     }
+}
+
+// Заменяем will-quit
+app.on('will-quit', () => {
+    killBackend();
 });
 
 app.on('window-all-closed', () => {
