@@ -1,6 +1,6 @@
 # 📡 LithoScan HUD (v1.0.0)
 
-Advanced Holographic Mining & Signature Overlay for Star Citizen (Alpha 4.7+) [3].
+Advanced Holographic Mining & Signature Overlay for Star Citizen (Alpha 4.7+).
 
 <p align="center">
   <a href="https://Lomikk.github.io/SC-LithoScan-HUD/"><strong>🔮 Visit Live Web Demo & Website</strong></a> |
@@ -36,8 +36,8 @@ Never waste hydrogen fuel flying to a worthless rock again. Our built-in signal 
 ---
 
 ## How to Install
-1. Download the latest installer from the **[Releases](https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest)** section [1].
-2. Run the installer (No Python or Node.js required, everything is packaged!) [1].
+1. Download the latest installer from the **[Releases](https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest)** section.
+2. Run the installer (No Python or Node.js required, everything is packaged!).
 3. Run the desktop shortcut.
 4. Launch Star Citizen, hover over a rock, and start mining smart!
 
