@@ -36,5 +36,6 @@ class WebSocketServer:
 
     async def start(self):
         logger.info(f"[WS] Запуск WebSocket сервера на {self.host}:{self.port}")
+        print("===BACKEND_READY===", flush=True)
         async with websockets.serve(self.register_client, self.host, self.port):
             await asyncio.Future()

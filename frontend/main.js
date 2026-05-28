@@ -29,8 +29,7 @@ function startBackend() {
         detached: false, 
         windowsHide: true,
         cwd: path.dirname(backendPath),
-        env: { ...process.env, PYTHONUTF8: "1" },
-        stdio: ['ignore', 'pipe', 'pipe'] // Настраиваем каналы вывода [2.4]
+        stdio: ['ignore', 'pipe', 'pipe'] 
     });
 
     // Следим за выводом бэкенда в поисках сигнала готовности [2.4]
@@ -118,18 +117,29 @@ function createWindow() {
 // 3. ЖИЗНЕННЫЙ ЦИКЛ ПРИЛОЖЕНИЯ
 // ==========================================
 app.whenReady().then(() => {
-    startBackend(); 
     
-    // Аварийный тайм-аут: если бэкенд не ответил за 5 секунд,
-    // всё равно открываем окно, чтобы пользователь не видел вечную загрузку
-    setTimeout(() => {
-        if (!windowCreated) {
-            console.log("Аварийный тайм-аут: бэкенд не ответил вовремя. Открываем принудительно.");
-            windowCreated = true;
-            createWindow();
-        }
-    }, 5000);
-    
+    // Если мы в скомпилированном релизе (.exe)
+    if (app.isPackaged) {
+        startBackend(); // Electron сам поднимает бэкенд
+        
+        // Ждем сигнал от Питона (с тайм-аутом)
+        setTimeout(() => {
+            if (!windowCreated) {
+                console.log("Аварийный тайм-аут: бэкенд не ответил вовремя. Открываем принудительно.");
+                windowCreated = true;
+                createWindow();
+            }
+        }, 5000);
+    } 
+    // Если мы в режиме разработки (start.bat)
+    else {
+        // start.bat УЖЕ запустил Питон в соседнем процессе, 
+        // поэтому нам не нужно ничего ждать, открываем окно мгновенно!
+        console.log("Режим разработки: Бэкенд запущен внешним скриптом.");
+        windowCreated = true;
+        createWindow();
+    }
+
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
