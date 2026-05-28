@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LithoScan HUD | Advanced Yield Analyzer for Star Citizen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-brand">LithoScan <span>HUD</span></div>
+        <div class="nav-links">
+            <a href="#demo">Live Demo</a>
+            <a href="#features">Core Tech</a>
+            <a href="#download" class="nav-btn">Download App</a>
+        </div>
+    </nav>
+
+    <!-- БОКОВЫЕ РЫНОЧНЫЕ ТИКЕРЫ (ФОНОВЫЕ) -->
+    <div class="ticker-panel left" id="panel-left"></div>
+    <div class="ticker-panel right" id="panel-right"></div>
+
+    <main class="main-container">
+        <!-- HERO SECTION -->
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1>Stop Guessing. <br><span>Start Mining Smart.</span></h1>
+                <p>A clean and simple calculator for Star Citizen miners. Estimate your yield, check station bonuses, and get back to mining.</p>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE DEMO SECTION (Сжата по содержимому) -->
+        <section id="demo" class="demo-section">
+            <div class="demo-header">
+                <h2>Interactive Web Demo</h2>
+                <p>Drop a screenshot of an asteroid scan to see the analysis.</p>
+            </div>
+
+            <!-- СТРОГО ФИКСИРОВАННЫЙ СКАНЕР (Уменьшена высота) -->
+            <div class="scanner-container">
+                <div id="drop-zone" class="drop-zone fixed-size">
+                    <!-- Состояние 1: Ожидание -->
+                    <div id="drop-text" class="drop-content">
+                        <div class="reticle-icon">⛶</div>
+                        <b>AWAITING VISUAL DATA</b>
+                        <span>Drop image</span>
+                    </div>
+                    
+                    <!-- Состояние 2: Сканирование и Результат -->
+                    <div id="preview-container" class="hide">
+                        <img id="preview-image" src="" alt="Scan target">
+                        <div id="scan-laser" class="scan-laser"></div>
+                        
+                        <div id="loader-logs" class="hide">
+                            <p id="log-1">> Scanning...</p>
+                            <p id="log-2" class="hide">> Matching UEX data...</p>
+                            <p id="log-4" class="hide">> Output ready.</p>
+                        </div>
+
+                        <div id="scan-complete-overlay" class="hide">
+                            <span class="complete-badge">✓ COMPLETE</span>
+                            <span class="reset-text">Click to reset</span>
+                        </div>
+                    </div>
+                </div>
+                <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
+            </div>
+
+            <!-- ПАНЕЛЬ КАЛЬКУЛЯТОРА -->
+            <div class="results-container">
+                <div class="theme-selector" id="theme-controls">
+                    <button class="theme-btn active" data-target="glass">GLASS</button>
+                    <button class="theme-btn" data-target="amber">AMBER</button>
+                    <button class="theme-btn" data-target="default">DEFAULT</button>
+                </div>
+
+                <div id="calc-app" data-theme="glass" class="empty-state">
+                    <div class="hologram-panel fixed-panel">
+                        <!-- ЗАГЛУШКА -->
+                        <div class="no-data-overlay">
+                            <div class="no-data-text">-- NO DATA --</div>
+                        </div>
+
+                        <!-- КОНТЕНТ -->
+                        <div class="panel-content-wrapper">
+                            <header class="panel-header">
+                                <div class="header-block ui-density-total">
+                                    <span class="label-sm">Total Density</span>
+                                    <div class="main-val"><span id="t-dens-full">0</span></div>
+                                    <div class="sub-val">Raw: <span id="r-dens-full">0</span></div>
+                                    <div class="optimal-block mt-1 text-bonus">
+                                        <span class="opt-label">Best Potential:</span><br>
+                                        <span class="opt-val" id="opt-dens">0</span> aUEC/SCU
+                                        <span class="opt-sub"> (in <span id="opt-scu">0</span> SCU)</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="header-block verdict-wrapper">
+                                    <div id="scan-verdict" class="verdict-base verdict-default">WAITING</div>
+                                </div>
+
+                                <div class="header-block right ui-profit-total">
+                                    <span class="label-sm">Total Profit</span>
+                                    <div class="main-val"><span id="t-prof-full">0</span></div>
+                                    <div class="sub-val">Raw: <span id="r-prof-full">0</span></div>
+                                </div>
+                            </header>
+
+                            <div class="meta-info">
+                                <span id="meta-vol">VOL: 0 SCU</span>
+                                <span id="meta-method">METHOD: NONE</span>
+                                <span id="meta-bonus" class="text-bonus">BONUS: 0%</span>
+                            </div>
+
+                            <table class="mining-table">
+                                <thead>
+                                    <tr>
+                                        <th class="ui-col-mineral">Mineral</th>
+                                        <th class="ui-col-comp comp-cell">%</th>
+                                        <th class="ui-col-scu">SCU (R/R)</th>
+                                        <th class="ui-col-dens">Density</th>
+                                        <th class="ui-col-val text-right">Profit</th>
+                                        <th class="ui-col-mods">Mods</th> <!-- СЮДА ВЕРНУЛИ MODS -->
+                                    </tr>
+                                </thead>
+                                <tbody id="minerals-body">
+                                    <!-- Пустые строки для сохранения высоты -->
+                                    <tr><td colspan="6" style="height: 160px;"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section id="features" class="features-section">
+            <h2 class="section-title">Core Features</h2>
+            <p class="section-subtitle">Everything you need to maximize your mining runs.</p>
+            
+            <!-- Row 1 -->
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>Advanced Yield Analytics</h3>
+                    <p>Get a complete breakdown of every cluster instantly. The app analyzes density, mass, and composition to project your exact SCU output and potential aUEC profit. Instantly compare raw selling prices against active refinery methods to make the most lucrative decisions on the fly.</p>
+                </div>
+                <div class="feature-image">
+                    <!-- Заменили заглушку на вашу картинку Calc.png -->
+                    <img src="images/Calc.png" alt="Advanced Yield Analytics" class="feature-screenshot">
+                </div>
+            </div>
+
+            <!-- Row 2 (Reverse) -->
+            <div class="feature-row reverse">
+                <div class="feature-text">
+                    <h3>Live UEXCorp Market Data</h3>
+                    <p>The Stanton economy is constantly shifting. LithoScan HUD pulls live commodity prices and refinery yield bonuses directly from the UEXCorp API. It automatically highlights the best refinery stations to maximize your profit margin.</p>
+                </div>
+                <div class="feature-image">
+                    <!-- Заменили заглушку на вашу картинку UEX.png -->
+                    <img src="images/UEX.png" alt="Live UEXCorp Market Data" class="feature-screenshot">
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>Long-Range Signature Decoder</h3>
+                    <p>Never waste hydrogen fuel flying to a worthless rock again. Our built-in signal decoder lets you identify asteroid contents from kilometers away. Just input the ping signature (e.g., 9940), and the HUD will reveal hidden Quantainium or Bexalite deposits before you even approach.</p>
+                </div>
+                <div class="feature-image">
+                    <!-- Заменили заглушку на вашу картинку Decoder.png -->
+                    <img src="images/Decoder.png" alt="Long-Range Signature Decoder" class="feature-screenshot">
+                </div>
+            </div>
+
+            <!-- Row 4 (Reverse) -->
+            <div class="feature-row reverse">
+                <div class="feature-text">
+                    <h3>Adaptive HUD Customization</h3>
+                    <p>Tailor your cockpit interface to your exact playstyle. The comprehensive settings panel allows you to toggle specific data columns, switch between full and abbreviated numbers, and change visual themes (like Glass or Amber) to perfectly match your ship's interior lighting.</p>
+                </div>
+                <div class="feature-image">
+                    <img src="images/calc-hud.png" alt="Astrometrics Calculator HUD" class="feature-screenshot">
+                </div>
+            </div>
+        </section>
+			
+
+        <!-- VIDEO DEMONSTRATION SECTION -->
+        <section class="video-section">
+            <h2 class="section-title">See It In Action</h2>
+            <p class="section-subtitle">Watch how the overlay seamlessly integrates with the Star Citizen HUD via transparent windows and smart click-through technology.</p>
+            
+            <div class="video-container local-video-container">
+                <!-- Замените 'images/demo-video.mp4' на путь к вашему файлу -->
+                <video controls autoplay muted loop preload="metadata" class="local-demo-video">
+                    <source src="images/demo-video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </section>
+
+        <!-- CALL TO ACTION (DOWNLOAD) -->
+        <section id="download" class="cta-section">
+            <div class="cta-content">
+                <h2>Ready to dominate the Aaron Halo?</h2>
+                <p>Join thousands of professional miners maximizing their yields today. Includes real-time screen capture, global hotkeys, and multi-monitor support.</p>
+                <a href="#" class="download-btn">Download for Windows (64-bit)</a>
+                <p class="version-info">Version 3.1.0 | Requires Windows 10/11</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 LithoScan HUD Pro. A conceptual demonstration project.</p>
+        <p class="disclaimer">This project is a fan-made portfolio piece and is not affiliated with Cloud Imperium Rights LLC or Star Citizen.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
