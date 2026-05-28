@@ -74,7 +74,7 @@ function createWindow() {
         alwaysOnTop: true,      
         skipTaskbar: false,     
         resizable: false,       
-        type: 'toolbar',        
+//        type: 'toolbar',        
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
