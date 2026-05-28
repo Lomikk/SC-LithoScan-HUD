@@ -18,13 +18,13 @@ const DEFAULT_SETTINGS = {
 // Единый центр управления темами. Добавляй новые темы только сюда!
 // Единый центр управления темами. Добавляй новые темы только сюда!
 const AVAILABLE_THEMES = {
-    'glass':      { title: 'GLASS HUD',   desc: '(Holographic)' },
-    'classic':    { title: 'CLASSIC HUD', desc: '(Cyan/Green)' },
-    'amber':      { title: 'AMBER HUD',   desc: '(Orange)' },
-    'outlaw':     { title: 'OUTLAW HUD',  desc: '(GrimHEX Red)' },
+    'glass':      { title: 'GLASS',   desc: '(Holographic)' },
+    'classic':    { title: 'CLASSIC', desc: '(Cyan/Green)' },
+    'amber':      { title: 'AMBER',   desc: '(Orange)' },
+    'outlaw':     { title: 'OUTLAW',  desc: '(desc)' },
     'industrial': { title: 'INDUSTRIAL',  desc: '(Drake Yellow)' },
-    'synthwave':  { title: 'SYNTHWAVE',   desc: '(MicroTech Pink)' },
-    'luxury':     { title: 'LUXURY HUD',  desc: '(Origin White)' }
+    'synthwave':  { title: 'SYNTHWAVE',   desc: '(desc)' },
+    'luxury':     { title: 'LUXURY',  desc: '(Origin White)' }
 };
 
 // Загружаем из памяти или создаем новый профиль

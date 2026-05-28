@@ -65,6 +65,7 @@ function createWindow() {
 
     mainWindow = new BrowserWindow({
         title: "LithoScan HUD",
+        icon: path.join(__dirname, 'icon.ico'),
         width: width,
         height: height,
         x: 0,

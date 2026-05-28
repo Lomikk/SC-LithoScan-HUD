@@ -2,6 +2,7 @@
   "name": "lithoscan-hud",
   "productName": "LithoScan HUD",
   "version": "1.0.0",
+  "author": "Lomikk",
   "description": "Advanced Mining & Signature Overlay for Star Citizen",
   "main": "main.js",
   "scripts": {
@@ -12,14 +13,17 @@
     "appId": "com.lithoscan.hud",
     "win": {
       "target": "nsis",
-      "requestedExecutionLevel": "requireAdministrator"
+      "requestedExecutionLevel": "asInvoker",
+      "icon": "icon.ico"
     },
     "nsis": {
       "oneClick": false,
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "createStartMenuShortcut": true,
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico"
     },
     "files": [
       "**/*",
