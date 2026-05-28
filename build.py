@@ -56,8 +56,11 @@ def clean_temp_folders():
                 print(f"  [!] Не удалось удалить {folder}: {e}")
 
 def run_command(cmd, cwd):
-    """Выполняет консольную команду с перехватом вывода"""
-    process = subprocess.Popen(cmd, cwd=cwd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    process = subprocess.Popen(
+        cmd, cwd=cwd, shell=True, 
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, 
+        text=True, encoding='utf-8', errors='replace'
+    )
     for line in process.stdout:
         print(f"  > {line.strip()}")
     process.wait()
