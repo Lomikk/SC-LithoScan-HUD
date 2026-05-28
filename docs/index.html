@@ -31,41 +31,42 @@
             </div>
         </section>
 
-        <!-- INTERACTIVE DEMO SECTION (Сжата по содержимому) -->
-        <section id="demo" class="demo-section">
-            <div class="demo-header">
-                <h2>Interactive Web Demo</h2>
-                <p>Drop a screenshot of an asteroid scan to see the analysis.</p>
-            </div>
-
-            <!-- СТРОГО ФИКСИРОВАННЫЙ СКАНЕР (Уменьшена высота) -->
-            <div class="scanner-container">
-                <div id="drop-zone" class="drop-zone fixed-size">
-                    <!-- Состояние 1: Ожидание -->
-                    <div id="drop-text" class="drop-content">
-                        <div class="reticle-icon">⛶</div>
-                        <b>AWAITING VISUAL DATA</b>
-                        <span>Drop image</span>
+        <!-- ИНТЕРАКТИВНЫЙ СКРИНШОТ ИГРЫ -->
+            <div class="scanner-container" id="demo-trigger">
+                <div class="game-screen-wrapper">
+                    <!-- Задний фон: скриншот из игры -->
+                    <img src="images/Image1.png" alt="Star Citizen Gameplay" class="game-screenshot" id="game-bg">
+                    
+                    <!-- Состояние 1: Кнопка-призыв к действию -->
+                    <div id="click-prompt" class="click-prompt">
+                        <span class="pulse-icon">⛶</span>
+                        <span>CLICK TO SCAN</span>
                     </div>
                     
-                    <!-- Состояние 2: Сканирование и Результат -->
-                    <div id="preview-container" class="hide">
-                        <img id="preview-image" src="" alt="Scan target">
-                        <div id="scan-laser" class="scan-laser"></div>
-                        
-                        <div id="loader-logs" class="hide">
-                            <p id="log-1">> Scanning...</p>
-                            <p id="log-2" class="hide">> Matching UEX data...</p>
-                            <p id="log-4" class="hide">> Output ready.</p>
-                        </div>
-
-                        <div id="scan-complete-overlay" class="hide">
-                            <span class="complete-badge">✓ COMPLETE</span>
-                            <span class="reset-text">Click to reset</span>
+                    <!-- Состояние 2: Зона сканирования (Точно по вашим координатам) -->
+                    <div id="scan-target-box" class="hide">
+                        <div class="scan-laser"></div>
+                        <div class="scan-hud">
+                            <div class="scan-bracket top-left"></div>
+                            <div class="scan-bracket top-right"></div>
+                            <div class="scan-bracket bottom-left"></div>
+                            <div class="scan-bracket bottom-right"></div>
                         </div>
                     </div>
+
+                    <!-- Логи поверх экрана -->
+                    <div id="loader-logs" class="hide">
+                        <p id="log-1">> Initializing OCR...</p>
+                        <p id="log-2" class="hide">> Reading cluster data...</p>
+                        <p id="log-4" class="hide">> Data extracted.</p>
+                    </div>
+
+                    <!-- Завершение -->
+                    <div id="scan-complete-overlay" class="hide">
+                        <span class="complete-badge">✓ SCAN COMPLETE</span>
+                        <span class="reset-text">Click anywhere to reset</span>
+                    </div>
                 </div>
-                <input type="file" id="file-input" accept="image/png, image/jpeg" style="display: none;">
             </div>
 
             <!-- ПАНЕЛЬ КАЛЬКУЛЯТОРА -->

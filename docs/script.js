@@ -1,31 +1,17 @@
 // ============================================================================
-// 1. EXACT MOCK DATA FROM SCREENSHOTS
+// 1. EXACT MOCK DATA (Оставили только 1 набор данных)
 // ============================================================================
-const mockScans = {
-    "img1": {
-        meta_vol: 15.49,
-        meta_method: "DINYX SOLV",
-        meta_bonus: 556.0,
-        totals: { t_dens: 23248, r_dens: 3544, t_prof: 360117, r_prof: 54895, opt_dens: 33133, opt_scu: 10.04 },
-        minerals: [
-            { name: "GOLD", percent: 42.45, grade: 0, scu_ref: 6.81, scu_raw: 6.58, dens_ref: 14900, dens_raw: 1134, prof_ref: 230801, prof_raw: 17570, station: "MIC-L2", system: "Stanton", bonus: 0.09, is_core: true },
-            { name: "TARANITE", percent: 22.39, grade: 0, scu_ref: 3.56, scu_raw: 3.47, dens_ref: 6583, dens_raw: 1970, prof_ref: 101972, prof_raw: 30517, station: "Levski", system: "Nyx", bonus: 0.08, is_core: true },
-            { name: "QUARTZ", percent: 30.74, grade: 0, scu_ref: 5.02, scu_raw: 4.76, dens_ref: 1765, dens_raw: 439, prof_ref: 27344, prof_raw: 6804, station: "Nyx Gateway", system: "Stanton", bonus: 0.11, is_core: false },
-            { name: "INERT", percent: 4.40, grade: 0, scu_ref: 0.65, scu_raw: 0.68, dens_ref: 0, dens_raw: 0, prof_ref: 0, prof_raw: 4, station: "-", system: "Unknown", bonus: 0, is_core: false }
-        ]
-    },
-    "img2": {
-        meta_vol: 46.03,
-        meta_method: "DINYX SOLV",
-        meta_bonus: 9703.7,
-        totals: { t_dens: 25021, r_dens: 255, t_prof: 1151702, r_prof: 11748, opt_dens: 51841, opt_scu: 21.33 },
-        minerals: [
-            { name: "LINDINIUM", percent: 40.28, grade: 260, scu_ref: 18.85, scu_raw: 18.54, dens_ref: 20882, dens_raw: 0, prof_ref: 961187, prof_raw: 0, station: "MIC-L5", system: "Stanton", bonus: 0.07, is_core: true },
-            { name: "LINDINIUM", percent: 6.05, grade: 897, scu_ref: 2.83, scu_raw: 2.78, dens_ref: 3136, dens_raw: 0, prof_ref: 144369, prof_raw: 0, station: "MIC-L5", system: "Stanton", bonus: 0.07, is_core: true },
-            { name: "TUNGSTEN", percent: 8.15, grade: 428, scu_ref: 3.88, scu_raw: 3.75, dens_ref: 1003, dens_raw: 252, prof_ref: 46151, prof_raw: 11622, station: "MIC-L2", system: "Stanton", bonus: 0.09, is_core: false },
-            { name: "INERT", percent: 45.51, grade: 0, scu_ref: 19.90, scu_raw: 20.95, dens_ref: 0, dens_raw: 3, prof_ref: -5, prof_raw: 126, station: "-", system: "Unknown", bonus: 0, is_core: false }
-        ]
-    }
+const scanData = {
+    meta_vol: 15.49,
+    meta_method: "DINYX SOLV",
+    meta_bonus: 556.0,
+    totals: { t_dens: 23248, r_dens: 3544, t_prof: 360117, r_prof: 54895, opt_dens: 33133, opt_scu: 10.04 },
+    minerals: [
+        { name: "GOLD", percent: 42.45, grade: 0, scu_ref: 6.81, scu_raw: 6.58, dens_ref: 14900, dens_raw: 1134, prof_ref: 230801, prof_raw: 17570, station: "MIC-L2", system: "Stanton", bonus: 0.09, is_core: true },
+        { name: "TARANITE", percent: 22.39, grade: 0, scu_ref: 3.56, scu_raw: 3.47, dens_ref: 6583, dens_raw: 1970, prof_ref: 101972, prof_raw: 30517, station: "Levski", system: "Nyx", bonus: 0.08, is_core: true },
+        { name: "QUARTZ", percent: 30.74, grade: 0, scu_ref: 5.02, scu_raw: 4.76, dens_ref: 1765, dens_raw: 439, prof_ref: 27344, prof_raw: 6804, station: "Nyx Gateway", system: "Stanton", bonus: 0.11, is_core: false },
+        { name: "INERT", percent: 4.40, grade: 0, scu_ref: 0.65, scu_raw: 0.68, dens_ref: 0, dens_raw: 0, prof_ref: 0, prof_raw: 4, station: "-", system: "Unknown", bonus: 0, is_core: false }
+    ]
 };
 
 const MINERAL_COLORS = {
@@ -220,63 +206,67 @@ window.addEventListener('resize', () => {
 document.addEventListener("DOMContentLoaded", generateTickers);
 
 // ============================================================================
-// DRAG & DROP & ANIMATION LOGIC
+// ИНТЕРАКТИВНЫЙ КЛИК ПО СКРИНШОТУ
 // ============================================================================
-const dropZone = document.getElementById('drop-zone');
-const fileInput = document.getElementById('file-input');
+const demoTrigger = document.getElementById('demo-trigger');
+let isScanning = false;
+let isScanComplete = false;
 
-dropZone.addEventListener('click', () => fileInput.click());
+demoTrigger.addEventListener('click', function() {
+    if (isScanning) return; // Блокируем клики во время анимации
 
-['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
-});
-
-dropZone.addEventListener('drop', e => handleFiles(e.dataTransfer.files), false);
-fileInput.addEventListener('change', function() { handleFiles(this.files); });
-
-function handleFiles(files) {
-    if (files.length === 0) return;
-    const file = files[0];
-    
-    const dropText = document.getElementById('drop-text');
-    const previewContainer = document.getElementById('preview-container');
-    const previewImage = document.getElementById('preview-image');
+    const clickPrompt = document.getElementById('click-prompt');
+    const targetBox = document.getElementById('scan-target-box');
     const loaderLogs = document.getElementById('loader-logs');
     const calcApp = document.getElementById('calc-app');
+    const completeOverlay = document.getElementById('scan-complete-overlay');
+    const gameBg = document.getElementById('game-bg');
+
+    // Если скан уже был завершен - сбрасываем всё в начало
+    if (isScanComplete) {
+        calcApp.classList.add('empty-state');
+        completeOverlay.classList.add('hide');
+        clickPrompt.classList.remove('hide');
+        gameBg.style.opacity = "0.6";
+        isScanComplete = false;
+        return;
+    }
+
+    // --- НАЧАЛО СКАНИРОВАНИЯ ---
+    isScanning = true;
     
-    // Возврат в состояние сканирования
-    calcApp.classList.add('empty-state');
-    document.getElementById('scan-complete-overlay').classList.add('hide');
-    document.getElementById('scan-laser').classList.remove('hide');
+    // Прячем кнопку, показываем рамку сканера и логи
+    clickPrompt.classList.add('hide');
+    targetBox.classList.remove('hide');
+    loaderLogs.classList.remove('hide');
+    gameBg.style.opacity = "0.4"; // Затемняем фон для фокуса на сканере
     
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        previewImage.src = e.target.result;
-        previewImage.style.opacity = "0.3"; 
+    // Сброс логов
+    document.getElementById('log-2').classList.add('hide');
+    document.getElementById('log-4').classList.add('hide');
+    
+    // Анимация текста в логах
+    setTimeout(() => document.getElementById('log-2').classList.remove('hide'), 600);
+    
+    setTimeout(() => {
+        document.getElementById('log-4').classList.remove('hide');
         
-        dropText.classList.add('hide');
-        previewContainer.classList.remove('hide');
-        loaderLogs.classList.remove('hide');
-        
-        document.getElementById('log-2').classList.add('hide');
-        document.getElementById('log-4').classList.add('hide');
-        
-        setTimeout(() => document.getElementById('log-2').classList.remove('hide'), 600);
+        // --- ЗАВЕРШЕНИЕ СКАНИРОВАНИЯ ---
         setTimeout(() => {
-            document.getElementById('log-4').classList.remove('hide');
+            // Отрисовываем данные
+            renderResults(scanData);
             
-            setTimeout(() => {
-                const nameLower = file.name.toLowerCase();
-                renderResults(nameLower.includes("img2") ? mockScans["img2"] : mockScans["img1"]);
-                
-                calcApp.classList.remove('empty-state');
-                loaderLogs.classList.add('hide');
-                document.getElementById('scan-laser').classList.add('hide');
-                previewImage.style.opacity = "0.8"; 
-                document.getElementById('scan-complete-overlay').classList.remove('hide');
-                
-            }, 800);
-        }, 1600);
-    };
-    reader.readAsDataURL(file);
-}
+            // Проявляем калькулятор
+            calcApp.classList.remove('empty-state');
+            
+            // Скрываем сканер, показываем надпись Complete
+            targetBox.classList.add('hide');
+            loaderLogs.classList.add('hide');
+            completeOverlay.classList.remove('hide');
+            gameBg.style.opacity = "0.2"; // Сильно затемняем скриншот, фокус на калькуляторе
+            
+            isScanning = false;
+            isScanComplete = true;
+        }, 800);
+    }, 1600);
+});
