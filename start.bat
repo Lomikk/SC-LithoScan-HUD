@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 echo ==================================================
 echo   INITIALIZING STAR CITIZEN OVERLAY SETUP...
 echo ==================================================
