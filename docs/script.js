@@ -1,16 +1,24 @@
 // ============================================================================
-// 1. EXACT MOCK DATA (Оставили только 1 набор данных)
+// 1. EXACT MOCK DATA FROM SCREENSHOT (Image1.png)
 // ============================================================================
 const scanData = {
-    meta_vol: 15.49,
+    meta_vol: 17.50,
     meta_method: "DINYX SOLV",
-    meta_bonus: 556.0,
-    totals: { t_dens: 23248, r_dens: 3544, t_prof: 360117, r_prof: 54895, opt_dens: 33133, opt_scu: 10.04 },
+    meta_bonus: 630.0,
+    totals: {
+        t_dens: 23791,
+        r_dens: 3259,
+        t_prof: 416348,
+        r_prof: 57037,
+        opt_dens: 35825,
+        opt_scu: 11.62
+    },
     minerals: [
-        { name: "GOLD", percent: 42.45, grade: 0, scu_ref: 6.81, scu_raw: 6.58, dens_ref: 14900, dens_raw: 1134, prof_ref: 230801, prof_raw: 17570, station: "MIC-L2", system: "Stanton", bonus: 0.09, is_core: true },
-        { name: "TARANITE", percent: 22.39, grade: 0, scu_ref: 3.56, scu_raw: 3.47, dens_ref: 6583, dens_raw: 1970, prof_ref: 101972, prof_raw: 30517, station: "Levski", system: "Nyx", bonus: 0.08, is_core: true },
-        { name: "QUARTZ", percent: 30.74, grade: 0, scu_ref: 5.02, scu_raw: 4.76, dens_ref: 1765, dens_raw: 439, prof_ref: 27344, prof_raw: 6804, station: "Nyx Gateway", system: "Stanton", bonus: 0.11, is_core: false },
-        { name: "INERT", percent: 4.40, grade: 0, scu_ref: 0.65, scu_raw: 0.68, dens_ref: 0, dens_raw: 0, prof_ref: 0, prof_raw: 4, station: "-", system: "Unknown", bonus: 0, is_core: false }
+        { name: "BEXALITE", percent: 53.35, grade: 302, scu_ref: 9.93, scu_raw: 9.34, dens_ref: 19189, dens_raw: 2785, prof_ref: 335799, prof_raw: 48735, station: "MIC-L5", system: "Stanton", bonus: 0.12, is_core: true },
+        { name: "BEXALITE", percent: 6.35, grade: 582, scu_ref: 1.18, scu_raw: 1.11, dens_ref: 2284, dens_raw: 331, prof_ref: 39969, prof_raw: 5801, station: "MIC-L5", system: "Stanton", bonus: 0.12, is_core: true },
+        { name: "BORASE", percent: 3.65, grade: 421, scu_ref: 0.66, scu_raw: 0.64, dens_ref: 1245, dens_raw: 59, prof_ref: 21786, prof_raw: 1035, station: "MIC-L5", system: "Stanton", bonus: 0.09, is_core: true },
+        { name: "GOLD", percent: 3.06, grade: 491, scu_ref: 0.55, scu_raw: 0.54, dens_ref: 1074, dens_raw: 82, prof_ref: 18796, prof_raw: 1431, station: "MIC-L2", system: "Stanton", bonus: 0.09, is_core: true },
+        { name: "INERT", percent: 33.57, grade: 0, scu_ref: 5.58, scu_raw: 5.87, dens_ref: 0, dens_raw: 2, prof_ref: -1, prof_raw: 35, station: "-", system: "Unknown", bonus: 0, is_core: false }
     ]
 };
 
