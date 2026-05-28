@@ -1,8 +1,7 @@
-const { exec } = require('child_process'); // Добавь этот импорт в самый верх, если его там нет
-const { app, BrowserWindow, ipcMain, screen, dialog } = require('electron'); // <-- добавили dialog
+const { app, BrowserWindow, ipcMain, screen, dialog } = require('electron');
 const path = require('path');
-const fs = require('fs'); // <-- добавили fs
-const { spawn } = require('child_process');
+const fs = require('fs');
+const { spawn, exec } = require('child_process');
 
 let mainWindow;
 let backendProcess = null;
@@ -18,26 +17,23 @@ function startBackend() {
 
     console.log("Запускаем бэкенд по пути:", backendPath);
 
-    // Проверяем, на месте ли файл
     if (!fs.existsSync(backendPath)) {
         dialog.showErrorBox("Ошибка запуска", "Файл бэкенда не найден:\n" + backendPath);
         return;
     }
 
-    // Запускаем процесс напрямую, БЕЗ shell: true [2.4]
-   backendProcess = spawn(backendPath, [], {
+    backendProcess = spawn(backendPath, [], {
         detached: false, 
         windowsHide: true,
         cwd: path.dirname(backendPath),
         stdio: ['ignore', 'pipe', 'pipe'] 
     });
 
-    // Следим за выводом бэкенда в поисках сигнала готовности [2.4]
+    // ЕДИНСТВЕННЫЙ обработчик stdout
     backendProcess.stdout.on('data', (data) => {
         const output = data.toString();
-        console.log(`[Backend]: ${output}`);
+        console.log(`[Backend]: ${output.trim()}`);
         
-        // Как только питон отрапортовал о готовности — открываем интерфейс! [2.4]
         if (output.includes("===BACKEND_READY===") && !windowCreated) {
             console.log("Бэкенд готов! Открываем окно.");
             windowCreated = true;
@@ -45,35 +41,26 @@ function startBackend() {
         }
     });
 
+    // ЕДИНСТВЕННЫЙ обработчик stderr
+    backendProcess.stderr.on('data', (data) => {
+        console.error(`[Backend Error]: ${data.toString().trim()}`);
+    });
+
     backendProcess.on('error', (err) => {
-        dialog.showErrorBox(
-            "Ошибка запуска бэкенда", 
-            `Не удалось запустить процесс Питона:\n${err.message}`
-        );
+        dialog.showErrorBox("Ошибка запуска бэкенда", `Не удалось запустить процесс Питона:\n${err.message}`);
     });
 
     backendProcess.on('exit', (code) => {
         if (code !== 0 && code !== null) {
-            dialog.showErrorBox(
-                "Критическая ошибка бэкенда", 
-                `Процесс Python неожиданно завершился (код ${code}).\nУбедитесь, что у программы есть права Администратора.`
-            );
+            dialog.showErrorBox("Критическая ошибка бэкенда", `Процесс Python неожиданно завершился (код ${code}).\nУбедитесь, что антивирус не удалил файл.`);
         }
     });
-
-    backendProcess.stdout.on('data', (data) => console.log(`[Backend]: ${data}`));
-    backendProcess.stderr.on('data', (data) => console.error(`[Backend Error]: ${data}`));
 }
 
 // ==========================================
 // 2. СОЗДАНИЕ ОКНА
 // ==========================================
-// ... (здесь идет функция createWindow и остальной код без изменений) ...
-// ==========================================
-// 2. СОЗДАНИЕ ОКНА
-// ==========================================
 function createWindow() {
-    // Получаем размеры основного монитора
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
     mainWindow = new BrowserWindow({
@@ -82,12 +69,12 @@ function createWindow() {
         height: height,
         x: 0,
         y: 0,
-        transparent: true,      // Идеальная прозрачность для оверлея
-        frame: false,           // Без рамок
-        alwaysOnTop: true,      // Поверх всех окон (поверх игры)
-        skipTaskbar: false,      // Скрыть из панели задач
-        resizable: false,
-        //type: 'toolbar',        // <--- 1. Запрещает окну сворачиваться
+        transparent: true,      
+        frame: false,           
+        alwaysOnTop: true,      
+        skipTaskbar: false,     
+        resizable: false,       
+        type: 'toolbar',        
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -95,22 +82,19 @@ function createWindow() {
         }
     });
 
-    // <--- 2. Форсируем максимальный Z-index поверх игр
     mainWindow.setAlwaysOnTop(true, 'screen-saver', 1);
 
-    // <--- 3. Если игра забирает фокус, жестко держим оверлей наверху
     mainWindow.on('blur', () => {
         mainWindow.setAlwaysOnTop(true, 'screen-saver', 1);
     });
 
-    // Отключаем аппаратное ускорение, если оно конфликтует со Star Citizen
-    // app.disableHardwareAcceleration();
-
     mainWindow.setIgnoreMouseEvents(false);
     mainWindow.loadFile('app/index.html');
 
-    // Раскомментируй для отладки
-    // mainWindow.webContents.openDevTools({ mode: 'detach' });
+    // ВОЗВРАЩАЕМ ЗАЩИТУ ОТ СМЕЩЕНИЯ МАСШТАБА (СЛУЧАЙНО УДАЛЕННУЮ РАНЕЕ)
+    mainWindow.webContents.on('did-finish-load', () => {
+        mainWindow.webContents.setZoomFactor(1.0);
+    });
 }
 
 // ==========================================
@@ -118,11 +102,9 @@ function createWindow() {
 // ==========================================
 app.whenReady().then(() => {
     
-    // Если мы в скомпилированном релизе (.exe)
     if (app.isPackaged) {
-        startBackend(); // Electron сам поднимает бэкенд
+        startBackend(); 
         
-        // Ждем сигнал от Питона (с тайм-аутом)
         setTimeout(() => {
             if (!windowCreated) {
                 console.log("Аварийный тайм-аут: бэкенд не ответил вовремя. Открываем принудительно.");
@@ -130,11 +112,7 @@ app.whenReady().then(() => {
                 createWindow();
             }
         }, 5000);
-    } 
-    // Если мы в режиме разработки (start.bat)
-    else {
-        // start.bat УЖЕ запустил Питон в соседнем процессе, 
-        // поэтому нам не нужно ничего ждать, открываем окно мгновенно!
+    } else {
         console.log("Режим разработки: Бэкенд запущен внешним скриптом.");
         windowCreated = true;
         createWindow();
@@ -145,37 +123,27 @@ app.whenReady().then(() => {
     });
 });
 
-// Умный клик-сквозь. Команды приходят из renderer.js
 ipcMain.on('set-ignore-mouse-events', (event, ignore) => {
     const win = BrowserWindow.fromWebContents(event.sender);
     if (!win) return;
-    
-    // forward: true позволяет оверлею ловить mousemove для 3D эффектов, 
-    // но клики пролетают насквозь в игру!
     win.setIgnoreMouseEvents(ignore, { forward: true });
 });
 
-// УБИВАЕМ БЭКЕНД ПРИ ЗАКРЫТИИ ПРОГРАММЫ
-// В самом конце файла frontend/main.js:
-
-// Функция для железного убийства дерева процессов в Windows
+// ФУНКЦИЯ УНИЧТОЖЕНИЯ БЭКЕНДА
 function killBackend() {
     if (backendProcess && backendProcess.pid) {
         console.log(`Завершаем процесс бэкенда (PID: ${backendProcess.pid})...`);
-        
-        // /F - принудительно, /T - убивает дерево процессов (все дочерние потоки Питона)
         exec(`taskkill /pid ${backendProcess.pid} /T /F`, (err) => {
             if (err) {
                 console.log("Taskkill завершился с ошибкой, пробуем стандартный kill()");
-                backendProcess.kill(); // Резервный откат
+                backendProcess.kill(); 
             } else {
-                console.log("Бэкенд успешно и полностью выгружен из ОЗУ.");
+                console.log("Бэкенд успешно выгружен.");
             }
         });
     }
 }
 
-// Заменяем will-quit
 app.on('will-quit', () => {
     killBackend();
 });
