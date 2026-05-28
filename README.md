@@ -35,7 +35,7 @@ Never waste hydrogen fuel flying to a worthless rock again. Our built-in signal 
 
 ---
 
-## How to Install (For Players)
+## How to Install
 1. Download the latest installer from the **[Releases](https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest)** section [1].
 2. Run the installer (No Python or Node.js required, everything is packaged!) [1].
 3. Run the desktop shortcut.
@@ -57,7 +57,7 @@ Never waste hydrogen fuel flying to a worthless rock again. Our built-in signal 
 * **Core Engines:** RapidOCR (Neural network text detection & recognition), PyInstaller (standalone bundling).
 
 ## Credits & Third-Party Assets
-* **Signature Database (`signatures.json`):** Derived from the database originally compiled by [Mallachi](https://github.com/Mallachi) (Copyright (c) 2026 Mallachi), used under the terms of the [MIT License](backend/data/signatures.json.LICENSE.txt).
+* **Signature Database (`signatures.json`):** Derived from the database originally compiled by [Mallachi](https://github.com/Diftic) (Copyright (c) 2026 Mallachi), used under the terms of the [MIT License](https://github.com/Diftic/SC_Signature_Scanner/blob/master/LICENSE).
 
 ## Disclaimer
 This is a fan-made community tool. LithoScan HUD is not affiliated with, authorized by, endorsed by, or in any way officially connected with the Cloud Imperium group of companies. Star Citizen®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC.
