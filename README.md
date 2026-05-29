@@ -127,7 +127,7 @@ Here is how it interacts with your system:
 
 Watch how the overlay seamlessly integrates with the Star Citizen HUD.
 
-> **Note:** [Watch the Demo Video here](docs/images/demo-video.mp4)
+<video src="docs/images/demo-video.mp4" controls="controls" style="max-width: 100%;"></video>
 
 ---
 
