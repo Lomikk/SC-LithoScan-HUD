@@ -14,7 +14,10 @@
         <div class="nav-links">
             <a href="#demo">Live Demo</a>
             <a href="#features">Core Tech</a>
-            <a href="#download" class="nav-btn">Download App</a>
+            <!-- Ссылка на GitHub Репозиторий -->
+            <a href="https://github.com/Lomikk/SC-LithoScan-HUD" target="_blank" class="nav-link">GitHub</a>
+            <!-- Ведет прямо на скачивание последней версии -->
+            <a href="https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest" target="_blank" class="nav-btn">Download App</a>
         </div>
     </nav>
 
@@ -27,11 +30,18 @@
         <section class="hero-section">
             <div class="hero-text">
                 <h1>Stop Guessing. <br><span>Start Mining Smart.</span></h1>
-                <p>A clean and simple calculator for Star Citizen miners. Estimate your yield, check station bonuses, and get back to mining.</p>
+                <p>A transparent, high-performance overlay for Star Citizen miners. Estimate your yield, decode radar signatures, and get back to mining.</p>
             </div>
         </section>
 
-        <!-- ИНТЕРАКТИВНЫЙ СКРИНШОТ ИГРЫ -->
+        <!-- INTERACTIVE DEMO SECTION -->
+        <section id="demo" class="demo-section">
+            <div class="demo-header">
+                <h2>Interactive Web Demo</h2>
+                <p>Drop a screenshot of an asteroid scan to see the analysis.</p>
+            </div>
+
+            <!-- СТРОГО ФИКСИРОВАННЫЙ СКАНЕР -->
             <div class="scanner-container" id="demo-trigger">
                 <div class="game-screen-wrapper">
                     <!-- Задний фон: скриншот из игры -->
@@ -43,7 +53,7 @@
                         <span>CLICK TO SCAN</span>
                     </div>
                     
-                    <!-- Состояние 2: Зона сканирования (Точно по вашим координатам) -->
+                    <!-- Состояние 2: Зона сканирования -->
                     <div id="scan-target-box" class="hide">
                         <div class="scan-laser"></div>
                         <div class="scan-hud">
@@ -72,16 +82,17 @@
             <!-- ПАНЕЛЬ КАЛЬКУЛЯТОРА -->
             <div class="results-container">
                 <div class="theme-selector" id="theme-controls">
+                    <!-- Заменили DEFAULT на CLASSIC, как у нас в программе -->
                     <button class="theme-btn active" data-target="glass">GLASS</button>
                     <button class="theme-btn" data-target="amber">AMBER</button>
-                    <button class="theme-btn" data-target="default">DEFAULT</button>
+                    <button class="theme-btn" data-target="classic">CLASSIC</button>
                 </div>
 
                 <div id="calc-app" data-theme="glass" class="empty-state">
                     <div class="hologram-panel fixed-panel">
                         <!-- ЗАГЛУШКА -->
                         <div class="no-data-overlay">
-                            <div class="no-data-text">-- NO DATA --</div>
+                            <div class="no-data-text">-- AWAITING DATA --</div>
                         </div>
 
                         <!-- КОНТЕНТ -->
@@ -123,7 +134,7 @@
                                         <th class="ui-col-scu">SCU (R/R)</th>
                                         <th class="ui-col-dens">Density</th>
                                         <th class="ui-col-val text-right">Profit</th>
-                                        <th class="ui-col-mods">Mods</th> <!-- СЮДА ВЕРНУЛИ MODS -->
+                                        <th class="ui-col-mods">Mods</th>
                                     </tr>
                                 </thead>
                                 <tbody id="minerals-body">
@@ -142,62 +153,53 @@
             <h2 class="section-title">Core Features</h2>
             <p class="section-subtitle">Everything you need to maximize your mining runs.</p>
             
-            <!-- Row 1 -->
             <div class="feature-row">
                 <div class="feature-text">
-                    <h3>Advanced Yield Analytics</h3>
-                    <p>Get a complete breakdown of every cluster instantly. The app analyzes density, mass, and composition to project your exact SCU output and potential aUEC profit. Instantly compare raw selling prices against active refinery methods to make the most lucrative decisions on the fly.</p>
+                    <h3>Yield Analytics</h3>
+                    <p>Get a clear breakdown of asteroid clusters instantly. The overlay calculates the price-to-volume ratio (Density) and estimates the "Best Potential" yield for optimal fracturing. With built-in smart verdicts and highlighted mineral grades, you can quickly decide which rocks are truly worth your time.</p>
                 </div>
                 <div class="feature-image">
-                    <!-- Заменили заглушку на вашу картинку Calc.png -->
-                    <img src="images/Calc.png" alt="Advanced Yield Analytics" class="feature-screenshot">
+                    <img src="images/Calc.png" alt="Yield Analytics" class="feature-screenshot">
                 </div>
             </div>
 
-            <!-- Row 2 (Reverse) -->
             <div class="feature-row reverse">
                 <div class="feature-text">
                     <h3>Live UEXCorp Market Data</h3>
-                    <p>The Stanton economy is constantly shifting. LithoScan HUD pulls live commodity prices and refinery yield bonuses directly from the UEXCorp API. It automatically highlights the best refinery stations to maximize your profit margin.</p>
+                    <p>LithoScan HUD pulls current commodity prices and refinery yield bonuses directly from the UEXCorp API. It automatically calculates the best refinery stations for your specific cargo to help optimize your routes.</p>
                 </div>
                 <div class="feature-image">
-                    <!-- Заменили заглушку на вашу картинку UEX.png -->
                     <img src="images/UEX.png" alt="Live UEXCorp Market Data" class="feature-screenshot">
                 </div>
             </div>
 
-            <!-- Row 3 -->
             <div class="feature-row">
                 <div class="feature-text">
-                    <h3>Long-Range Signature Decoder</h3>
-                    <p>Never waste hydrogen fuel flying to a worthless rock again. Our built-in signal decoder lets you identify asteroid contents from kilometers away. Just input the ping signature (e.g., 9940), and the HUD will reveal hidden Quantainium or Bexalite deposits before you even approach.</p>
+                    <h3>Signature Decoder</h3>
+                    <p>Evaluate radar pings before closing in. By scanning the signature number directly from your screen, the overlay calculates all possible mineral combinations, revealing potential high-value deposits from a distance.</p>
                 </div>
                 <div class="feature-image">
-                    <!-- Заменили заглушку на вашу картинку Decoder.png -->
-                    <img src="images/Decoder.png" alt="Long-Range Signature Decoder" class="feature-screenshot">
+                    <img src="images/Decoder.png" alt="Signature Decoder" class="feature-screenshot">
                 </div>
             </div>
 
-            <!-- Row 4 (Reverse) -->
             <div class="feature-row reverse">
                 <div class="feature-text">
-                    <h3>Adaptive HUD Customization</h3>
-                    <p>Tailor your cockpit interface to your exact playstyle. The comprehensive settings panel allows you to toggle specific data columns, switch between full and abbreviated numbers, and change visual themes (like Glass or Amber) to perfectly match your ship's interior lighting.</p>
+                    <h3>HUD Customization</h3>
+                    <p>Adjust the overlay to fit your preferences. The settings panel allows you to toggle specific data columns, switch between full and abbreviated number formats, and change visual themes (such as Glass, Classic, or Amber) to match your ship's UI.</p>
                 </div>
                 <div class="feature-image">
-                    <img src="images/calc-hud.png" alt="Astrometrics Calculator HUD" class="feature-screenshot">
+                    <img src="images/calc-hud.png" alt="HUD Customization" class="feature-screenshot">
                 </div>
             </div>
         </section>
-			
 
         <!-- VIDEO DEMONSTRATION SECTION -->
         <section class="video-section">
             <h2 class="section-title">See It In Action</h2>
-            <p class="section-subtitle">Watch how the overlay seamlessly integrates with the Star Citizen HUD via transparent windows and smart click-through technology.</p>
+            <p class="section-subtitle">Watch how the overlay seamlessly integrates with the Star Citizen HUD.</p>
             
             <div class="video-container local-video-container">
-                <!-- Замените 'images/demo-video.mp4' на путь к вашему файлу -->
                 <video controls autoplay muted loop preload="metadata" class="local-demo-video">
                     <source src="images/demo-video.mp4" type="video/mp4">
                     Your browser does not support the video tag.
@@ -208,17 +210,17 @@
         <!-- CALL TO ACTION (DOWNLOAD) -->
         <section id="download" class="cta-section">
             <div class="cta-content">
-                <h2>Ready to dominate the Aaron Halo?</h2>
-                <p>Join thousands of professional miners maximizing their yields today. Includes real-time screen capture, global hotkeys, and multi-monitor support.</p>
-                <a href="#" class="download-btn">Download for Windows (64-bit)</a>
-                <p class="version-info">Version 3.1.0 | Requires Windows 10/11</p>
+                <h2>Start Mining Smarter</h2>
+                <p>Download the latest version of LithoScan HUD. The tool uses real-time screen capture via global hotkeys, runs locally on your machine, and requires no complicated setup.</p>
+                <a href="https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest" target="_blank" class="download-btn">Download for Windows (64-bit)</a>
+                <p class="version-info">Current Release: v1.0.0 | Requires Windows 10/11</p>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 LithoScan HUD Pro. A conceptual demonstration project.</p>
-        <p class="disclaimer">This project is a fan-made portfolio piece and is not affiliated with Cloud Imperium Rights LLC or Star Citizen.</p>
+        <p>&copy; 2026 LithoScan HUD. An open-source tool for the Star Citizen community.</p>
+        <p class="disclaimer">This project is a fan-made tool and is not affiliated with Cloud Imperium Rights LLC or Star Citizen.</p>
     </footer>
 
     <script src="script.js"></script>

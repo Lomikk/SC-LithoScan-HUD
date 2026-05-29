@@ -358,16 +358,16 @@ footer { text-align: center; padding: 30px; border-top: 1px solid var(--border);
    7. HUD COLOR SCHEME THEMES
    ========================================================================== */
 
-#calc-app[data-theme="default"] {
+#calc-app[data-theme="classic"] {
     --bg-overlay: rgba(11, 15, 19, 0.95);
     --t-border: rgba(45, 55, 72, 0.8);
     --t-raw: #00d4ff; --t-ref: #00ff9d; --t-dim: #718096;
 }
-#calc-app[data-theme="default"] .hologram-panel { background: var(--bg-overlay); border: 1px solid var(--t-border); border-top: 3px solid var(--t-ref); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-#calc-app[data-theme="default"] .label-sm, #calc-app[data-theme="default"] .opt-sub, #calc-app[data-theme="default"] .meta-info, #calc-app[data-theme="default"] th { color: var(--t-dim); }
-#calc-app[data-theme="default"] .main-val, #calc-app[data-theme="default"] .v-ref, #calc-app[data-theme="default"] tr.row-core td.ui-col-mineral { color: var(--t-ref); }
-#calc-app[data-theme="default"] .sub-val, #calc-app[data-theme="default"] .v-raw { color: var(--t-raw); }
-#calc-app[data-theme="default"] th { border-bottom: 1px solid var(--t-border); }
+#calc-app[data-theme="classic"] .hologram-panel { background: var(--bg-overlay); border: 1px solid var(--t-border); border-top: 3px solid var(--t-ref); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+#calc-app[data-theme="classic"] .label-sm, #calc-app[data-theme="classic"] .opt-sub, #calc-app[data-theme="classic"] .meta-info, #calc-app[data-theme="classic"] th { color: var(--t-dim); }
+#calc-app[data-theme="classic"] .main-val, #calc-app[data-theme="classic"] .v-ref, #calc-app[data-theme="classic"] tr.row-core td.ui-col-mineral { color: var(--t-ref); }
+#calc-app[data-theme="classic"] .sub-val, #calc-app[data-theme="classic"] .v-raw { color: var(--t-raw); }
+#calc-app[data-theme="classic"] th { border-bottom: 1px solid var(--t-border); }
 
 #calc-app[data-theme="amber"] {
     --bg-overlay: rgba(20, 10, 0, 0.95);

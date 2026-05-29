@@ -23,11 +23,32 @@ const scanData = {
 };
 
 const MINERAL_COLORS = {
-    "QUANTANIUM": { short: "QUAN", color: "#F700FF" }, "GOLD": { short: "GOLD", color: "#A3AA40" },
-    "TARANITE": { short: "TARA", color: "#BCA32F" }, "TUNGSTEN": { short: "TUNG", color: "#D49D1E" },
-    "HEPHAESTANITE": { short: "HEPH", color: "#DC9639" }, "QUARTZ": { short: "QUAR", color: "#D49746" },
-    "SILICON": { short: "SILI", color: "#A69D91" }, "INERT": { short: "INER", color: "#9E9E9E" },
-    "LINDINIUM": { short: "LIND", color: "#F700FF" }
+    "QUANTANIUM": { short: "QUAN", color: "#F700FF" },
+    "STILBITE": { short: "STIL", color: "#F700FF" },
+    "SAVR": { short: "SAVR", color: "#F700FF" },
+    "RICCITE": { short: "RICC", color: "#F700FF" },
+    "LINDINIUM": { short: "LIND", color: "#F700FF" },
+    "BORASE": { short: "BORS", color: "#97AE48" },
+    "GOLD": { short: "GOLD", color: "#A3AA40" },
+    "BEXALITE": { short: "BEX", color: "#AFA737" },
+    "TARANITE": { short: "TARA", color: "#BCA32F" },
+    "BERLITE": { short: "BERL", color: "#C8A026" },
+    "TUNGSTEN": { short: "TUNG", color: "#D49D1E" },
+    "AGRICIUM": { short: "AGRI", color: "#E09915" },
+    "TITANIUM": { short: "TITA", color: "#ED960D" },
+    "LARANITE": { short: "LARA", color: "#FB9206" },
+    "DIAMOND": { short: "DIAM", color: "#F39313" },
+    "TORBENITE": { short: "TORI", color: "#EC9420" },
+    "ICE": { short: "ICE", color: "#E4952C" },
+    "HEPHAESTANITE": { short: "HEPH", color: "#DC9639" },
+    "QUARTZ": { short: "QUAR", color: "#D49746" },
+    "COPPER": { short: "COPP", color: "#CD9852" },
+    "ALUMINUM": { short: "ALUM", color: "#C5995F" },
+    "TIN": { short: "TIN", color: "#BD9A6B" },
+    "CORUNDUM": { short: "CORU", color: "#B59B78" },
+    "IRON": { short: "IRON", color: "#AE9C85" },
+    "SILICON": { short: "SILI", color: "#A69D91" },
+    "INERT": { short: "INER", color: "#9E9E9E" }
 };
 
 function getMineralInfo(name) {
