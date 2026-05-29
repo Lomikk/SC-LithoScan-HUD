@@ -1,47 +1,69 @@
-# 📡 LithoScan HUD (v1.0.0)
+<div align="center">
+  <h1>LithoScan HUD</h1>
+  <h3>Advanced Yield Analyzer for Star Citizen</h3>
+  <p><strong>Stop Guessing. Start Mining Smart.</strong></p>
+  
+  <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+    <a href="https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest">
+      <img src="https://img.shields.io/github/v/release/Lomikk/SC-LithoScan-HUD?label=Download%20Latest%20Version&style=for-the-badge&color=success" alt="Download">
+    </a>
+    <a href="https://lomikk.github.io/SC-LithoScan-HUD/">
+      <img src="https://img.shields.io/badge/Try_Interactive_Web_Demo-00D2C4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Interactive Web Demo">
+    </a>
+    <a href="https://boosty.to/justlomikk/donate">
+      <img src="https://img.shields.io/badge/Support_Project-Boosty-F15F2C?style=for-the-badge&logo=boosty&logoColor=white" alt="Boosty">
+    </a>
+  </div>
 
-Advanced Holographic Mining & Signature Overlay for Star Citizen (Alpha 4.7+).
+  <p>
+    ✨ <b>Want a quick preview?</b> Check out our <b>Interactive Web Demo</b>! 
+    Click the screenshot to trigger a simulated scan, see the UI animations in action, and try switching between different HUD themes directly in your browser.
+  </p>
+</div>
 
-<p align="center">
-  <a href="https://Lomikk.github.io/SC-LithoScan-HUD/"><strong>🔮 Visit Live Web Demo & Website</strong></a> |
-  <a href="https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest"><strong>💾 Download Installer</strong></a>
-</p>
+<br>
 
----
-
-## Core Features
-
-### 📊 Advanced Yield Analytics
-<p align="center">
-  <img src="docs/images/Calc.png" alt="Advanced Yield Analytics" width="550">
-</p>
-Get a complete breakdown of every cluster instantly. The app analyzes density, mass, and composition to project your exact SCU output and potential aUEC profit. Instantly compare raw selling prices against active refinery methods to make the most lucrative decisions on the fly.
-
----
-
-### 💱 Live UEXCorp Market Data
-<p align="center">
-  <img src="docs/images/UEX.png" alt="Live UEXCorp Market Data" width="450">
-</p>
-The Stanton economy is constantly shifting. LithoScan HUD pulls live commodity prices and refinery yield bonuses directly from the UEXCorp API. It automatically highlights the best refinery stations to maximize your profit margin.
-
----
-
-### 📡 Long-Range Signature Decoder
-<p align="center">
-  <img src="docs/images/Decoder.png" alt="Long-Range Signature Decoder" width="450">
-</p>
-Never waste hydrogen fuel flying to a worthless rock again. Our built-in signal decoder lets you identify asteroid contents from kilometers away. Just input the ping signature (e.g., 9940), and the HUD will reveal hidden Quantainium or Bexalite deposits before you even approach [3].
+A transparent overlay for Star Citizen miners. Estimate your yield, decode radar signatures, and get back to mining. The tool uses real-time screen capture via global hotkeys, runs locally on your machine, and requires no complicated setup.
 
 ---
 
-## How to Install
-1. Download the latest installer from the **[Releases](https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest)** section.
-2. Run the installer (No Python or Node.js required, everything is packaged!).
-3. Run the desktop shortcut.
-4. Launch Star Citizen, hover over a rock, and start mining smart!
+## 🚀 Core Features
 
-## Default Hotkeys
+<p align="justify">
+  <img src="docs/images/Calc.png" width="400" align="right" alt="Yield Analytics">
+  <h3>Yield Analytics</h3>
+  Get a clear breakdown of asteroid clusters instantly. The overlay calculates the price-to-volume ratio (Density) and estimates the "Best Potential" yield for optimal fracturing. With built-in smart verdicts and highlighted mineral grades, you can quickly decide which rocks are truly worth your time.
+</p>
+<br clear="all">
+<br>
+
+<p align="justify">
+  <img src="docs/images/UEX.png" width="400" align="left" alt="Live UEXCorp Market Data">
+  <h3>Live UEXCorp Market Data</h3>
+  LithoScan HUD pulls current commodity prices and refinery yield bonuses directly from the <a href="https://uexcorp.space/" target="_blank">UEXCorp API</a>. It automatically calculates the best refinery stations for your specific cargo to help optimize your routes and ensure your profit calculations are always up-to-date with the current game economy.
+</p>
+<br clear="all">
+<br>
+
+<p align="justify">
+  <img src="docs/images/Decoder.png" width="400" align="right" alt="Signature Decoder">
+  <h3>Signature Decoder</h3>
+  Evaluate radar pings before closing in. By scanning the signature number directly from your screen, the overlay calculates all possible mineral combinations, revealing potential high-value deposits from a distance.
+</p>
+<br clear="all">
+<br>
+
+<p align="justify">
+  <img src="docs/images/calc-hud.png" width="400" align="left" alt="HUD Customization">
+  <h3>HUD Customization</h3>
+  Adjust the overlay to fit your preferences. The settings panel allows you to toggle specific data columns, switch between full and abbreviated number formats, and change visual themes (such as Glass, Classic, or Amber) to match your ship's UI.
+</p>
+<br clear="all">
+<br>
+
+---
+
+## ⌨️ Default Hotkeys
 * `Alt + G` - Toggle Edit/Game mode (unlocks window dragging and positioning).
 * `Alt + V` - Hide/Show the entire HUD overlay.
 * `Alt + 1` / `Alt + 2` - Set Asteroid Scan Area.
@@ -51,13 +73,91 @@ Never waste hydrogen fuel flying to a worthless rock again. Our built-in signal 
 
 *Note: You can easily customize these hotkeys in `backend/data/hotkeys.json` after installation.*
 
-## Tech Stack
-* **Frontend:** Electron.js, HTML5, CSS3 (3D holographic matrix, blur filters).
-* **Backend:** Python (asyncio, websockets).
-* **Core Engines:** RapidOCR (Neural network text detection & recognition), PyInstaller (standalone bundling).
+---
 
-## Credits & Third-Party Assets
+## ⚙️ Architecture & Under the Hood
+
+LithoScan HUD operates using two main components communicating locally:
+
+### 1. The Frontend (UI & Overlay)
+* **Framework:** [Electron.js](https://www.electronjs.org/) (Chromium-based).
+* **Tech:** HTML5, CSS3, Vanilla JavaScript.
+* **Role:** The transparent overlay renders, allowing you to play the game while the HUD is active. 
+* *Note:* Like any Chromium application, Electron splits its tasks into several micro-processes (Main, Renderer, GPU). This is why you will see multiple "LithoScan HUD" processes in your Task Manager, and why it occupies a certain baseline amount of RAM.
+
+### 2. The Backend (OCR & Mathematics)
+* **Language:** [Python 3](https://www.python.org/).
+* **Core Libraries:**
+  * **RapidOCR (ONNX Runtime):** Local neural network for text recognition.
+  * **MSS (Multiple Screen Shots):** Screen capture.
+  * **OpenCV (`cv2`) & NumPy:** For in-memory image processing.
+  * **WebSockets (`asyncio`):** For communication with the Frontend.
+* **Role:** Runs in the background (`lithoscan_backend.exe`). It listens for global hotkeys, captures a small region of the screen directly into RAM, reads the text, calculates the most profitable refining yield, and pushes the JSON result to the UI.
+
+---
+
+## ⚡ Performance & Resource Usage
+
+Due to the nature of Electron and local OCR processing, the app is not perfectly lightweight. Here is an honest breakdown of what you can expect:
+
+| Component | CPU Usage | RAM Usage | Disk I/O | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **Idling in Background** | **0%** | **~200 MB** | **0 MB/s** | Baseline usage while waiting for hotkeys. |
+| └ Backend (Python OCR) | 0% | ~115 MB | 0 MB/s | Loaded into memory, standing by. |
+| └ Frontend (Electron UI) | 0% | ~85 MB | 0 MB/s | UI rendering processes. |
+| **During Active Scan** | **Spikes** | **~200 MB+** | **0 MB/s** | *The neural network will briefly load your CPU/GPU to process the image and extract text.* |
+
+---
+
+## 🛡️ Anti-Cheat (EAC) & TOS Safety
+
+**LithoScan HUD is designed to comply with Star Citizen's Terms of Service and Easy Anti-Cheat (EAC) guidelines.**
+
+Here is how it interacts with your system:
+* **Read-Only Screen Capture:** It uses standard OS-level screen capture (like OBS Studio or Discord screen share). It does **not** read game memory, alter game files, or inject DLLs into the game client.
+* **No Input Injection:** The application does **not** automate gameplay or send fake inputs (no macros, no aimbots). 
+* **Native Click-Through:** When interacting with the game, the overlay uses the native Windows `WS_EX_TRANSPARENT` flag. It does not "intercept and forward" your mouse clicks; it simply tells Windows to make the overlay physically intangible, so your hardware mouse clicks go directly to the game.
+* **Passive Hotkeys:** It listens for your specific hotkeys (like `Alt+X`) purely passively, exactly like Discord's Push-to-Talk feature.
+
+*Disclaimer: LithoScan HUD is a third-party fan-made tool. While its architecture strictly avoids malicious behaviors targeted by Anti-Cheats, Cloud Imperium Games retains the right to moderate third-party software. Use it at your own discretion.*
+
+---
+
+## 🎥 See It In Action
+
+Watch how the overlay seamlessly integrates with the Star Citizen HUD.
+
+> **Note:** [Watch the Demo Video here](docs/images/demo-video.mp4)
+
+---
+
+## 📥 Download & Installation
+
+1. Go to the [Releases Page](https://github.com/Lomikk/SC-LithoScan-HUD/releases/latest).
+2. Download the latest `.exe` or `.zip` archive for Windows (64-bit).
+3. Run the application and launch Star Citizen.
+
+**Requirements:** Windows 10 / 11.
+
+---
+
+## 📜 Credits & Third-Party Assets
 * **Signature Database (`signatures.json`):** Derived from the database originally compiled by [Mallachi](https://github.com/Diftic) (Copyright (c) 2026 Mallachi), used under the terms of the [MIT License](https://github.com/Diftic/SC_Signature_Scanner/blob/master/LICENSE).
+* **Optical Character Recognition:** Powered by [RapidOCR](https://github.com/RapidAI/RapidOCR) (Copyright (c) 2021 RapidOCR Authors / RapidAI), used under the terms of the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
-## Disclaimer
-This is a fan-made community tool. LithoScan HUD is not affiliated with, authorized by, endorsed by, or in any way officially connected with the Cloud Imperium group of companies. Star Citizen®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC.
+* ### Additional Libraries
+The Python backend is built using the following open-source libraries, licensed under MIT, BSD, and Apache 2.0:
+* `rapidocr-onnxruntime` (Apache 2.0) - ONNX runtime for RapidOCR.
+* `opencv-python` (Apache 2.0 / MIT) - In-memory image processing.
+* `numpy` (BSD) - High-performance array calculations.
+* `mss` (MIT) - Ultra-fast desktop screen capture.
+* `websockets` (BSD) - Real-time communication server.
+* `keyboard` & `mouse` (MIT) - Global input hooking.
+* `pywin32` (PSF) - Windows API interactions.
+* `requests` (Apache 2.0) - Market data API fetching.
+
+## ⚖️ Disclaimer
+
+*© 2026 LithoScan HUD. An open-source tool for the Star Citizen community.*
+
+This project is a fan-made tool and is not affiliated with Cloud Imperium Rights LLC or Star Citizen.
