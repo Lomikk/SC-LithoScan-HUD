@@ -75,6 +75,14 @@ A transparent overlay for Star Citizen miners. Estimate your yield, decode radar
 
 ---
 
+## 🎥 See It In Action
+
+Watch how the overlay seamlessly integrates with the Star Citizen HUD.
+
+https://github.com/user-attachments/assets/25e97175-58c5-47c5-b19e-75ffc0ea9fa7
+
+---
+
 ## ⚙️ Architecture & Under the Hood
 
 LithoScan HUD operates using two main components communicating locally:
@@ -120,14 +128,6 @@ Here is how it interacts with your system:
 * **Passive Hotkeys:** It listens for your specific hotkeys (like `Alt+X`) purely passively, exactly like Discord's Push-to-Talk feature.
 
 *Disclaimer: LithoScan HUD is a third-party fan-made tool. While its architecture strictly avoids malicious behaviors targeted by Anti-Cheats, Cloud Imperium Games retains the right to moderate third-party software. Use it at your own discretion.*
-
----
-
-## 🎥 See It In Action
-
-Watch how the overlay seamlessly integrates with the Star Citizen HUD.
-
-https://github.com/user-attachments/assets/25e97175-58c5-47c5-b19e-75ffc0ea9fa7
 
 ---
 
